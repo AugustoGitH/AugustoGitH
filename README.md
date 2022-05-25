@@ -1,4 +1,4 @@
-<h3>Hello World🌐! Meu nome é Augusto Westphal✌️</h3>
+<h3>Hello World🌐! <br>Meu nome é Augusto✌️</h3>
 
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/augusto_westphall/)
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/augusto-westphal-67b7b3230/)
@@ -16,10 +16,7 @@
   <img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white">
   <img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">
   <img src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white">
-
-
-
-
-
-
 </div>
+
+<h4>Sou apaixonado por Programação Web em geral, porém tenho carinho especial pela parte Front_End dos meus projetos, dar vida ao código e melhorar a experiência 
+  do usuário é a minha motivação.</h4>
