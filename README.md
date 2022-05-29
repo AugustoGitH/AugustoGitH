@@ -21,7 +21,7 @@
 <h4>Sou apaixonado por Programação Web em geral, porém tenho carinho especial pela parte Front_End dos meus projetos, dar vida ao código e melhorar a experiência 
   do usuário é a minha motivação.</h4>
  <h2>{Veja meus projetos em meu portfolio}</h2>  
- 
- [![Meu Portfolio](https://img.shields.io/badge/dev.to-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white)](https://ephemeral-empanada-11d468.netlify.app)
+ <a href="meuportfolio-augustogith.netlify.app">MEU PORTFOLIO</a>
+
 
 
