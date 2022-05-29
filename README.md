@@ -21,7 +21,8 @@
 <h4>Sou apaixonado por Programação Web em geral, porém tenho carinho especial pela parte Front_End dos meus projetos, dar vida ao código e melhorar a experiência 
   do usuário é a minha motivação.</h4>
  <h2>{Veja meus projetos em meu portfolio}</h2>  
- <a href="meuportfolio-augustogith.netlify.app">MEU PORTFOLIO</a>
+ 
+ [![Discord](https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white)](meuportfolio-augustogith.netlify.app)
 
 
 
