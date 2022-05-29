@@ -22,7 +22,9 @@
   do usuário é a minha motivação.</h4>
  <h2>{Veja meus projetos em meu portfolio}</h2>  
  
- [![Discord](https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white)](meuportfolio-augustogith.netlify.app)
+ https://meuportfolio-augustogith.netlify.app
+ 
+ [![MeuPortfolio](https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white)](meuportfolio-augustogith.netlify.app)
 
 
 
