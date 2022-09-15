@@ -22,7 +22,7 @@
   do usuário é a minha motivação.</h4>
  <h2>{Veja meus projetos em meu portfolio}</h2>  
  
- https://meuportfolio-augustogith.netlify.app
+ https://statuesque-kheer-c8c240.netlify.app
  
 
 
