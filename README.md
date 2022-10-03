@@ -22,7 +22,7 @@
   do usuário é a minha motivação.</h4>
  <h2>{Veja meus projetos em meu portfolio}</h2>  
  
-[![Netlify Status](https://api.netlify.com/api/v1/badges/2aeffe7f-6ae6-45f8-ab87-f3f7ad684fa0/deploy-status)](https://app.netlify.com/sites/meu-portfolio-augusto/deploys)
+[[![Netlify Status](https://api.netlify.com/api/v1/badges/2aeffe7f-6ae6-45f8-ab87-f3f7ad684fa0/deploy-status)](https://app.netlify.com/sites/meu-portfolio-augusto/deploys)](https://meu-portfolio-augusto.netlify.app)
  
 
 
