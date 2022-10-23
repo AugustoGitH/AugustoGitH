@@ -4,8 +4,11 @@
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/augusto-westphal-67b7b3230/)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/DX8tAjUTRy)
 
+<span>
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=AugustoGitH&layout=compact)](https://github.com/AugustoGitH/github-readme-stats)
 
+![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
+</span>
 <hr>
 <div class="display" style="display: grid;">
   <h3>Tecnogias que utilizo em meus projetos</h3>
