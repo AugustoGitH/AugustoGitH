@@ -7,9 +7,9 @@
  </div>
 <br>
 <br>
-<div style="display: flex; align_items: center">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AugustoGitH&layout=compact">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=AugustoGitH&show_icons=true&theme=radical">
+<div style="display: inline-block;>
+    <img width="50%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AugustoGitH&layout=compact">
+    <img width="50%" src="https://github-readme-stats.vercel.app/api?username=AugustoGitH&show_icons=true&theme=radical">
 </div>
 <hr>
 <div class="display" style="display: grid;">
