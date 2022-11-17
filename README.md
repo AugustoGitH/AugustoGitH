@@ -13,19 +13,9 @@
   <img height="160em" src="https://github-readme-stats.vercel.app/api?username=AugustoGitH&show_icons=true&theme=github_dark&include_all_commits=true&count_private=true"/>
   <img height="140em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AugustoGitH&layout=compact&langs_count=7&theme=github_dark"/>
 </div>
-<div style="display: inline_block" align="center" ><br>
-<h2>Skills</h2>
-  <img align="center" alt="Marcus-Js" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg">
-  <img align="center" alt="Marcus-HTML" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg">
-  <img align="center" alt="Marcus-CSS" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg">
-  <img align="center" alt="Marcus-GIT" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" />
-  <img align="center" alt="Marcus-GITHub" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
 
-  <img align="center" alt="Marcus-GITHub" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" />
-  <img align="center" alt="Marcus-Js" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg">
-</div><br><br><br>
 <div align="center">
-<img src="https://media.tenor.com/GVk4jB2u_i8AAAAd/coding.gif">
+<img src="https://jovemnerd.com.br/wp-content/uploads/2017/09/mario-punch.gif">
 </div><br><br>
  
  
