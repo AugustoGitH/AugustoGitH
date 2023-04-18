@@ -25,7 +25,7 @@
     </div>
     <br>
     <div align="center">
-        <a target="_blank" href="https://augustowestphal.site"><img src="https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white"></a>
+        <a target="_blank" href="https://augustowestphal.up.railway.app"><img src="https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white"></a>
         <a href="https://www.linkedin.com/in/augusto-westphal-67b7b3230/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
     </div>
     <br><br><br><br>
