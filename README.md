@@ -27,6 +27,8 @@
     <div align="center">
         <a target="_blank" href="https://augustowestphal.up.railway.app"><img src="https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white"></a>
         <a href="https://www.linkedin.com/in/augusto-westphal-67b7b3230/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+         <br><br>
+        <p align="center"><img align="center" src="https://profile-counter.glitch.me/{EmanuelAkumaA}/count.svg" /></p> 
     </div>
     <br><br><br><br>
     <img align="center" src="https://i.pinimg.com/originals/74/5c/c9/745cc90fcc688569610f84bc5d2b2fd6.gif">
