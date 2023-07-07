@@ -1,6 +1,5 @@
 <div>
-    <div align="center">
-        <img width="150px" src="https://augustowestphal.up.railway.app/assets/profile-01-0d2f189f.webp">
+    <div align="center">  
         <h1 >Olá GitHub! Meu nome é <a href="https://augustowestphal.up.railway.app">Augusto</a>😃️</h1>
         <p>Sou Desenvolvedor Full-Stack, Web Designer e Graphic Designer. Faço postagens a respeito dos meus projetos em <a href="https://www.linkedin.com/in/augusto-westphal-67b7b3230/">meu linkedin.</a></p>
     </div>
