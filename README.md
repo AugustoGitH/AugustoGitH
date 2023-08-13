@@ -4,8 +4,6 @@
 
 Olá! Meu nome é Augusto e sou um entusiasta da tecnologia. Este é o meu espaço no GitHub, onde compartilho projetos, aprendizados e colaborações. Estou sempre em busca de novos desafios e oportunidades para expandir meu conhecimento.
 
-## 
-
 ## Sobre Mim
 
 - Desenvolvedor Web Full-Stack
@@ -13,6 +11,8 @@ Olá! Meu nome é Augusto e sou um entusiasta da tecnologia. Este é o meu espa�
 - Atualmente estou procurando uma oportunidade como desenvolvedor
 - Voluntário em projetos de impacto social
 - Buscando constantemente aprimorar minhas habilidades
+
+ ![Banner](https://i.imgur.com/JeL0sOn.png)
  
  ## Minhas Habilidades
 
