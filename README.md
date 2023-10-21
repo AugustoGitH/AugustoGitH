@@ -1,5 +1,9 @@
 
 ![Banner](https://i.imgur.com/U94xDco.png)
+<div align="center">
+  <img height="170em" src="https://github-readme-stats.vercel.app/api?username=AugustoGitH&show_icons=true&theme=react&include_all_commits=true&count_private=true"/>
+  <img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AugustoGitH&layout=compact&langs_count=7&theme=react"/>
+</div>
 # Bem-vindo(a) ao meu Perfil no GitHub! 👋
 
 Olá! Meu nome é Augusto e sou um entusiasta da tecnologia. Este é o meu espaço no GitHub, onde compartilho projetos, aprendizados e colaborações. Estou sempre em busca de novos desafios e oportunidades para expandir meu conhecimento.
