@@ -1,7 +1,3 @@
-<div align="center">
-  <img src="https://i.imgur.com/U94xDco.png" alt="Banner Principal" width="100%">
-</div>
-
 # Olá, eu sou o Augusto! 👋
 
 <div align="center">
