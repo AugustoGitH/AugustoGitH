@@ -1,6 +1,6 @@
 <div align="center">
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=500&size=18&duration=3000&pause=1200&color=61DAFB&center=true&vCenter=true&width=900&lines=%24+whoami;Building+modern+web+applications...;Frontend+Specialist;Clean+Code+Enthusiast;Always+Learning..."/>
-<img src="./banner_00.png" alt="Augusto Caetano Westphal"/>
+<img src="./banner_00_rounded.png" alt="Augusto Caetano Westphal"/>
 
 </div>
 
