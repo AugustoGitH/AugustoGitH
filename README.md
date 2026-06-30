@@ -4,6 +4,12 @@
 
 </div>
 
+<p align="center">
+
+<img src="https://raw.githubusercontent.com/AugustoGitH/AugustoGitH/output/github-contribution-grid-snake-dark.svg"/>
+
+</p>
+
 ## $ open contact/
 
 <p>
@@ -19,16 +25,6 @@
 <a href="https://github.com/AugustoGitH">
 <img src="https://img.shields.io/badge/GitHub-20232A?style=for-the-badge&logo=github&logoColor=white"/>
 </a>
-
-</p>
-
----
-
-> Generated automatically by GitHub Actions.
-
-<p align="center">
-
-<img src="https://raw.githubusercontent.com/AugustoGitH/AugustoGitH/output/github-contribution-grid-snake-dark.svg"/>
 
 </p>
 
