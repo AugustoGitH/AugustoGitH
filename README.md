@@ -12,16 +12,13 @@
 
 ## $ open contact/
 
-<p>
-
+<p align="left">
 <a href="https://augustowestphal.site">
 <img src="https://img.shields.io/badge/Portfolio-20232A?style=for-the-badge&logo=firefoxbrowser&logoColor=61DAFB"/>
 </a>
-
 <a href="https://www.linkedin.com/in/augusto-westphal/">
 <img src="https://img.shields.io/badge/LinkedIn-20232A?style=for-the-badge&logo=linkedin&logoColor=0A66C2"/>
 </a>
-
 <a href="https://github.com/AugustoGitH">
 <img src="https://img.shields.io/badge/GitHub-20232A?style=for-the-badge&logo=github&logoColor=white"/>
 </a>
