@@ -1,89 +1,34 @@
-<div align="center">
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=500&size=18&duration=3000&pause=1200&color=61DAFB&center=true&vCenter=true&width=900&lines=%24+whoami;Building+modern+web+applications...;Frontend+Specialist;Clean+Code+Enthusiast;Always+Learning..."/>
-<img src="./banner_00_rounded.png" alt="Augusto Caetano Westphal"/>
+<!-- ══════════════════ 01 · APRESENTAÇÃO ══════════════════ -->
 
+<div align="center">
+  <img src="./assets/agents-grid.svg" width="820"
+       alt="Quatro agentes de terminal se revezando para apresentar Augusto Caetano Westphal: identidade, números do perfil, stack e contato." />
+</div>
+
+<!-- ══════════════════ 02 · COMMITS ══════════════════ -->
+
+<div align="center">
+  <img src="./assets/commit-city.svg" width="820"
+       alt="$ git log --graph --since=1.year — skyline das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 3862 commits, 306 de 365 dias ativos, pico semanal de 201." />
+</div>
+
+<!-- ══════════════════ 03 · STACKS ══════════════════ -->
+
+<div align="center">
+  <img src="./assets/stack-well.svg" width="820"
+       alt="$ tree ./tech-stack --depth=1 — 32 tecnologias empilhadas como peças de Tetris. Front-end: React, Next.js, TypeScript, JavaScript, HTML5, CSS3, Sass, Styled Components, Bootstrap, Material UI, Apollo Client, jQuery. Back-end: Node.js, Express.js, NestJS, GraphQL. Bancos e ORM: PostgreSQL, MongoDB, Prisma, TypeORM, Sequelize, Firestore, Firebase Storage. Testes: Jest, React Testing Library, Mocha, Chai, Selenium, Robot Framework. Arquitetura: SOLID, Design Patterns, Clean Code." />
+</div>
+
+<!-- ══════════════════ 04 · LINKS ══════════════════ -->
+
+<div align="center">
+  <img src="./assets/contact-prompt.svg" width="820"
+       alt="$ connect --list — portfolio: augustowestphal.netlify.app, linkedin: linkedin.com/in/augusto-westphal, github: github.com/AugustoGitH, email: augustoc.westphal.ltda@gmail.com." />
 </div>
 
 <p align="center">
-
-<img src="https://raw.githubusercontent.com/AugustoGitH/AugustoGitH/output/github-contribution-grid-snake-dark.svg"/>
-
+  <a href="https://augustowestphal.netlify.app">portfolio</a> ·
+  <a href="https://www.linkedin.com/in/augusto-westphal/">linkedin</a> ·
+  <a href="https://github.com/AugustoGitH">github</a> ·
+  <a href="mailto:augustoc.westphal.ltda@gmail.com">email</a>
 </p>
-
-## $ open contact/
-
-<p align="left">
-<a href="https://augustowestphal.site">
-<img src="https://img.shields.io/badge/Portfolio-20232A?style=for-the-badge&logo=firefoxbrowser&logoColor=61DAFB"/>
-</a>
-<a href="https://www.linkedin.com/in/augusto-westphal/">
-<img src="https://img.shields.io/badge/LinkedIn-20232A?style=for-the-badge&logo=linkedin&logoColor=0A66C2"/>
-</a>
-<a href="https://github.com/AugustoGitH">
-<img src="https://img.shields.io/badge/GitHub-20232A?style=for-the-badge&logo=github&logoColor=white"/>
-</a>
-
-</p>
-
-## $ tree ./tech-stack
-
-### Front-End
-
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Next.js](https://img.shields.io/badge/Next.js-20232A?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-20232A?style=for-the-badge&logo=typescript&logoColor=3178C6)
-![JavaScript](https://img.shields.io/badge/JavaScript-20232A?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
-![HTML5](https://img.shields.io/badge/HTML5-20232A?style=for-the-badge&logo=html5&logoColor=E34F26)
-![CSS3](https://img.shields.io/badge/CSS3-20232A?style=for-the-badge&logo=css3&logoColor=1572B6)
-![Sass](https://img.shields.io/badge/Sass-20232A?style=for-the-badge&logo=sass&logoColor=CC6699)
-![Styled Components](https://img.shields.io/badge/Styled--Components-20232A?style=for-the-badge&logo=styledcomponents&logoColor=DB7093)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-20232A?style=for-the-badge&logo=bootstrap&logoColor=7952B3)
-![Material UI](https://img.shields.io/badge/MUI-20232A?style=for-the-badge&logo=mui&logoColor=007FFF)
-![Apollo Client](https://img.shields.io/badge/Apollo-20232A?style=for-the-badge&logo=apollographql&logoColor=311C87)
-![jQuery](https://img.shields.io/badge/jQuery-20232A?style=for-the-badge&logo=jquery&logoColor=0769AD)
-
-### Back-End
-
-![Node.js](https://img.shields.io/badge/Node.js-20232A?style=for-the-badge&logo=nodedotjs&logoColor=339933)
-![Express.js](https://img.shields.io/badge/Express.js-20232A?style=for-the-badge&logo=express&logoColor=white)
-![NestJS](https://img.shields.io/badge/NestJS-20232A?style=for-the-badge&logo=nestjs&logoColor=E0234E)
-![GraphQL](https://img.shields.io/badge/GraphQL-20232A?style=for-the-badge&logo=graphql&logoColor=E10098)
-
-### Databases & ORM
-
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-20232A?style=for-the-badge&logo=postgresql&logoColor=4169E1)
-![MongoDB](https://img.shields.io/badge/MongoDB-20232A?style=for-the-badge&logo=mongodb&logoColor=47A248)
-![Prisma](https://img.shields.io/badge/Prisma-20232A?style=for-the-badge&logo=prisma&logoColor=white)
-![TypeORM](https://img.shields.io/badge/TypeORM-20232A?style=for-the-badge)
-![Sequelize](https://img.shields.io/badge/Sequelize-20232A?style=for-the-badge&logo=sequelize&logoColor=52B0E7)
-![Firestore](https://img.shields.io/badge/Firestore-20232A?style=for-the-badge&logo=firebase&logoColor=FFCA28)
-![Firebase Storage](https://img.shields.io/badge/Firebase%20Storage-20232A?style=for-the-badge&logo=firebase&logoColor=FFCA28)
-
-### Testing
-
-![Jest](https://img.shields.io/badge/Jest-20232A?style=for-the-badge&logo=jest&logoColor=C21325)
-![RTL](https://img.shields.io/badge/RTL-20232A?style=for-the-badge&logo=testinglibrary&logoColor=E33332)
-![Mocha](https://img.shields.io/badge/Mocha-20232A?style=for-the-badge&logo=mocha&logoColor=8D6748)
-![Chai](https://img.shields.io/badge/Chai-20232A?style=for-the-badge)
-![Selenium](https://img.shields.io/badge/Selenium-20232A?style=for-the-badge&logo=selenium&logoColor=43B02A)
-![Robot Framework](https://img.shields.io/badge/Robot_Framework-20232A?style=for-the-badge&logo=robotframework&logoColor=white)
-
-### Architecture
-
-![SOLID](https://img.shields.io/badge/SOLID-20232A?style=for-the-badge)
-![Design Patterns](https://img.shields.io/badge/Design_Patterns-20232A?style=for-the-badge)
-![Clean Code](https://img.shields.io/badge/Clean_Code-20232A?style=for-the-badge)
-
----
-
-<div align="center">
-
-```text
-$ exit
-
-Session closed.
-
-Thanks for visiting.
-```
-
-</div>

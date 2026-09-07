@@ -1,0 +1,65 @@
+name: Update README art
+
+# Redesenha as quatro seções do README a partir dos dados do perfil.
+# Nada aqui depende de serviço de terceiro: os scripts são deste repositório e
+# os SVGs são commitados de volta.
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # ~03:17 no horário de Brasília
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - ".github/workflows/update-readme-art.yml"
+
+# Sem isso o job não consegue commitar os SVGs de volta.
+permissions:
+  contents: write
+
+concurrency:
+  group: readme-art
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # Sem `npm ci`: o projeto não tem dependência de produção.
+
+      - name: Verificar a regra dos valores de desenho
+        run: node scripts/audit_constants.mjs
+
+      # Também confere que cada endereço de contato responde — um link morto
+      # aborta o job em vez de sobreviver no README sem ninguém notar.
+      - name: Coletar o perfil
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch_profile.mjs "${{ github.repository_owner }}"
+
+      - name: Desenhar as seções
+        run: |
+          node scripts/render_agents.mjs
+          node scripts/render_city.mjs
+          node scripts/render_stack.mjs
+          node scripts/render_links.mjs
+
+      # Os renders são determinísticos, então só há o que commitar quando o
+      # DADO mudou. [skip ci] evita que o commit do bot dispare este workflow.
+      - name: Commitar se algo mudou
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/profile.json assets/
+          if git diff --staged --quiet; then
+            echo "nada mudou"
+          else
+            git commit -m "chore(readme): refresh art [skip ci]"
+            git push
+          fi
