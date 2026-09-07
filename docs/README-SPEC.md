@@ -1903,6 +1903,23 @@ entram por argumento.
 `render_banner.mjs`, esse sim, é Node e determinístico: só lê os `.jpg` prontos
 e embute. O CI o roda como qualquer outro render.
 
+### 8.4.1 Ordem dos quadros e manchete
+
+**A ordem de exibição não é a de geração.** O quadro `03` — o agachamento
+simétrico, com os dois símbolos apoiados no banco — vai ao **centro**, e o `02`
+vai à direita. A simetria no meio dá eixo à peça; nas pontas ela se perdia.
+
+A descrição de cada quadro viaja junto com ele em `BANNER.SRC`, então o `alt`
+não pode divergir do que está desenhado quando a ordem mudar.
+
+**Manchete `My Blog`**, sobreposta aos três. Sobre foto o texto não pode
+depender do que houver atrás, então vem numa **faixa escura de largura cheia** a
+82% — o strap de capa de revista — com o corpo em 34px e entreletra de 2.5px
+(monoespaçado em corpo de manchete fecha muito mais que em corpo de texto).
+
+Monocromática: o acento pertence ao sistema, e o banner é o registro
+fotográfico (§8.2).
+
 ### 8.5 Geometria
 
 ```
@@ -1945,4 +1962,6 @@ dela mesma, não pelo orçamento que a originou.
 | Formato | JPEG q85 embutido como data URI num SVG |
 | Corte e compressão | Python, local e à mão (§1.1) |
 | Link do blog | ausente até estar no ar; o banner declara o estado |
-| Animação | os quadros surgem escalonados em 1.2s e congelam |
+| Ordem | 01, 03, 02 — a simetria vai ao centro |
+| Manchete | `My Blog` em faixa de largura cheia, monocromática |
+| Animação | os quadros surgem escalonados, a manchete por último, e congela em 1.6s |

@@ -23,12 +23,11 @@ const OUT = 'assets/banner.svg'
 const STATIC = process.env.STATIC === '1'
 
 const main = () => {
-  const total = +(BANNER.FADE_LEAD + (BANNER.FRAMES - 1) * BANNER.FADE_STEP +
-                  BANNER.FADE_DUR).toFixed(2)
+  const total = +(BANNER.HEADLINE_AT + BANNER.FADE_DUR).toFixed(2)
   const kk = (s) => (s / total).toFixed(KEYTIME_DECIMALS)
 
-  const quadros = BANNER.SRC.map((src, i) => {
-    const b64 = readFileSync(src).toString('base64')
+  const quadros = BANNER.SRC.map((q, i) => {
+    const b64 = readFileSync(q.file).toString('base64')
     const x = BANNER.PAD + i * (BANNER.SIDE + BANNER.GUTTER)
     const y = BANNER.TOP
 
@@ -52,6 +51,21 @@ const main = () => {
       })) + foto + num)
   }).join('')
 
+  // Faixa e manchete, por cima dos três quadros.
+  const meio = BANNER.TOP + BANNER.SIDE / 2
+  const faixa = tag('g', { opacity: 1 },
+    (STATIC ? '' : animate({
+      attr: 'opacity', values: '0;0;1;1',
+      keyTimes: `0;${kk(BANNER.HEADLINE_AT)};${kk(BANNER.HEADLINE_AT + BANNER.FADE_DUR)};1`,
+      dur: total, where: 'manchete', repeat: false,
+    })) +
+    tag('rect', { x: 0, y: meio - BANNER.BAND_H / 2, width: BANNER.W,
+      height: BANNER.BAND_H, fill: T.bg, opacity: BANNER.BAND_OPACITY }) +
+    text(BANNER.W / 2, meio + BANNER.HEADLINE_DROP, T.ink, BANNER.HEADLINE, {
+      'font-size': TYPO.SIZE.display, 'font-weight': TYPO.SECTION_WEIGHT,
+      'letter-spacing': TYPO.DISPLAY_TRACKING, 'text-anchor': 'middle',
+    }))
+
   const legenda =
     text(BANNER.PAD, BANNER.CAPTION_Y, T.accent, BANNER.TITLE, {
       'font-size': TYPO.SIZE.section,
@@ -63,15 +77,14 @@ const main = () => {
   const svg = [
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ` +
     `width="${BANNER.W}" height="${BANNER.H}" viewBox="0 0 ${BANNER.W} ${BANNER.H}" ` +
-    `role="img" aria-label="${BANNER.TITLE} — três retratos em preto e branco de ` +
-    `Augusto Caetano Westphal, da mesma sessão: agachado sobre um banco de concreto ` +
-    `segurando um asterisco luminoso, deitado de lado com o mesmo asterisco, e ` +
-    `agachado entre dois símbolos luminosos apoiados no banco. Estado do blog: ` +
-    `${BANNER.STATUS}.">`,
+    `role="img" aria-label="${BANNER.HEADLINE} — três retratos em preto e branco de ` +
+    `Augusto Caetano Westphal, da mesma sessão: ` +
+    `${BANNER.SRC.map((q) => q.alt).join('; ')}. ` +
+    `${BANNER.TITLE}: ${BANNER.STATUS}.">`,
     // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
     `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: BANNER.W, height: BANNER.H, fill: T.bg }),
-    quadros, legenda,
+    quadros, faixa, legenda,
     '</svg>',
   ].join('\n')
 

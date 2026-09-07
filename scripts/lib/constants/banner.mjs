@@ -30,9 +30,34 @@ export const BANNER = Object.freeze({
   NUM_INSET: 8,
   NUM_OPACITY: 0.75,
 
-  /** Origem dos arquivos. Gerados por scripts/prep_banner.py, à mão (§1.1). */
-  SRC: Object.freeze(['assets/src/frame-01.jpg', 'assets/src/frame-02.jpg',
-                      'assets/src/frame-03.jpg']),
+  /**
+   * Origem e ORDEM dos quadros. Gerados por scripts/prep_banner.py, à mão (§1.1).
+   *
+   * A ordem de exibição não é a de geração: o quadro 03 vai ao centro e o 02 à
+   * direita. A descrição acompanha a ordem para o alt nunca divergir do que
+   * está desenhado.
+   */
+  SRC: Object.freeze([
+    Object.freeze({ file: 'assets/src/frame-01.jpg',
+      alt: 'agachado sobre um banco de concreto, segurando um asterisco luminoso nas mãos' }),
+    Object.freeze({ file: 'assets/src/frame-03.jpg',
+      alt: 'agachado no banco entre dois símbolos luminosos apoiados nele' }),
+    Object.freeze({ file: 'assets/src/frame-02.jpg',
+      alt: 'deitado de lado sobre o banco, com o mesmo asterisco luminoso' }),
+  ]),
+
+  /**
+   * Manchete sobreposta aos três quadros.
+   *
+   * Sobre foto o texto não pode depender do que houver atrás, então ele vem numa
+   * faixa escura de largura cheia — o strap de capa de revista. Monocromática:
+   * o acento pertence ao sistema, e o banner é o registro fotográfico (§8.2).
+   */
+  HEADLINE: 'My Blog',
+  BAND_H: 52,
+  BAND_OPACITY: 0.82,
+  HEADLINE_DROP: 12,        // do centro da faixa até a linha de base
+  HEADLINE_AT: 1.05,        // entra depois do último quadro
 
   TITLE: '$ blog --status',
   STATUS: 'writing · soon',

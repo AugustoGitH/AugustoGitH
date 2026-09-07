@@ -11,9 +11,11 @@ export const TYPO = Object.freeze({
     title:   11, // barra de título dos painéis
     box:     11,
     section: 15, // título da seção, dentro da imagem
+    display: 34, // manchete sobreposta, só no banner
   }),
   SECTION_WEIGHT: 600,
-  SECTION_TRACKING: 0.5, // px de entreletra; monoespaçado em corpo grande fecha demais
+  SECTION_TRACKING: 0.5,  // px de entreletra; monoespaçado em corpo grande fecha demais
+  DISPLAY_TRACKING: 2.5,  // em corpo de manchete o monoespaçado fecha muito mais
   ADVANCE_RATIO: 0.6,
   LINE_H: 15,
   BASELINE_NUDGE: 4, // metade da altura-x, para centrar texto numa caixa
