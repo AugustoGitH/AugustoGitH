@@ -19,3 +19,4 @@ export {
   PRODUCT, UI, RAIL, RAIL_TARGET, CARDS, CARD_TARGET, TABLE, APP, TOUR,
   LAY, WEIGHT, ARROW,
 } from './product.mjs'
+export { ICONS, ICON_SIDE } from './icons.mjs'

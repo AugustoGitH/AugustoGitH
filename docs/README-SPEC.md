@@ -2027,6 +2027,7 @@ O que é fiel, de capturas de 2026-09-07 e do código:
 | --- | --- |
 | cabeçalho com marca, busca, seletor de organização e avatar | captura |
 | trilho de **ícones** (não rótulos), com o item ativo em chip teal | captura + `Sidebar/constants.ts` |
+| os sete glifos | **os SVGs do produto**, extraídos por `prep_icons.mjs` |
 | card: barra de plano colorida, badge, PLANO/PERÍODO/ESTADO, duas barras de progresso, contagem de versões | captura + `BudgetCard` |
 | pills ELABORAÇÃO e EXECUÇÃO | captura + `tailwind.config.ts` |
 | tabela: faixa BUDGET, ano, trimestre, mês; linhas numeradas com expansão; marcador laranja na célula; símbolo de vazio | captura + `BudgetTable` |
@@ -2074,6 +2075,26 @@ previsto.
 
 **Regra que sai daqui:** posição derivada de largura de texto é frágil. Onde o
 fluxo resolve — `tspan`, `text-anchor` — prefira o fluxo.
+
+#### Os ícones vêm do produto, não da mão
+
+A primeira versão desenhava aproximações — uma casinha, um retângulo, um
+círculo. Nenhuma era o glifo do produto, e a seção existe para ser fiel.
+
+`scripts/prep_icons.mjs` lê `src/svg/icons/outline` do repositório do produto e
+gera `lib/constants/icons.mjs`: sete ícones, treze `<path>` num viewBox 20×20.
+Roda **local e à mão**, como o `prep_banner.py` — depende de um repositório
+privado, e o CI só lê o módulo gerado (§1.1).
+
+#### Todas as animações repetem
+
+As telas usavam `fill=freeze`: rodavam uma vez e a sessão **congelava na
+tabela**, enquanto só o ponteiro seguia em ciclo. Era o comportamento da Seção 3
+aplicado por engano a uma seção que é narrativa, não gráfico.
+
+Agora as seis animações têm `repeatCount=indefinite`, e cada tela volta a zero
+no fim do ciclo. Verificação: `grep -c 'fill="freeze"'` no arquivo tem que dar
+zero.
 
 #### Os offsets de UI moram agrupados por zona
 

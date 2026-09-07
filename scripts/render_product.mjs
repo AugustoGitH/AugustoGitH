@@ -17,7 +17,7 @@ import { writeFileSync, mkdirSync } from 'node:fs'
 import {
   T, TYPO, GEO, KEYTIME_DECIMALS, keyTimeTick,
   PRODUCT, UI, RAIL, RAIL_TARGET, CARDS, CARD_TARGET, TABLE, APP, TOUR,
-  LAY, WEIGHT, ARROW,
+  LAY, WEIGHT, ARROW, ICONS, ICON_SIDE,
 } from './lib/constants/index.mjs'
 import { assertBudget } from './lib/assert.mjs'
 import { tag, text, animate, esc } from './lib/svg.mjs'
@@ -39,21 +39,25 @@ const bold = (size) => ({ 'font-size': size, 'font-weight': WEIGHT.bold })
 
 // ------------------------------------------------------------------ moldura
 
-/** Glifos do trilho. Simplificações reconhecíveis, não os ícones do produto. */
-function glifo(kind, cx, cy, cor) {
-  const r = LAY.rail.iconR
-  const traco = { fill: 'none', stroke: cor, 'stroke-width': LAY.stroke.icon, 'stroke-linejoin': 'round' }
-  switch (kind) {
-    case 'home': return tag('path', { d: `M${cx - r} ${cy + 1}L${cx} ${cy - r}L${cx + r} ${cy + 1}V${cy + r}H${cx - r}Z`, ...traco })
-    case 'tree': return tag('path', { d: `M${cx - r} ${cy - r}V${cy + r}M${cx - r} ${cy}H${cx + r}M${cx + r} ${cy - r}v${r * 2}`, ...traco })
-    case 'tag': return tag('path', { d: `M${cx - r} ${cy - r}h${r}l${r} ${r}l-${r} ${r}h-${r}Z`, ...traco })
-    case 'folder': return tag('path', { d: `M${cx - r} ${cy + r}v-${r * 2}h${r}l1 1h${r - 1}v${r * 2}Z`, ...traco })
-    case 'coin': return tag('circle', { cx, cy, r, ...traco }) +
-      tag('path', { d: `M${cx} ${cy - r + 1}v${r * 2 - 2}`, ...traco })
-    case 'chart': return tag('path', { d: `M${cx - r} ${cy + r}L${cx - 1} ${cy - 1}L${cx + 1} ${cy + 1}L${cx + r} ${cy - r}`, ...traco })
-    default: return tag('circle', { cx, cy, r: r - 1, ...traco }) +
-      tag('circle', { cx, cy, r: r - LAY.rail.aiInner, ...traco })
-  }
+/**
+ * Um ícone do produto, escalado do viewBox original para o lado pedido.
+ *
+ * Vem de icons.mjs, extraído de src/svg/icons/outline pelo prep_icons.mjs.
+ * Desenhar aproximações à mão dava glifos que não eram os do produto, e a seção
+ * existe para ser fiel.
+ */
+function glifo(nome, cx, cy, cor) {
+  const ic = ICONS[nome]
+  const s = LAY.rail.iconSize
+  const k = s / ICON_SIDE
+  return tag('g', {
+    transform: `translate(${(cx - s / 2).toFixed(2)} ${(cy - s / 2).toFixed(2)}) ` +
+               `scale(${k.toFixed(4)})`,
+    fill: cor,
+  }, ic.paths.map((p) => tag('path', {
+    d: p.d,
+    ...(p.rule ? { 'fill-rule': p.rule, 'clip-rule': p.rule } : {}),
+  })).join(''))
 }
 
 /** Cabeçalho: marca, busca, organização e usuário. */
@@ -100,7 +104,7 @@ function rail(sel) {
       ? tag('rect', { x: cx - r.size / 2, y, width: r.size, height: r.size, rx: r.rx,
           fill: UI.teal, opacity: 1 }, STATIC ? '' : sel)
       : ''
-    return chip + glifo(item.glyph, cx, cy, ativo ? UI.surface : UI.dim)
+    return chip + glifo(item.icon, cx, cy, ativo ? UI.surface : UI.dim)
   }).join('')
 
   return (
@@ -305,8 +309,8 @@ function ponteiro(q, kk, total) {
   const pulso = tag('circle', { cx: 0, cy: 0, r: 0, fill: 'none', stroke: UI.teal,
       'stroke-width': LAY.stroke.icon, opacity: 0 },
     STATIC ? '' :
-      animate({ attr: 'r', ...q.pulseR, dur: total, where: 'pulso/r', repeat: false }) +
-      animate({ attr: 'opacity', ...q.pulseO, dur: total, where: 'pulso/o', repeat: false }))
+      animate({ attr: 'r', ...q.pulseR, dur: total, where: 'pulso/r' }) +
+      animate({ attr: 'opacity', ...q.pulseO, dur: total, where: 'pulso/o' }))
   const ultimo = q.path.at(-1)
   return tag('g', { transform: `translate(${ultimo.x.toFixed(1)} ${ultimo.y.toFixed(1)})` },
     (STATIC ? '' : tag('animateTransform', {
@@ -358,23 +362,31 @@ const main = () => {
    * Uma tela visível em [de, ate). O estado base é a TABELA: sem SMIL o leitor
    * recebe o quadro mais informativo da sessão, não o de partida (§0.3).
    */
+  /**
+   * Uma tela visível em [de, ate), em ciclo.
+   *
+   * Antes isto usava fill=freeze: as telas rodavam UMA vez e a sessão
+   * congelava na tabela enquanto só o ponteiro continuava em loop. Aqui tudo
+   * repete, e cada tela volta a zero no fim do ciclo.
+   *
+   * O estado base do markup é a TABELA: sem SMIL o leitor recebe o quadro mais
+   * informativo da sessão, não o app vazio por onde ela começa (§0.3).
+   */
   const tela = (conteudo, de, ate, base) => {
     if (STATIC) return base ? conteudo : ''
     const f = TOUR.FADE
     return tag('g', { opacity: base ? 1 : 0 },
       animate({
-        attr: 'opacity',
-        values: base ? '1;0;0;1;1' : '0;0;1;1;0',
-        keyTimes: base ? `0;${kk(f)};${kk(de)};${kk(de + f)};1`
-                       : `0;${kk(de)};${kk(de + f)};${kk(ate)};1`,
-        dur: total, where: 'tela', repeat: false,
+        attr: 'opacity', values: '0;0;1;1;0',
+        keyTimes: `0;${kk(de)};${kk(de + f)};${kk(ate)};1`,
+        dur: total, where: 'tela',
       }) + conteudo)
   }
 
   const selecao = STATIC ? '' : animate({
     attr: 'opacity', values: '0;0;1;1',
     keyTimes: `0;${kk(t.click1)};${kk(t.cards)};1`,
-    dur: total, where: 'seleção', repeat: false,
+    dur: total, where: 'seleção',
   })
 
   const svg = [
@@ -397,7 +409,7 @@ const main = () => {
       tag('rect', { x: APP.X, y: APP.Y, width: APP.VIEW_W, height: APP.VIEW_H,
         fill: UI.canvas }) +
       tela(screenCards(), t.cards, t.table, false) +
-      tela(screenTable(), t.table, total, true) +
+      tela(screenTable(), t.table, t.leave, true) +
       header() + rail(selecao) +
       ponteiro(q, kk, total)),
     tag('rect', { x: APP.X + GEO.HAIRLINE, y: APP.Y + GEO.HAIRLINE,

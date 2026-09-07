@@ -60,16 +60,17 @@ export const UI = Object.freeze({
 
 /**
  * A sidebar real é um trilho de ícones, sem rótulo. Sete itens, na ordem de
- * src/components/navigations/Sidebar/constants.ts; o glifo é uma simplificação.
+ * src/components/navigations/Sidebar/constants.ts, com os nomes de ícone que o
+ * produto usa — os glifos vêm de icons.mjs, extraídos do próprio projeto.
  */
 export const RAIL = Object.freeze([
-  Object.freeze({ id: 'home', glyph: 'home' }),
-  Object.freeze({ id: 'plan', glyph: 'tree' }),
-  Object.freeze({ id: 'category', glyph: 'tag' }),
-  Object.freeze({ id: 'premise', glyph: 'folder' }),
-  Object.freeze({ id: 'budget', glyph: 'coin' }),
-  Object.freeze({ id: 'analysis', glyph: 'chart' }),
-  Object.freeze({ id: 'aixpert', glyph: 'ai' }),
+  Object.freeze({ id: 'home', icon: 'home' }),
+  Object.freeze({ id: 'plan', icon: 'plans' }),
+  Object.freeze({ id: 'category', icon: 'tag' }),
+  Object.freeze({ id: 'premise', icon: 'folder' }),
+  Object.freeze({ id: 'budget', icon: 'coin' }),
+  Object.freeze({ id: 'analysis', icon: 'scale' }),
+  Object.freeze({ id: 'aixpert', icon: 'helix' }),
 ])
 export const RAIL_TARGET = 4 // Orçamentos
 
@@ -180,7 +181,7 @@ export const LAY = Object.freeze({
     searchIconR: 3, orgPadX: 8,
   }),
   rail: Object.freeze({
-    top: 10, step: 26, size: 20, rx: 5, iconR: 6, collapseY: 8,
+    top: 10, step: 26, size: 20, rx: 5, iconSize: 12, collapseY: 8,
     footR: 8, footInset: 12, aiInner: 3.5,
   }),
   titlebar: Object.freeze({
