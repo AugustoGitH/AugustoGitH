@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import {
   T, AGENT_HUE, TYPO, CELL_W, GEO, TIME, TOTAL_S, CUE, CURSOR_DUTY, SPIN,
-  FINALE_AT, ERASE, ERASE_END, KEYTIME_DECIMALS, phaseStart, k, ROSTER,
+  FINALE_AT, GROW, growAt, GROW_END, KEYTIME_DECIMALS, phaseStart, k, ROSTER,
 } from './lib/constants/index.mjs'
 import { LIMITS } from './lib/constants/index.mjs'
 import { assertWidth, assertLineCount, assertBudget } from './lib/assert.mjs'
@@ -69,9 +69,6 @@ function revealRow(i, r, idx, agentId) {
   const p0 = phaseStart(i)
   const wS = p0 + r.at                                   // começa a escrever
   const wE = wS + r.dur                                  // escrito
-  // Absoluto, não relativo à fase: os quatro painéis apagam juntos no fim.
-  const eS = ERASE.at + idx * ERASE.step                 // começa a apagar
-  const eE = eS + ERASE.dur                              // apagado
   const f = TIME.CURSOR_FADE_S
   const id = `c-${i}-${idx}`
 
@@ -80,8 +77,8 @@ function revealRow(i, r, idx, agentId) {
     x: x0, y: r.y - TYPO.SIZE.body, width: w, height: TYPO.LINE_H,
   }, animate({
     attr: 'width',
-    values: `0;0;${w};${w};0;0`,
-    keyTimes: `0;${k(wS)};${k(wE)};${k(eS)};${k(eE)};1`,
+    values: `0;0;${w};${w}`,
+    keyTimes: `0;${k(wS)};${k(wE)};1`,
     dur: TOTAL_S, where: `${where}/clip`,
   })))
 
@@ -93,17 +90,16 @@ function revealRow(i, r, idx, agentId) {
   })
   const slide = animate({
     attr: 'x',
-    values: `${x0};${x0};${x1.toFixed(2)};${x1.toFixed(2)};${x0};${x0}`,
-    keyTimes: `0;${k(wS)};${k(wE)};${k(eS)};${k(eE)};1`,
+    values: `${x0};${x0};${x1.toFixed(2)};${x1.toFixed(2)}`,
+    keyTimes: `0;${k(wS)};${k(wE)};1`,
     dur: TOTAL_S, where: `${where}/slide`,
   })
   // Visível só enquanto escreve e enquanto apaga. Entre os dois ele some, senão
   // os seis cursores do painel ficariam acesos ao mesmo tempo.
   const cursor = tag('g', { opacity: 0 },
     animate({
-      attr: 'opacity', values: '0;0;1;1;0;0;1;1;0',
-      keyTimes: `0;${k(wS)};${k(wS + f)};${k(wE)};${k(wE + f)};` +
-                `${k(eS)};${k(eS + f)};${k(eE)};1`,
+      attr: 'opacity', values: '0;0;1;1;0;0',
+      keyTimes: `0;${k(wS)};${k(wS + f)};${k(wE)};${k(wE + f)};1`,
       dur: TOTAL_S, where: `${where}/cursor`,
     }) +
     tag('rect', {
@@ -159,12 +155,12 @@ function veilFrames(i) {
 function spinnerFrames(i) {
   const f = TIME.VEIL_FADE_S
   const pS = phaseStart(i)
-  if (i === 0) {
-    return { values: '0;0;1;1', keyTimes: `0;${k(ERASE_END)};${k(ERASE_END + f)};1` }
-  }
+  // Só enquanto o painel ainda não falou — depois ele tem saída própria, e no
+  // fim a seção se multiplica em vez de esvaziar.
+  if (i === 0) return { values: '0;0', keyTimes: '0;1' }
   return {
-    values: '1;1;0;0;1;1',
-    keyTimes: `0;${k(pS - f)};${k(pS)};${k(ERASE_END)};${k(ERASE_END + f)};1`,
+    values: '1;1;0;0',
+    keyTimes: `0;${k(pS - f)};${k(pS)};1`,
   }
 }
 
@@ -221,19 +217,114 @@ function pane(i, agent, data) {
     box + content + spinner(i) + veil(i))
 }
 
+
+// ------------------------------------------------- multiplicação da frota
+
+/**
+ * Um nível da multiplicação: n x n painéis abstratos.
+ *
+ * Não mostram conteúdo porque não cabe — em 4x4 sobram 26 colunas de texto, em
+ * 8x8 sobram dez. O que resta é a silhueta do terminal, e a cor diz de qual dos
+ * quatro agentes aquele painel descende: cada quadrante herda o pai.
+ */
+function subgrid(n) {
+  const s = GEO.SUB
+  return Array.from({ length: n * n }, (_, i) => {
+    const p = GEO.gridPane(i, n)
+    const pai = ROSTER[GEO.parentAgent(i, n)]
+    const hue = AGENT_HUE[pai.id]
+    const ch = Math.round(p.h * s.chromeRatio)
+    const rx = Math.min(GEO.PANE.RX, ch)
+    const st = GEO.PANE.STROKE
+
+    const moldura =
+      tag('rect', { x: p.x + st / 2, y: p.y + st / 2, width: p.w - st, height: p.h - st,
+        rx, fill: T.pane, stroke: T.border, 'stroke-width': st }) +
+      tag('rect', { x: p.x + st, y: p.y + st, width: p.w - st * 2, height: ch, rx,
+        fill: T.chrome }) +
+      tag('rect', { x: p.x + st, y: p.y + ch, width: p.w - st * 2, height: rx, fill: T.chrome }) +
+      [0, 1, 2].map((d) => tag('circle', {
+        cx: p.x + s.pad + d * s.dotGap, cy: p.y + st + ch / 2, r: s.dotR,
+        fill: [T.dotRed, T.dotYellow, T.dotGreen][d],
+      })).join('')
+
+    // Nível intermediário ainda carrega o endereço do agente; o maior, só o cursor.
+    const corpo = n <= s.TEXT_UNTIL
+      ? text(p.x + s.pad, p.y + ch + s.pad + s.titleSize, hue, pai.title,
+          { 'font-size': s.titleSize }) +
+        s.barWidths.map((_, b) => tag('rect', {
+          x: p.x + s.pad, y: p.y + ch + s.pad * 2 + s.titleSize + b * s.barGap,
+          width: (p.w - s.pad * 2) * s.barWidths[b], height: s.barH,
+          rx: s.barH / 2, fill: T.dim, opacity: s.barOpacity,
+        })).join('')
+      : cursorMini(p.x + s.pad, p.y + ch + s.pad, pai.id, hue)
+
+    return moldura + corpo
+  }).join('')
+}
+
+/**
+ * O cursor de um painel do nível maior.
+ *
+ * Animado, sai como <use> do símbolo em <defs> — assim 64 cursores vivos custam
+ * quatro <animate> no arquivo. No quadro estático não há <defs>, e um <use>
+ * apontando para nada não desenha: aí o retângulo vai direto.
+ */
+function cursorMini(x, y, id, hue) {
+  const s = GEO.SUB
+  return STATIC
+    ? tag('rect', { x, y, width: s.cursorW, height: s.cursorH, fill: hue })
+    : tag('use', { href: `#cur-${id}`, 'xlink:href': `#cur-${id}`, x, y })
+}
+
+/** Os quatro cursores do nível maior, definidos uma vez e reusados 64 vezes.
+ *  <use> replica a animação em cada cópia — 64 cursores vivos, quatro <animate>. */
+function cursorDefs() {
+  const s = GEO.SUB
+  return tag('defs', {}, ROSTER.map((a) => tag('g', { id: `cur-${a.id}` },
+    tag('rect', { x: 0, y: 0, width: s.cursorW, height: s.cursorH, fill: AGENT_HUE[a.id] },
+      tag('animate', {
+        attributeName: 'opacity', ...CURSOR_DUTY,
+        dur: `${TIME.CURSOR_BLINK_S}s`, begin: '0s', repeatCount: 'indefinite',
+      })))).join(''))
+}
+
+/** Opacidade de um nível: entra em `de`, sai em `ate`. */
+function nivel(conteudo, de, ate, base, kk) {
+  if (STATIC) return base ? conteudo : ''
+  const f = GROW.fade
+  return tag('g', { opacity: base ? 1 : 0 },
+    animate({
+      attr: 'opacity',
+      values: base ? '1;1;0;0' : '0;0;1;1;0;0',
+      keyTimes: base
+        ? `0;${kk(de)};${kk(de + f)};1`
+        : `0;${kk(de)};${kk(de + f)};${kk(ate)};${kk(ate + f)};1`,
+      dur: TOTAL_S, where: 'nível',
+    }) + conteudo)
+}
+
+// --------------------------------------------------------------------- main
+
 const main = () => {
   const data = JSON.parse(readFileSync(IN, 'utf8'))
   console.log(`-> lido ${IN}`)
 
   const svg = [
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${GEO.CANVAS.W}" height="${GEO.CANVAS.H}" ` +
+    // xmlns:xlink declarado porque <use> traz xlink:href por compatibilidade.
+    // Sem a declaração o SVG vira XML inválido e o GitHub não renderiza nada.
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ` +
+    `width="${GEO.CANVAS.W}" height="${GEO.CANVAS.H}" ` +
     `viewBox="0 0 ${GEO.CANVAS.W} ${GEO.CANVAS.H}" role="img" ` +
     `aria-label="Quatro agentes de terminal se apresentando em revezamento: ` +
     `identidade, números do perfil, stack e contato.">`,
     // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
     `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: GEO.CANVAS.W, height: GEO.CANVAS.H, fill: T.bg }),
-    ...ROSTER.map((a, i) => pane(i, a, data)),
+    STATIC ? '' : cursorDefs(),
+    nivel(ROSTER.map((a, i) => pane(i, a, data)).join(''), GROW.at, 0, true, k),
+    nivel(subgrid(GROW.levels[0]), GROW.at, growAt(1), false, k),
+    nivel(subgrid(GROW.levels[1]), growAt(1), GROW_END, false, k),
     '</svg>',
   ].join('\n')
 

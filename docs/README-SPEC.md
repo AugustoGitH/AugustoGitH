@@ -934,9 +934,11 @@ export const ROSTER = Object.freeze([
 Valores de `constants/timing.mjs` (§2.6).
 
 ```
-PHASE_S   6.5    por agente
-CLEAR_S   2.0    limpeza final antes do loop
-TOTAL_S   28.0   PHASE_S × 4 + CLEAR_S
+PHASE_S    6.5    por agente
+FINALE_AT 24.1    os quatro acendem juntos
+GROW.at   25.6    começa a subdividir; +1.4 para o nível seguinte
+GROW_END  29.7    o campo de 64 começa a sair
+TOTAL_S   30.4
 ```
 
 Janela ativa do agente `i`: `[phaseStart(i), phaseStart(i) + PHASE_S)`.
@@ -1035,7 +1037,40 @@ O número de entradas varia com a posição do agente: o agente 0 é
 `claro → escuro` (5 valores), os agentes 1–3 são `escuro → claro → escuro`
 (7 valores). O gerador monta a lista a partir da fase, não à mão.
 
-#### d) Spinner de espera
+#### d) A multiplicação da frota
+
+Depois que os quatro terminam e a grade acende inteira, cada painel se divide em
+quatro, duas vezes: **4 → 16 → 64**. É o fecho da seção, e substituiu a limpeza
+linha a linha.
+
+O nível de 64 **não é legível, e não deveria ser**. Em 820×520 o painel fica com
+92×55px e 29px de corpo — os três semáforos sozinhos ocupariam 52 dos 92 se
+mantivessem o tamanho original. A ilegibilidade é a mensagem: você lê quatro, e
+vê que são sessenta e quatro.
+
+| nível | painel | mostra |
+| --- | --- | --- |
+| 4 | 404×254 | tudo — chrome, título, caixa, quatro linhas, rodapé |
+| 16 | 196×121 | chrome, `agent://…` e duas barras que insinuam saída |
+| 64 | 92×55 | chrome e um cursor |
+
+**A cor diz a descendência.** Cada quadrante herda o agente pai: as 16 do canto
+superior esquerdo descendem do `scout`, e assim por diante. `parentAgent(i, n)`
+resolve isso pela posição, então subdividir lê como cada agente gerando uma
+equipe, não como a grade trocando de tamanho.
+
+**Custo pago com `<use>`.** Os 64 cursores saem de quatro símbolos em `<defs>`,
+um por cor. `<use>` replica a animação em cada cópia: **64 cursores vivos por
+quatro `<animate>` no arquivo**. Sem isso o orçamento de 150 estouraria.
+
+> **Uma armadilha que isso trouxe.** `<use>` costuma vir com `xlink:href`, e o
+> primeiro render escreveu o atributo sem declarar `xmlns:xlink` no root. Dentro
+> de `<img>` o SVG é parseado como **XML estrito**, não como HTML tolerante: o
+> navegador não renderiza nada e não avisa. `assertNamespaces` agora aborta a
+> geração quando um prefixo não está declarado — `xml` e `xmlns`, que a
+> especificação predefine, são exceção.
+
+#### e) Spinner de espera
 
 Painel inativo mostra no rodapé três pontos `● ● ●` com `opacity` defasada em
 0.4 s, via `<animate>` com `repeatCount="indefinite"`.

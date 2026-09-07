@@ -4,7 +4,7 @@ export { TYPO, CELL_W } from './typography.mjs'
 export { GEO } from './geometry.mjs'
 export {
   TIME, TOTAL_S, CUE, CURSOR_DUTY, HOLD_END, SPIN,
-  FINALE_AT, ERASE, ERASE_END, KEYTIME_DECIMALS, keyTimeTick, phaseStart, k,
+  FINALE_AT, GROW, growAt, GROW_END, KEYTIME_DECIMALS, keyTimeTick, phaseStart, k,
 } from './timing.mjs'
 export { LIMITS } from './limits.mjs'
 export { ROSTER, ROLE, LINKS, MONTHS } from './roster.mjs'

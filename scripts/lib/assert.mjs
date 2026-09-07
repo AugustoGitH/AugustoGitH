@@ -43,8 +43,27 @@ export function assertKeyframes(values, keyTimes, where) {
   return keyTimes
 }
 
+/**
+ * Todo prefixo usado tem que estar declarado no root.
+ *
+ * Um `xlink:href` sem `xmlns:xlink` torna o arquivo XML inválido. Dentro de
+ * <img> o SVG é parseado como XML estrito, não como HTML tolerante — o
+ * navegador não renderiza NADA e não avisa. Foi assim que o <use> dos cursores
+ * quebrou a Seção 1 inteira.
+ */
+export function assertNamespaces(svg) {
+  const usados = new Set([...svg.matchAll(/\s([a-zA-Z][\w-]*):[\w-]+=/g)].map((m) => m[1]))
+  // 'xml' e 'xmlns' são predefinidos pela especificação e nunca se declaram.
+  for (const p of ['xml', 'xmlns']) usados.delete(p)
+  const declarados = new Set([...svg.matchAll(/xmlns:([\w-]+)=/g)].map((m) => m[1]))
+  const faltando = [...usados].filter((p) => !declarados.has(p))
+  if (faltando.length) fail(`prefixo sem xmlns: ${faltando.join(', ')}`)
+  return svg
+}
+
 /** Orçamentos do arquivo final. */
 export function assertBudget(svg) {
+  assertNamespaces(svg)
   const bytes = Buffer.byteLength(svg, 'utf8')
   // \b depois de "animate" NÃO casa <animateTransform> — o T é caractere de
   // palavra. Contar só <animate> subestimava o orçamento pela metade.

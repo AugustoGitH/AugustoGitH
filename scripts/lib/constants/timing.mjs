@@ -8,7 +8,7 @@ export const TIME = Object.freeze({
   VEIL_FADE_S: 0.3,
 })
 
-export const TOTAL_S = TIME.PHASE_S * TIME.AGENTS + TIME.CLEAR_S // 28.0
+export const TOTAL_S = 30.4 // fecha depois do campo de 64 sair (ver GROW_END)
 
 /** Cues em segundos, relativos ao início da fase do agente. */
 export const CUE = Object.freeze({
@@ -33,19 +33,30 @@ export const FINALE_AT =
   TIME.PHASE_S * (TIME.AGENTS - 1) + CUE.foot.at + CUE.foot.dur + CUE.finaleHold
 
 /**
- * Limpeza. Absoluta, não relativa à fase: os quatro painéis apagam JUNTOS,
- * depois que o último terminou de preencher — e não cada um no fim do seu turno.
+ * A multiplicação da frota, que substituiu a limpeza.
  *
- * Mesma mecânica do escrever, invertida: o clip encolhe da direita para a
- * esquerda e o cursor volta com ele, como um backspace.
+ * Depois que os quatro terminam e a grade acende inteira, cada painel se divide
+ * em quatro, duas vezes: 4 -> 16 -> 64. É o fecho da seção — a frota à qual os
+ * quatro pertencem.
+ *
+ * O nível de 64 não é legível e não deveria ser: em 820x520 o painel fica com
+ * 92x55px e 29px de corpo. A ilegibilidade é a mensagem — você lê quatro, e vê
+ * que são sessenta e quatro.
  */
-export const ERASE = Object.freeze({
-  at:   TIME.PHASE_S * TIME.AGENTS, // 26.0 — assim que a última fase termina
-  step: 0.12,                       // entre linhas; curto, a limpeza não se lê
-  dur:  0.30,
+export const GROW = Object.freeze({
+  at: 25.6,     // começa a subdividir, depois do finale
+  step: 1.4,    // de um nível ao próximo
+  fade: 0.7,    // duração de cada troca
+  hold: 2.0,    // o campo de 64 parado
+  levels: Object.freeze([4, 8]), // colunas de cada nível novo; o primeiro é 2
 })
 
-export const ERASE_END = ERASE.at + ERASE.step * 5 + ERASE.dur
+/** Instante em que cada nível entra. */
+export const growAt = (n) => GROW.at + n * GROW.step
+
+/** O campo de 64 começa a sair. */
+export const GROW_END =
+  growAt(GROW.levels.length - 1) + GROW.fade + GROW.hold
 
 /**
  * Ciclo de trabalho do cursor: aceso na primeira metade, apagado na segunda.

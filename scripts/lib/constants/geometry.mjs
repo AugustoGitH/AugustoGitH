@@ -60,6 +60,25 @@ const BOX = Object.freeze({
 const BODY = Object.freeze({ Y: 94 })
 const FOOT = Object.freeze({ Y: 236 })
 
+/**
+ * Retângulo do painel i numa grade n x n que preenche o canvas.
+ *
+ * A grade de 2 é a da seção; 4 e 8 são os níveis da multiplicação (§4.x). As
+ * bordas externas coincidem nos três, então subdividir lê como cada painel se
+ * partindo, não como a grade trocando de tamanho.
+ */
+const gridPane = (i, n) => {
+  const w = (CANVAS.W - GAP * (n - 1)) / n
+  const h = (CANVAS.H - GAP * (n - 1)) / n
+  return { x: (i % n) * (w + GAP), y: Math.floor(i / n) * (h + GAP), w, h }
+}
+
+/** De qual dos quatro agentes o painel i da grade n x n descende. */
+const parentAgent = (i, n) => {
+  const meia = n / 2
+  return Math.floor(Math.floor(i / n) / meia) * COLS + Math.floor((i % n) / meia)
+}
+
 /** Origem do painel i na grade COLS x ROWS. */
 const paneOrigin = (i) => Object.freeze({
   x: (i % COLS) * (PANE.W + GAP),
@@ -78,7 +97,34 @@ const boxTextY = () => BOX.Y + BOX.H / 2 + TYPO.BASELINE_NUDGE
 /** x do texto dentro da caixa de status, respeitando o padding interno. */
 const boxTextX = () => BOX.X + BOX.PAD
 
+/**
+ * Aparência dos painéis dos níveis multiplicados.
+ *
+ * Eles não mostram conteúdo: em 4x4 sobram 26 colunas e em 8x8, dez. O que
+ * resta é a silhueta do terminal — moldura, barra de título e, no nível maior,
+ * um cursor. É abstração de propósito (§4.x).
+ */
+const SUB = Object.freeze({
+  chromeRatio: 0.22,  // a barra de título acompanha a altura do painel
+  dotR: 2,
+  dotGap: 6,
+  titleSize: 8,
+  barH: 4,
+  barGap: 8,
+  pad: 8,
+  cursorW: 5,
+  cursorH: 9,
+
+  /** Até esta largura de grade o painel ainda carrega o endereço do agente;
+   *  acima dela sobra só o cursor. */
+  TEXT_UNTIL: 4,
+
+  /** Barras que insinuam linhas de saída, em fração da largura útil. */
+  barWidths: Object.freeze([0.8, 0.55]),
+  barOpacity: 0.35,
+})
+
 export const GEO = Object.freeze({
   GAP, COLS, ROWS, PAD, HAIRLINE, COORD_DECIMALS, CANVAS, PANE, DOT, SPIN_DOT, BOX, BODY, FOOT,
-  paneOrigin, colX, lineY, boxTextY, boxTextX,
+  SUB, paneOrigin, gridPane, parentAgent, colX, lineY, boxTextY, boxTextX,
 })
