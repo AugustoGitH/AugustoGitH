@@ -32,7 +32,7 @@ const alvos = [
   'scripts/render_agents.mjs', 'scripts/render_city.mjs',
   'scripts/fetch_profile.mjs', 'scripts/lib/svg.mjs',
   'scripts/lib/color.mjs', 'scripts/lib/assert.mjs',
-  'scripts/render_stack.mjs', 'scripts/lib/pack.mjs', 'scripts/render_links.mjs', 'scripts/render_banner.mjs',
+  'scripts/render_stack.mjs', 'scripts/lib/pack.mjs', 'scripts/render_links.mjs', 'scripts/render_banner.mjs', 'scripts/render_product.mjs',
 ]
 
 let achados = 0

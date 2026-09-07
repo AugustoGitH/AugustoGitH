@@ -74,3 +74,10 @@ export const phaseStart = (i) => i * TIME.PHASE_S
 export const KEYTIME_DECIMALS = 4
 
 export const k = (seconds) => (seconds / TOTAL_S).toFixed(KEYTIME_DECIMALS)
+
+/**
+ * Menor intervalo que dois keyTimes conseguem distinguir depois do
+ * arredondamento. Serve para separar dois eventos coladinhos sem que o valor
+ * arredondado os funda — o que descartaria a animação inteira (§4.6).
+ */
+export const keyTimeTick = (total) => total / 10 ** KEYTIME_DECIMALS

@@ -4,7 +4,7 @@
 > **como o SVG é montado**. Nada aqui é implementado por terceiros: todo
 > elemento animado é gerado por código deste repositório e commitado como arquivo.
 
-- **Escopo deste documento:** as cinco seções do README.
+- **Escopo deste documento:** as seis seções do README.
 - **Última atualização:** 2026-09-06
 
 > **Fonte de verdade deste documento.** Tudo aqui é derivado de (a) este
@@ -28,6 +28,7 @@
 | 6 | [Seção 3 — O poço de stacks](#6-seção-3--o-poço-de-stacks) | partida de Tetris com as tecnologias |
 | 7 | [Seção 4 — O prompt devolvido](#7-seção-4--o-prompt-devolvido) | fecho: os endereços e o cursor esperando |
 | 8 | [Seção 0 — O banner](#8-seção-0--o-banner) | abertura: folha de contatos e o blog |
+| 9 | [Seção 1 — O preview do produto](#9-seção-1--o-preview-do-produto) | sessão de uso gravada do BudgetXpert |
 
 ---
 
@@ -635,6 +636,7 @@ longo. Numa peça maior a conclusão seria outra.
 | # | Seção | Estado hoje | Ao ser especificada |
 | :-: | --- | --- | --- |
 | 00 | Banner | — (nova) | `banner.svg` (§8) |
+| 01 | Produto | — (nova) | `product-preview.svg` (§9) |
 | 01 | Apresentação | `readme-typing-svg` externo + `banner_00_rounded.png` (699 KB) | **substituído** por `agents-grid.svg` |
 | 02 | Commits | snake via `Platane/snk@v3` | **substituído** por `commit-city.svg` (§5) |
 | 03 | Stacks | ~35 badges `shields.io` | **substituído** por `stack-well.svg` (§6) |
@@ -1971,3 +1973,136 @@ dela mesma, não pelo orçamento que a originou.
 | Ordem | 01, 03, 02 — a simetria vai ao centro |
 | Manchete | `My Blog` em faixa de largura cheia, monocromática |
 | Animação | os quadros surgem escalonados, a manchete por último, e congela em 1.6s |
+
+
+---
+
+## 9. Seção 1 — O preview do produto
+
+### 9.1 Intenção
+
+Uma sessão de uso gravada do BudgetXpert: o ponteiro clica em **Budgets**, os
+cards aparecem, ele abre um deles e chega na tabela de orçamento. Somente
+leitura, em loop.
+
+Não é um jogo nem um app embutido — sem JS (§0.2), é um **replay**, pela mesma
+razão que a partida da Seção 4 é.
+
+### 9.2 Posição: depois do banner, antes da apresentação
+
+```
+00 banner     capa — identidade visual
+01 produto    o que ele constrói        ← aqui
+02 agentes    quem é
+03 cidade     atividade
+04 stacks     ferramentas
+05 links      contato
+```
+
+O README abria com o teaser de um blog que **ainda não existe**. Um produto no
+ar é uma primeira impressão mais forte, e o banner segue como capa.
+
+O produto vir antes da apresentação funciona porque a página de perfil do GitHub
+já mostra nome e avatar na barra lateral, ao lado do README — o visitante não
+depende da Seção 2 para saber de quem é o perfil.
+
+### 9.3 Terceiro registro, e por quê
+
+O produto é uma interface corporativa **clara**, dentro de uma página escura. É
+o terceiro registro do README, depois do fotográfico (banner) e do terminal.
+
+Repintar o BudgetXpert de terracota deturparia o produto. A coisa parece com ela
+mesma — mesma lógica que manteve as fotos do banner em preto e branco (§8.2).
+
+### 9.4 Fiel na estrutura, amostra no conteúdo
+
+Os repositórios são **privados e da organização** `budgetXpert`, e o conteúdo
+pertence aos clientes. Nada de dado real entra aqui.
+
+O que é fiel, lido do código em 2026-09-07:
+
+| Elemento | Origem |
+| --- | --- |
+| navegação (Home, Plans, Categories, Premises, Budgets, Analyses, AI Xpert) | `src/components/navigations/Sidebar/constants.ts` |
+| paleta `main` `second` `third` `fourth` | `tailwind.config.ts` |
+| estados de budget (`running`, `indraft`, `closed`) e suas cores | `tailwind.config.ts` |
+| campos do card (nome, estado, nº de versões) | `budget/_impl/NonSelected/_impl/BudgetCard` |
+| tabela: Categories e Premises aninhados por `level`, colunas de período, até 4 versões comparadas | `features/budget/BudgetTable` |
+| o fluxo `NonSelected → Selected` | estrutura de pastas da tela de budget |
+
+Os **números são inventados**, e a moldura diz isso: `preview · sample data`,
+à direita do título.
+
+Como a Seção 5, esta seção **apresenta, não mede** — e isso fica declarado, não
+disfarçado (§0.5).
+
+### 9.5 Geometria
+
+Canvas **820 × 314**, o mesmo do banner (§8.5) — as duas aberturas têm o mesmo
+peso na página.
+
+```
+TITLE_Y    27       mesma linha de base das demais seções
+app        796 × 260 em (12, 42)
+header     34
+sidebar    132       7 itens de 26px = 182, cabe em 214
+conteúdo   664 × 226
+tabela     rótulo 170 + 6 colunas de 78
+```
+
+Os corpos de texto são menores que os 11px do sistema (`brand` 12, `nav` 10,
+`head` 11, `label` 9.5, `cell` 9, `badge` 8.5): o SVG imita uma tela inteira
+reduzida a 796×260, e o texto precisa da proporção que teria no app.
+
+#### Os offsets de UI moram agrupados por zona
+
+Desenhar uma interface produz dezenas de números pequenos — respiro de 16 aqui,
+linha de base de 22 ali. A primeira versão deste render tinha **72 valores de
+desenho soltos**, e a auditoria de §0.9 os pegou.
+
+Nomear um por um viraria uma lista ilegível. Ficaram agrupados por zona em
+`LAY`: `header`, `nav`, `screen`, `home`, `card`, `table`. Mexer no cabeçalho é
+mexer em `LAY.header`, e nada mais.
+
+### 9.6 O roteiro do ponteiro
+
+```
+0.35 – 1.45s   o ponteiro vai até Budgets
+1.45s          clique — pulso, e a seleção da sidebar acende
+1.90 – 2.25s   os cards entram
+2.25 – 3.35s   o ponteiro vai até o primeiro card
+3.35s          clique
+3.80 – 4.15s   a tabela entra
+4.15 – 7.15s   parado, tempo de ler
+               recomeça
+```
+
+A seta é um `path` em frações da própria altura (`ARROW`), então mudar
+`TOUR.CURSOR` reescala o desenho inteiro. O pulso do clique mora **dentro** do
+grupo do ponteiro, na origem — assim ele acompanha a seta sem precisar de uma
+segunda animação de posição.
+
+Um só elemento de pulso serve aos dois cliques, com dois picos na mesma lista de
+`values`. Separar dois eventos vizinhos exige `keyTimeTick()`: menos que isso e
+os dois valores arredondam para o mesmo keyTime, o que descartaria a animação
+inteira (§4.6).
+
+**O estado base é a TABELA.** Sem SMIL o leitor recebe o quadro mais informativo
+da sessão, não a tela vazia por onde ela começa (§0.3).
+
+### 9.7 Molde para outros produtos
+
+`constants/product.mjs` é o molde. Trocar de produto é trocar `PRODUCT`, `NAV`,
+`UI`, `CARDS` e `TABLE` — a mecânica do ponteiro e das telas não sabe qual
+produto está desenhando.
+
+### 9.8 Decisões da Seção 1
+
+| Decisão | Resultado |
+| --- | --- |
+| Posição | 01, depois do banner e antes da apresentação (§9.2) |
+| Registro | claro, a paleta do produto — repintar deturparia (§9.3) |
+| Dado | estrutura fiel, números de amostra, rotulado na moldura |
+| Interação | replay com ponteiro visível; a plataforma não executa JS |
+| Altura | 314, igual ao banner |
+| Reuso | `product.mjs` é o molde para o próximo projeto |

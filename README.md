@@ -2,13 +2,23 @@
 
 <div align="center">
   <img src="./assets/banner.svg" width="820"
-       alt="$ blog --status — três retratos em preto e branco de Augusto Caetano Westphal, da mesma sessão: agachado sobre um banco de concreto segurando um asterisco luminoso, deitado de lado com o mesmo asterisco, e agachado entre dois símbolos luminosos apoiados no banco. Estado do blog: writing, soon." />
+       alt="My Blog — três retratos em preto e branco de Augusto Caetano Westphal, da mesma sessão: agachado sobre um banco de concreto segurando um asterisco luminoso; agachado no banco entre dois símbolos luminosos apoiados nele; deitado de lado sobre o banco, com o mesmo asterisco. $ blog --status: writing, soon." />
 </div>
 
 <br />
 <br />
 
-<!-- ══════════════════ 01 · APRESENTAÇÃO ══════════════════ -->
+<!-- ══════════════════ 01 · PRODUTO ══════════════════ -->
+
+<div align="center">
+  <img src="./assets/product-preview.svg" width="820"
+       alt="$ open ~/work/budgetxpert --preview — sessão de uso gravada do BudgetXpert, Results Management Software: o ponteiro abre Budgets, os cards aparecem e um deles revela a tabela de orçamento com categorias e premissas por período. Navegação: Home, Plans, Categories, Premises, Budgets, Analyses, AI Xpert. preview, sample data." />
+</div>
+
+<br />
+<br />
+
+<!-- ══════════════════ 02 · APRESENTAÇÃO ══════════════════ -->
 
 <div align="center">
   <img src="./assets/agents-grid.svg" width="820"
@@ -17,16 +27,18 @@
 
 <br />
 <br />
-<!-- ══════════════════ 02 · COMMITS ══════════════════ -->
+
+<!-- ══════════════════ 03 · COMMITS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/commit-city.svg" width="820"
-       alt="$ git log --graph --since=1.year — skyline das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 3862 commits, 306 de 365 dias ativos, pico semanal de 201." />
+       alt="$ git log --graph --since=1.year — skyline das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 306 de 365 dias ativos, pico semanal de 201." />
 </div>
 
 <br />
 <br />
-<!-- ══════════════════ 03 · STACKS ══════════════════ -->
+
+<!-- ══════════════════ 04 · STACKS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/stack-well.svg" width="820"
@@ -35,7 +47,8 @@
 
 <br />
 <br />
-<!-- ══════════════════ 04 · LINKS ══════════════════ -->
+
+<!-- ══════════════════ 05 · LINKS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/contact-prompt.svg" width="820"
@@ -44,4 +57,4 @@
 
 <!-- sem espaço entre as tags: o branco entre <img> inline viraria medianiz
      do navegador e a fileira não fecharia nos 820 do terminal acima -->
-<p align="center"><a target="_blank" href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="205" alt="portfolio — augustowestphal.netlify.app" /></a><a target="_blank" href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="205" alt="linkedin — linkedin.com/in/augusto-westphal" /></a><a target="_blank" href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="205" alt="github — github.com/AugustoGitH" /></a><a target="_blank" href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="205" alt="email — augustoc.westphal.ltda@gmail.com" /></a></p>
+<p align="center"><a href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="205" alt="portfolio — augustowestphal.netlify.app" /></a><a href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="205" alt="linkedin — linkedin.com/in/augusto-westphal" /></a><a href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="205" alt="github — github.com/AugustoGitH" /></a><a href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="205" alt="email — augustoc.westphal.ltda@gmail.com" /></a></p>
