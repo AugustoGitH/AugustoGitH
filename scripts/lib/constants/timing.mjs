@@ -8,10 +8,7 @@ export const TIME = Object.freeze({
   VEIL_FADE_S: 0.3,
 })
 
-/** Início absoluto da fase do agente i. */
-export const phaseStart = (i) => i * TIME.PHASE_S
-
-export const TOTAL_S = 31 // = GROW_END + GROW.fade, arredondado
+export const TOTAL_S = TIME.PHASE_S * TIME.AGENTS + TIME.CLEAR_S // 28.0
 
 /** Cues em segundos, relativos ao início da fase do agente. */
 export const CUE = Object.freeze({
@@ -36,32 +33,19 @@ export const FINALE_AT =
   TIME.PHASE_S * (TIME.AGENTS - 1) + CUE.foot.at + CUE.foot.dur + CUE.finaleHold
 
 /**
- * A montagem da frota, depois que os quatro terminam.
+ * Limpeza. Absoluta, não relativa à fase: os quatro painéis apagam JUNTOS,
+ * depois que o último terminou de preencher — e não cada um no fim do seu turno.
  *
- * A grade não salta de 4 para 64: ela se monta **de um em um**, um painel por
- * vez, em ordem de leitura. É aritmético — mais um, mais um — e é isso que faz
- * parecer uma frota subindo, e não um corte de plano.
- *
- * O nível final não é legível e não deveria ser: o painel fica com 92x55px e
- * 29px de corpo. A ilegibilidade é a mensagem — você lê quatro, e vê sessenta
- * e quatro.
+ * Mesma mecânica do escrever, invertida: o clip encolhe da direita para a
+ * esquerda e o cursor volta com ele, como um backspace.
  */
-export const GROW = Object.freeze({
-  at: 25.4,     // depois do finale, quando os quatro já acenderam juntos
-  step: 0.05,   // de um painel ao próximo
-  fade: 0.45,   // cada painel surge nisto
-  hold: 1.5,    // o campo completo, parado
-  cols: 8,
+export const ERASE = Object.freeze({
+  at:   TIME.PHASE_S * TIME.AGENTS, // 26.0 — assim que a última fase termina
+  step: 0.12,                       // entre linhas; curto, a limpeza não se lê
+  dur:  0.30,
 })
 
-/** Instante em que o painel k da grade entra. */
-export const paneAt = (k) => GROW.at + k * GROW.step
-
-/** O último painel termina de entrar. */
-export const FILL_END = paneAt(GROW.cols ** 2 - 1) + GROW.fade
-
-/** O campo completo começa a sair. */
-export const GROW_END = FILL_END + GROW.hold
+export const ERASE_END = ERASE.at + ERASE.step * 5 + ERASE.dur
 
 /**
  * Ciclo de trabalho do cursor: aceso na primeira metade, apagado na segunda.
@@ -81,6 +65,8 @@ export const HOLD_END = '0.9900'
 /** Perseguição do spinner: início, pico e fim do pulso de cada ponto. */
 export const SPIN = Object.freeze({ lead: 0.01, peak: 0.09, trail: 0.17 })
 
+/** Início absoluto da fase do agente i. */
+export const phaseStart = (i) => i * TIME.PHASE_S
 
 /** Segundos absolutos -> keyTime normalizado. Nenhum render divide por TOTAL_S. */
 /** Casas decimais de um keyTime. Quatro separam eventos a ~2.8ms num loop de

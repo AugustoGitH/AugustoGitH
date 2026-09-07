@@ -934,12 +934,9 @@ export const ROSTER = Object.freeze([
 Valores de `constants/timing.mjs` (§2.6).
 
 ```
-PHASE_S    6.5    por agente
-GROW.at   25.4    começa a montar a grade
-step      0.05    de um painel ao próximo, 64 vezes
-FILL_END  29.0    o último painel entrou
-GROW_END  30.5    o campo completo começa a sair
-TOTAL_S   31.0
+PHASE_S   6.5    por agente
+CLEAR_S   2.0    limpeza final antes do loop
+TOTAL_S   28.0   PHASE_S × 4 + CLEAR_S
 ```
 
 Janela ativa do agente `i`: `[phaseStart(i), phaseStart(i) + PHASE_S)`.
@@ -986,18 +983,40 @@ clip cresce da esquerda para a direita.
 - os `keyTimes` saem de `k()`: `k(0.60) = 0.0214`, `k(1.05) = 0.0375`,
   `k(6.50) = 0.2321`.
 
-#### c) Um cursor por painel, que anda
+#### b) Cursor de bloco
 
-Havia um cursor por linha: seis por painel, três animações cada, **72 no total**
-— mais da metade do orçamento da seção. Um terminal de verdade tem um cursor só,
-e ele se move.
+`<rect>` de `CELL_W × 12` em `T.accent`, na borda direita do clip. O piscar e o
+gate de fase são **animações em elementos diferentes** — piscar no `<rect>`,
+visibilidade da fase no `<g>` que o contém. Duas `<animate>` no mesmo atributo
+do mesmo elemento entram em conflito.
 
-Agora `x` desliza dentro da linha e volta para o começo da próxima; `y` salta em
-degraus (`calcMode=discrete`, senão o cursor cortaria na diagonal). Quatro
-animações por painel no lugar de dezoito — **16 no total**, e foi essa folga que
-pagou os 64 painéis da montagem.
+```xml
+<g opacity="1">
+  <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="…"
+           dur="28s" begin="0s" repeatCount="indefinite"/>
+  <rect … fill="#d97757">
+    <animate attributeName="opacity" values="1;1;0;0;1"
+             keyTimes="0;0.49;0.5;0.99;1"
+             dur="1.06s" begin="0s" repeatCount="indefinite"/>
+  </rect>
+</g>
+```
 
-#### d) Véu do painel inativo
+#### Moldura e barra de título — `lib/pane.mjs`
+
+O chrome era desenhado de `0` a `W`, **cobrindo o traço lateral do corpo**. O
+corpo ficava com borda visível nas laterais e o header não, e o olho lê isso
+como "o header é mais estreito que o corpo".
+
+O chrome recua pela largura do traço (`PANE.STROKE`), então a moldura emoldura o
+painel inteiro — header incluso — e as duas partes têm exatamente a mesma
+largura pintada. O raio do chrome também encolhe pelo traço: raios iguais em
+curvas concêntricas desalinhariam meio pixel.
+
+O código estava duplicado entre a Seção 1 e a Seção 4, com o mesmo erro nas
+duas. Agora vive em `lib/pane.mjs` e as duas seções não podem mais divergir.
+
+#### c) Véu do painel inativo
 
 Atributo de markup `opacity="0"` (fallback: todos os painéis nítidos); a
 animação o levanta para `T.veilAlpha` fora da fase daquele agente.
@@ -1016,49 +1035,7 @@ O número de entradas varia com a posição do agente: o agente 0 é
 `claro → escuro` (5 valores), os agentes 1–3 são `escuro → claro → escuro`
 (7 valores). O gerador monta a lista a partir da fase, não à mão.
 
-#### e) A frota se monta de um em um
-
-Depois que os quatro terminam e acendem juntos, a grade de **8×8** se monta —
-não de uma vez, e não em saltos de nível. **Um painel por vez**, em ordem de
-leitura, a cada 0.05s. É aritmético: mais um, mais um.
-
-```
-t=26s   ~13 painéis     t=27s   ~33
-t=28s   ~53             t=29s    64
-```
-
-Duas versões anteriores erraram isso. A primeira crescia em blocos — 4 → 16 →
-64 — e lia como corte de plano. A segunda dividia o painel de cada agente assim
-que ele terminava de falar; ficava fragmentado, e a montagem competia com quem
-ainda estava escrevendo. Aqui a montagem tem o palco só para ela, depois que a
-apresentação acaba.
-
-Os quatro grandes se dissolvem **no mesmo tempo** em que a grade sobe, então uma
-coisa vira a outra em vez de suceder a outra.
-
-| | painel | mostra |
-| --- | --- | --- |
-| os quatro | 404×254 | tudo — chrome, título, caixa, quatro linhas, rodapé |
-| a grade | 92×55 | chrome e um cursor |
-
-O painel da grade **não é legível, e não deveria ser**: 29px de corpo, e os três
-semáforos ocupariam 52 dos 92px se mantivessem o tamanho. A ilegibilidade é a
-mensagem — você lê quatro e vê sessenta e quatro.
-
-**A cor é a do agente de quem o painel descende** — cada quadrante da grade
-herda um dos quatro.
-
-**Custo.** Um painel por vez exige **uma animação por painel**: são 64, e é o que
-o efeito pede. Coube porque o cursor foi consolidado (§4.6c): 129 animações de
-150.
-
-> **Uma armadilha que o `<use>` trouxe.** Ele costuma vir com `xlink:href`, e o
-> primeiro render escreveu o atributo sem declarar `xmlns:xlink` no root. Dentro
-> de `<img>` o SVG é parseado como **XML estrito**: o navegador não renderiza
-> nada e não avisa. `assertNamespaces` aborta a geração quando um prefixo não
-> está declarado — `xml` e `xmlns` são exceção, a especificação os predefine.
-
-#### f) Spinner de espera
+#### d) Spinner de espera
 
 Painel inativo mostra no rodapé três pontos `● ● ●` com `opacity` defasada em
 0.4 s, via `<animate>` com `repeatCount="indefinite"`.
