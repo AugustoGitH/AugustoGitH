@@ -19,12 +19,19 @@ const FRAMES = 3
 const USABLE = GEO.CANVAS.W - PAD * 2
 const SIDE = (USABLE - GUTTER * (FRAMES - 1)) / FRAMES // 260
 
+/**
+ * O título fica ACIMA da montagem, na mesma linha de base das Seções 2 e 3
+ * (§5.3, §6.4). O estado vai à direita, na mesma linha: assim o banner não tem
+ * texto embaixo dos quadros e abre a página como um cabeçalho.
+ */
+const TITLE_Y = 27
+const TOP = 42
+
 export const BANNER = Object.freeze({
   W: GEO.CANVAS.W,
   PAD, GUTTER, FRAMES, SIDE,
-  TOP: PAD,
-  H: PAD + SIDE + 24 + PAD,                 // 312 — derivado do empilhamento
-  CAPTION_Y: PAD + SIDE + 24,               // 296
+  TITLE_Y, TOP,
+  H: TOP + SIDE + PAD,                      // 314 — derivado do empilhamento
 
   /** Número do quadro, sobre a foto — a marca da borda do filme. */
   NUM_INSET: 8,

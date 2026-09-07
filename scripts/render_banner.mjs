@@ -67,11 +67,11 @@ const main = () => {
     }))
 
   const legenda =
-    text(BANNER.PAD, BANNER.CAPTION_Y, T.accent, BANNER.TITLE, {
+    text(BANNER.PAD, BANNER.TITLE_Y, T.accent, BANNER.TITLE, {
       'font-size': TYPO.SIZE.section,
       'font-weight': TYPO.SECTION_WEIGHT, 'letter-spacing': TYPO.SECTION_TRACKING,
     }) +
-    text(BANNER.W - BANNER.PAD, BANNER.CAPTION_Y, T.muted, BANNER.STATUS,
+    text(BANNER.W - BANNER.PAD, BANNER.TITLE_Y, T.muted, BANNER.STATUS,
       { 'text-anchor': 'end' })
 
   const svg = [
@@ -84,7 +84,7 @@ const main = () => {
     // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
     `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: BANNER.W, height: BANNER.H, fill: T.bg }),
-    quadros, faixa, legenda,
+    legenda, quadros, faixa,
     '</svg>',
   ].join('\n')
 

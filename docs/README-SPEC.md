@@ -1923,11 +1923,17 @@ fotográfico (§8.2).
 ### 8.5 Geometria
 
 ```
+TITLE_Y   27      mesma linha de base das Seções 2 e 3
+TOP       42      topo dos quadros
 PAD       12
 GUTTER     8
 SIDE     260      (usável 796 - 2 medianizes) / 3
-CANVAS   820 × 308
+CANVAS   820 × 314
 ```
+
+**O título fica acima da montagem**, não abaixo — mesma convenção de §5.3 e
+§6.4. O estado (`writing · soon`) vai à direita, na mesma linha de base: assim o
+banner não tem texto sob os quadros e abre a página como um cabeçalho.
 
 O número do quadro fica **sobre** a foto, no canto inferior esquerdo — é a marca
 da borda do filme, e economiza uma linha de legenda.
