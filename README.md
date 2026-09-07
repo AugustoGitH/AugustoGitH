@@ -39,12 +39,12 @@
 
 <div align="center">
   <img src="./assets/contact-prompt.svg" width="820"
-       alt="$ connect --list — portfolio: augustowestphal.netlify.app, linkedin: linkedin.com/in/augusto-westphal, github: github.com/AugustoGitH, email: augustoc.westphal.ltda@gmail.com." />
+       alt="agent://liaison — $ connect --list, e o prompt devolvido ao leitor." />
 </div>
 
 <p align="center">
-  <a href="https://augustowestphal.netlify.app">portfolio</a> ·
-  <a href="https://www.linkedin.com/in/augusto-westphal/">linkedin</a> ·
-  <a href="https://github.com/AugustoGitH">github</a> ·
-  <a href="mailto:augustoc.westphal.ltda@gmail.com">email</a>
+  <a href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="194" alt="portfolio — augustowestphal.netlify.app" /></a>
+  <a href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="194" alt="linkedin — linkedin.com/in/augusto-westphal" /></a>
+  <a href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="194" alt="github — github.com/AugustoGitH" /></a>
+  <a href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="194" alt="email — augustoc.westphal.ltda@gmail.com" /></a>
 </p>

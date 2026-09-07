@@ -22,30 +22,64 @@ export const PROBE = Object.freeze([
 
 const PAD = GEO.PAD
 const CHROME_H = GEO.PANE.CHROME_H
-const LABEL_COLS = 12   // largura da coluna de rótulo, em colunas de texto
 
+/**
+ * O terminal encurtou: a lista de endereços saiu dele e virou peça clicável.
+ *
+ * Um <a> envolve a imagem inteira e dá um destino só, e o GitHub remove <a> de
+ * dentro do SVG — então quatro alvos exigem quatro arquivos. Em vez de duplicar
+ * os endereços (uma vez no terminal, outra nas peças), o terminal ficou com o
+ * que só ele pode dizer: o comando e o prompt devolvido.
+ */
 export const LINKS_PANE = Object.freeze({
   W: GEO.CANVAS.W,
   RX: GEO.PANE.RX,
   CHROME_H,
   PAD,
   TITLE: 'agent://liaison',
-  HUE: AGENT_HUE.liaison, // o agente que fecha o loop da Seção 1 fecha a página
-  LABEL_X: PAD + CELL_W * 2,
-  VALUE_X: PAD + CELL_W * (2 + LABEL_COLS),
+  HUE: AGENT_HUE.liaison,
 
-  CMD_Y: CHROME_H + 30,                       // 56 — a linha de comando
-  FIRST_Y: CHROME_H + 30 + 30,                // 86 — primeiro endereço
-  ROW_H: 22,                                  // mais arejado que o corpo: é o fecho
-  PROMPT_GAP: 30,                             // do último endereço até o prompt
+  CMD_Y: CHROME_H + 30,          // 56
+  PROMPT_GAP: 30,                // do comando até o prompt
   PROMPT: 'augusto@westphal:~$',
 })
 
 export const LINKS_CANVAS = Object.freeze({
   W: GEO.CANVAS.W,
-  // 4 endereços + prompt; altura sai do empilhamento, não é escolhida
-  H: LINKS_PANE.FIRST_Y + LINKS_PANE.ROW_H * 3 + LINKS_PANE.PROMPT_GAP + PAD * 2,
+  H: LINKS_PANE.CMD_Y + LINKS_PANE.PROMPT_GAP + 24,   // 110 — derivado
 })
+
+/**
+ * As quatro peças de contato.
+ *
+ * Cada uma herda a cor do agente correspondente da Seção 1, para a fileira ler
+ * como quatro coisas distintas em vez de quatro botões iguais. E cada uma pisca
+ * num ritmo levemente diferente: em uníssono pareceriam um só elemento
+ * cintilando; fora de fase, parecem quatro processos vivos.
+ */
+export const TILE = Object.freeze({
+  // 4 x 194 + o espaço em branco entre <img> inline cabe nos 796 úteis. A
+  // largura sai do endereço mais longo (32 colunas) com folga para variação de
+  // avanço entre as fontes monoespaçadas do sistema.
+  W: 194,
+  H: 46,
+  RX: 6,
+  PAD: 6,
+  STROKE: 0.75,
+  LABEL_Y: 20,
+  ADDR_Y: 36,
+  ADDR_SIZE: 9,          // o endereço mais longo tem 32 colunas e precisa caber
+  CURSOR_GAP: 1,         // colunas entre o rótulo e o cursor
+})
+
+export const TILES = Object.freeze([
+  Object.freeze({ id: 'portfolio', hue: AGENT_HUE.scout,   blink: 1.06, from: 'blog' }),
+  Object.freeze({ id: 'linkedin',  hue: AGENT_HUE.analyst, blink: 1.22,
+                  addr: CONTACT.linkedin, href: `https://${CONTACT.linkedin}` }),
+  Object.freeze({ id: 'github',    hue: AGENT_HUE.builder, blink: 0.94, from: 'login' }),
+  Object.freeze({ id: 'email',     hue: AGENT_HUE.liaison, blink: 1.14,
+                  addr: CONTACT.email, href: `mailto:${CONTACT.email}` }),
+])
 
 export const LINKS_TIME = Object.freeze({
   CMD_AT: 0.1,          // a linha de comando, antes de tudo

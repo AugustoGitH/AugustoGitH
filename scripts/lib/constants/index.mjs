@@ -13,5 +13,5 @@ export {
   CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, STACK_CANVAS, GAME,
   PIECE_LABEL_WEIGHT,
 } from './stack.mjs'
-export { CONTACT, PROBE, LINKS_PANE, LINKS_CANVAS, LINKS_TIME } from './links.mjs'
+export { CONTACT, PROBE, LINKS_PANE, LINKS_CANVAS, LINKS_TIME, TILE, TILES } from './links.mjs'
 export { BANNER } from './banner.mjs'

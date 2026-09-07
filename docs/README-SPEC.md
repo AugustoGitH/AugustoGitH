@@ -590,7 +590,7 @@ bloco, e nada mais.
 | # | Regra | Motivo |
 | :-: | --- | --- |
 | 1 | Um bloco = uma seção = um `<img>` | substituição determinística; o diff mostra qual seção mudou |
-| 1b | **Exceção, única:** o bloco 04 leva uma linha de links em markdown sob a imagem | um SVG dentro de `<img>` não é clicável, e o GitHub remove `<a>` de dentro dele. Sem essa linha o leitor teria que copiar o endereço à mão — regressão frente aos badges que estamos removendo |
+| 1b | **Exceção, única:** o bloco 04 tem cinco imagens — o terminal e quatro peças, cada uma num `<a>` | um `<a>` envolve a imagem inteira e dá um destino só, e o GitHub remove `<a>` de dentro do SVG. Quatro alvos exigem quatro arquivos (§7.7) |
 | 2 | Marcador `<!-- ═ NN · NOME ═ -->` abre todo bloco | delimita a fronteira sem ambiguidade |
 | 3 | Caminho sempre relativo: `./assets/…` | resolve na branch atual; não acopla a `main`; evita uma segunda ida ao proxy de imagem |
 | 4 | `width` explícito, igual à largura do canvas | sem ele o GitHub usa a largura intrínseca e o SVG estoura em tela estreita |
@@ -1735,24 +1735,49 @@ combinação distinta do documento, e cada uma tem razão própria:
 | 1 · agentes | repete | é uma narrativa, o ciclo faz parte dela |
 | 2 · cidade | congela | é um gráfico; redesenhar em loop cansa |
 | 3 · tetris | repete | é uma partida: começo, fim e recomeço |
-| 4 · contato | congela, cursor vivo | a página termina; o convite não |
+| 4 · contato | congela, cursores vivos | a página termina; o convite não |
 
-### 7.7 Clicabilidade — a única exceção do §3.3
+### 7.7 Clicabilidade — por que a seção virou cinco arquivos
 
-Um SVG dentro de `<img>` **não é clicável**, e o GitHub remove `<a>` de dentro
-dele. Um leitor teria que copiar o endereço à mão — regressão frente aos badges
-que estamos removendo.
+Um `<a>` envolve a imagem inteira e dá **um destino só**, e o GitHub remove
+`<a>` de dentro do SVG. Não existe link por região: quatro alvos exigem quatro
+arquivos.
 
-Por isso, e só aqui, o bloco 04 leva uma linha de links em markdown sob a
-imagem (§3.3, regra 1b). É o único lugar do README onde texto markdown se
-justifica: ele faz algo que o SVG não pode fazer.
+A saída ingênua seria manter o terminal com a lista e pôr as peças embaixo — e
+aí cada endereço apareceria duas vezes. Em vez disso **o terminal encurtou**: a
+lista saiu dele, e ele ficou com o que só ele pode dizer.
+
+```
+● ● ●  agent://liaison            contact-prompt.svg   820 × 110
+       $ connect --list
+       augusto@westphal:~$ █
+
+[ portfolio ][ linkedin ][ github ][ email ]   link-<id>.svg   194 × 46 cada
+```
+
+Cada peça herda a **cor do agente correspondente** da Seção 1 — âmbar, ciano,
+violeta, rosa — para a fileira ler como quatro coisas distintas em vez de quatro
+botões iguais.
+
+E cada uma pisca num ritmo próprio: 1.06s, 1.22s, 0.94s, 1.14s. Em uníssono
+pareceriam um só elemento cintilando; fora de fase, parecem quatro processos
+vivos. A defasagem vem de durações diferentes, não de `begin` atrasado — que
+§0.3 proíbe.
+
+**Largura:** 194px cada, saída do endereço mais longo (32 colunas a 9px) com
+folga para variação de avanço entre as fontes monoespaçadas do sistema. A
+fileira ocupa de 776 a 794px dos 796 úteis, conforme o espaço em branco que o
+navegador põe entre `<img>` inline.
+
+A linha de links em markdown puro **saiu**: as peças fazem o mesmo trabalho
+desenhadas.
 
 ### 7.8 Orçamento e verificação
 
 | Métrica | Alvo | Verificação |
 | --- | ---: | --- |
-| Tamanho do SVG | < 10 KB | `wc -c assets/contact-prompt.svg` |
-| Animações | 8 | `grep -c` |
+| Tamanho dos 5 SVGs | < 10 KB | `wc -c assets/contact-prompt.svg assets/link-*.svg` |
+| Animações | 4 no terminal + 1 por peça | `grep -c` |
 | Largura das linhas | ≤ largura útil | `assert.mjs` — **aborta** |
 | Endereços alcançáveis | todos | `fetch_profile.mjs` — **aborta** |
 | Determinismo | byte-idêntico | rodar 2× e comparar hash |
@@ -1766,7 +1791,7 @@ justifica: ele faz algo que o SVG não pode fazer.
 | Status HTTP | descartado no desenho, movido para asserção no coletor |
 | Animação | revela uma vez e congela; o cursor pisca para sempre |
 | Cor | rosa do `liaison` — o agente de contato fecha a página |
-| Markdown | uma linha de links, a única exceção do §3.3 |
+| Clicabilidade | quatro peças, uma por endereço, cada uma num `<a>` (§7.7) |
 
 
 ---
