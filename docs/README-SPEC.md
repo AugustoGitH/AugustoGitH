@@ -1407,7 +1407,7 @@ scripts/render_city.mjs          profile.json -> assets/commit-city.svg
 
 | Métrica | Alvo | Verificação |
 | --- | --- | --- |
-| Tamanho do SVG | < 60 KB | `wc -c assets/commit-city.svg` |
+| Tamanho do SVG | < 40 KB | `wc -c assets/commit-city.svg` |
 | Nº de `<animate>` | 1 | `grep -c '<animate' assets/commit-city.svg` |
 | Faixas desenhadas | = dias ativos | comparar com `contrib.activeDays` |
 | Soma das alturas | = soma dos dias | `assert.mjs` — **aborta** se divergir |
@@ -1510,46 +1510,58 @@ Os outros 26 aparecem por extenso — `TypeScript`, `JavaScript`, `Material UI` 
 O `alt` da imagem lista os **nomes originais**: quem ouve recebe a informação
 completa.
 
-### 6.4 Pixel art, e o que a torna possível sem fonte bitmap
+### 6.4 Vetor chapado: peça sólida, canto arredondado, calha
 
-Não há webfont (§0.4), então não há fonte de bitmap. A leitura de pixel art vem
-de outro lugar:
+Cada peça é **uma forma só**. Não há divisão entre as células que a compõem — o
+`L` é um `L` inteiro, não três quadrados encostados. Preenchimento chapado, sem
+friso, sem relevo, sem contorno.
 
 | Recurso | Efeito |
 | --- | --- |
-| `shape-rendering="crispEdges"` | desliga o antialiasing — aresta dura de verdade |
-| toda coordenada inteira | célula de 22px, poço em múltiplos dela; nada de subpixel |
-| sem `rx` | canto reto |
-| friso claro de 1px por dentro do bloco | o brilho de aresta dos blocos do jogo, sem filtro nem gradiente |
-| contorno escuro de 1px por peça | separa peças vizinhas da mesma categoria |
-| queda em passos discretos (§6.7) | movimento em grade, não interpolado |
+| um `<path>` por peça | some a costura interna entre células |
+| cantos convexos arredondados, côncavos vivos | é o que sai de uma união de retângulos arredondados, e o que a referência mostra |
+| calha de recuo em cada lado | separa peças vizinhas com um vão de fundo, não com uma linha |
 
-O `crispEdges` é o item central e é o motivo de a célula ser inteira: uma
-coordenada fracionária faz o navegador interpolar a borda e a aresta dura some.
+**A calha é de desenho, não de empacotamento.** A queda com gravidade e os 40
+buracos continuam idênticos: a peça ocupa as mesmas células, só é desenhada
+menor. `GUTTER = 1.5` em célula de 22px dá 3px entre peças vizinhas — cerca de
+14% da célula, na faixa da referência.
 
-O texto continua com antialiasing — não há como desligá-lo para glifos. É o
-limite aceito da abordagem: os blocos são pixel art, os rótulos são texto
-limpo sobre eles, em peso 600. Monoespaçado tem avanço fixo, então o negrito
-não altera a largura — o contraste sobre a cor da categoria sai de graça.
+#### O contorno é traçado, não montado
 
-#### Contorno da peça, não da célula
+`lib/outline.mjs` recebe o conjunto de células e devolve um caminho:
 
-Duas peças da mesma categoria que encostam viram um borrão só. O contorno
-resolve, mas contornar o tetrominó exigiria traçar sua silhueta. O desenho é
-feito em **duas camadas**: primeiro todos os retângulos escuros inflados em 1px,
-depois todos os preenchimentos por cima. As arestas internas somem sob o
-preenchimento da célula vizinha, e só a silhueta fica escura.
+1. junta as arestas de cada célula e descarta as que têm vizinha dentro — sobra
+   a fronteira
+2. encadeia a fronteira num ciclo e funde as colineares em vértices
+3. recua cada vértice pela soma das normais internas das duas arestas que nele
+   se encontram
+4. arredonda só os vértices convexos, com o raio limitado a metade do menor
+   lado adjacente
 
-Custa 128 retângulos a mais — o arquivo vai de 39 KB para 52 KB, dentro do teto
-de 60 KB.
+O traçado sai do próprio `cells`, então não há geometria duplicada em constante
+para divergir quando uma forma mudar.
 
-O friso claro ficou em `BEVEL_LIGHTEN: 0.16`. Mais forte que isso vira grade
-branca e come a cor da categoria.
+#### O que isso substituiu
+
+A versão anterior era pixel art: `shape-rendering="crispEdges"`, coordenada
+inteira, friso claro de 1px por célula e uma camada escura inflada por peça para
+separá-la das vizinhas. Eram **256 retângulos** e o `L` lia como três quadrados
+encostados.
+
+`crispEdges` saiu junto — ele serrilharia os cantos arredondados, e com ele cai
+a exigência de coordenada inteira que existia só para servi-lo.
+
+```
+52.376 bytes  →  32.251 bytes
+```
 
 #### Geometria
 
 ```
-CELL      22 px      inteiro, por causa do crispEdges
+CELL      22 px
+GUTTER     1.5 px por lado
+RADIUS     2.5 px no canto convexo
 COLS      12         perto do poço clássico de 10 — proporção retrato
 ROWS      18         14 usadas pela pilha + 4 de folga para a queda entrar
 POÇO      264 × 396 px
@@ -1557,19 +1569,37 @@ CANVAS    820 × 450 px
 PAINEL    508 px
 ```
 
+Largura da peça: `ceil((nome + 1) / 2)` células, de **3 a 6** — e o encaixe é
+conferido contra a largura **desenhada**, não a da grade. Uma peça de 3 células
+oferece 63px, não 66, e `assertLabelFits` aborta a geração se o rótulo não
+couber. Sem essa conferência o texto encosta nas bordas ou vaza, e nada avisa:
+o SVG segue válido.
+
 #### Queda com gravidade, não encaixe ótimo
 
 Cada peça é solta do topo em cada coluna e para no primeiro obstáculo; fica na
 coluna que der o repouso mais baixo, desempate pela esquerda.
 
 ```
-32 peças · 128 blocos · 14 fileiras · 40 buracos
+32 peças · 14 fileiras · 40 buracos
 ```
 
 Descer do topo — em vez de procurar o melhor encaixe — é o que impede a peça de
 escorregar para baixo de um beiral, e é o que **cria os buracos**. Buraco é a
 assinatura visual do Tetris; um empacotamento ótimo pareceria um gráfico de
 barras.
+
+#### O que se manteve da referência, e o que não
+
+A referência é uma ilustração sem texto, sobre branco, com sete cores
+decorativas. Três desvios deliberados:
+
+- **os nomes ficam** — são o conteúdo da seção; sem eles sobra uma ilustração
+  que não diz nada
+- **a paleta é a nossa** — cinco cores que dizem categoria, não sete que dizem
+  nada
+- **o fundo continua escuro** — abrir um terceiro registro claro, além do
+  preview do produto, custaria mais do que rende
 
 ### 6.5 Cores
 
@@ -1678,13 +1708,13 @@ scripts/render_stack.mjs          profile.json + stack.mjs -> assets/stack-well.
 | --- | --- |
 | Formato | replay, não jogo — a plataforma não executa JS |
 | Nomes | inteiros; 6 resumidos por não caberem; nenhuma sigla |
-| Poço | 12 colunas × 18 fileiras, célula de 22px |
+| Poço | 12 colunas × 18 fileiras, célula de 22px, calha de 1.5px |
 | Empacotamento | queda com gravidade, determinística — 40 buracos por consequência, não por enfeite |
 | Formas | os sete tetrominós; a forma é escolhida pelo tamanho do nome |
 | Cores | as 5 já existentes; o README fecha em 5 matizes |
 | Medido × declarado | lado a lado no painel, sem marcar as peças |
 | Animação | queda em passos discretos → pilha → desintegração → loop |
-| Estilo | pixel art via `crispEdges`, coordenada inteira e friso de 1px |
+| Estilo | vetor chapado: peça sólida, canto convexo arredondado, calha entre peças |
 
 
 ---

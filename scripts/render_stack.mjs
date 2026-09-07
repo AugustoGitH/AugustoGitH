@@ -20,10 +20,10 @@ import {
   CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, STACK_CANVAS, GAME,
   PIECE_LABEL_WEIGHT,
 } from './lib/constants/index.mjs'
-import { assertBudget, assertKeyframes } from './lib/assert.mjs'
+import { assertBudget, assertKeyframes, assertLabelFits } from './lib/assert.mjs'
 import { dropPieces, stackStats } from './lib/pack.mjs'
+import { caminhoDaPeca } from './lib/outline.mjs'
 import { tag, text, animate } from './lib/svg.mjs'
-import { lighten } from './lib/color.mjs'
 
 const IN = 'data/profile.json'
 const OUT = 'assets/stack-well.svg'
@@ -38,9 +38,11 @@ const STATIC = process.env.STATIC === '1'
 function formaPara(label, ordem) {
   const largura = (label.length + 1) * CELL_W
   const runs = Object.keys(BY_RUN).map(Number).sort((a, b) => a - b)
-  const run = runs.find((r) => largura <= r * CELL) ?? runs.at(-1)
-  const opcoes = BY_RUN[run]
-  return opcoes[ordem % opcoes.length]
+  // A calha desconta de cada lado: a peça é desenhada mais estreita que as
+  // células que ocupa, e o rótulo tem que caber no DESENHO, não na grade.
+  const cabe = (r) => r * CELL - WELL.GUTTER * 2
+  const run = runs.find((r) => largura <= cabe(r)) ?? runs.at(-1)
+  return BY_RUN[run][ordem % BY_RUN[run].length]
 }
 
 /** As 32 tecnologias, na ordem das categorias, já com forma atribuída. */
@@ -50,28 +52,6 @@ const pecas = CATEGORIES.flatMap((c) => c.items).map((nome, i) => {
   return { nome, label, hue: cat.hue, grupo: cat.id, shape: formaPara(label, i) }
 })
 
-/**
- * Um bloco unitário, no estilo dos blocos do jogo: quadrado de cor sólida com
- * friso claro por dentro. `crispEdges` desliga o antialiasing — é o que dá a
- * aresta dura da pixel art, e o motivo de toda coordenada aqui ser inteira.
- */
-function bloco(x, y, hue) {
-  const b = WELL.BEVEL
-  return tag('rect', {
-    x: x + b / 2, y: y + b / 2, width: CELL - b, height: CELL - b,
-    fill: hue, stroke: lighten(hue, WELL.BEVEL_LIGHTEN), 'stroke-width': b,
-    'shape-rendering': 'crispEdges',
-  })
-}
-
-/** Camada escura sob o bloco, inflada em OUTLINE. Ver WELL.OUTLINE. */
-function contorno(x, y) {
-  const o = WELL.OUTLINE
-  return tag('rect', {
-    x: x - o, y: y - o, width: CELL + o * 2, height: CELL + o * 2,
-    fill: T.bg, 'shape-rendering': 'crispEdges',
-  })
-}
 
 /** Uma peça: quatro blocos e o nome sobre a maior sequência horizontal. */
 function peca(p, i, tempos, kk) {
@@ -79,11 +59,15 @@ function peca(p, i, tempos, kk) {
   const px = (c) => WELL.X + (p.col + c) * CELL
   const py = (r) => WELL.Y + (p.row + r) * CELL
 
+  // Um caminho só: sem costura entre as células, sem friso, sem contorno. O
+  // que separa a peça das vizinhas é a calha (WELL.GUTTER), não uma linha.
   const corpo =
-    // Duas camadas: contornos primeiro, preenchimentos por cima. As arestas
-    // internas somem e só a silhueta da peça fica escura.
-    forma.cells.map(([c, r]) => contorno(px(c), py(r))).join('') +
-    forma.cells.map(([c, r]) => bloco(px(c), py(r), p.hue)).join('') +
+    tag('path', {
+      d: caminhoDaPeca(forma.cells.map((c) => [...c]), CELL, px(0), py(0),
+        WELL.GUTTER, WELL.RADIUS),
+      fill: p.hue,
+    }) +
+    assertLabelFits(p.label, forma.run) +
     text(px(forma.runCol + forma.run / 2), py(forma.runRow) + CELL / 2 + TYPO.BASELINE_NUDGE,
       T.bg, p.label, { 'text-anchor': 'middle', 'font-weight': PIECE_LABEL_WEIGHT })
 
@@ -158,7 +142,6 @@ const main = () => {
   const paredes = tag('path', {
     d: `M${WELL.X} ${WELL.Y}V${WELL.BOTTOM}H${WELL.X + WELL.W}V${WELL.Y}`,
     fill: 'none', stroke: T.border, 'stroke-width': 1,
-    'shape-rendering': 'crispEdges',
   })
   const clip = tag('clipPath', { id: 'well' }, tag('rect', {
     x: WELL.X, y: WELL.Y, width: WELL.W, height: WELL.H,

@@ -1,5 +1,5 @@
 /** Validações que abortam a geração. Erro de conteúdo estoura aqui, não no painel. */
-import { LIMITS } from './constants/index.mjs'
+import { LIMITS, CELL, CELL_W, WELL } from './constants/index.mjs'
 
 class SpecError extends Error {}
 
@@ -92,4 +92,20 @@ export function assertPieces(placed, well) {
     }
   }
   return placed
+}
+
+/**
+ * O rótulo tem que caber na largura DESENHADA da peça, não na da grade.
+ *
+ * A calha (WELL.GUTTER) desconta de cada lado, então uma peça de 3 células com
+ * célula de 22px oferece 63px, não 66. Sem esta conferência o texto encosta nas
+ * bordas ou vaza, e nada avisa — o SVG segue válido.
+ */
+export function assertLabelFits(label, run) {
+  const disponivel = run * CELL - WELL.GUTTER * 2
+  const usado = label.length * CELL_W
+  if (usado > disponivel) {
+    fail(`rótulo ${label}: ${usado.toFixed(1)}px numa peça de ${disponivel.toFixed(1)}px`)
+  }
+  return ''
 }

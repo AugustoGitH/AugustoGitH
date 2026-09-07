@@ -77,21 +77,20 @@ export const WELL = Object.freeze({
   X: PAD, Y: WELL_Y, W: WELL_W, H: WELL_H,
   BOTTOM: WELL_Y + WELL_H,
 
-  /** Friso claro por dentro do bloco: o brilho de aresta dos blocos do jogo,
-   *  sem filtro nem gradiente. Discreto de propósito — friso forte demais vira
-   *  grade branca e come a cor da categoria. */
-  BEVEL: 1,
-  BEVEL_LIGHTEN: 0.16,
+  /**
+   * Calha: recuo de desenho em cada lado da peça.
+   *
+   * É ela que separa peças vizinhas — um vão de fundo, não uma linha. O
+   * empacotamento não muda: a peça ocupa as mesmas células, só é desenhada
+   * menor. Cerca de 14% da célula, como na referência.
+   *
+   * Substitui o contorno escuro por peça e o friso claro por célula, que juntos
+   * custavam 256 retângulos e faziam o L ler como três quadrados encostados.
+   */
+  GUTTER: 1.5,
 
-  /** Contorno escuro da PEÇA, não da célula.
-   *
-   *  Desenhado em duas camadas: primeiro todos os retângulos escuros inflados,
-   *  depois todos os preenchimentos por cima. As arestas internas somem sob o
-   *  preenchimento da célula vizinha e só a silhueta sobra escura — sem
-   *  precisar traçar o contorno do tetrominó.
-   *
-   *  Sem isso, duas peças da mesma categoria que encostam viram um borrão só. */
-  OUTLINE: 1,
+  /** Raio do canto convexo. Côncavo fica vivo (ver lib/outline.mjs). */
+  RADIUS: 2.5,
 })
 
 export const PANEL = Object.freeze({
