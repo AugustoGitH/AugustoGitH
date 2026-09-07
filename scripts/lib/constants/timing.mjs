@@ -8,7 +8,10 @@ export const TIME = Object.freeze({
   VEIL_FADE_S: 0.3,
 })
 
-export const TOTAL_S = 30.4 // fecha depois do campo de 64 sair (ver GROW_END)
+/** Início absoluto da fase do agente i. */
+export const phaseStart = (i) => i * TIME.PHASE_S
+
+export const TOTAL_S = 30.4 // = GROW_END + GROW.fade
 
 /** Cues em segundos, relativos ao início da fase do agente. */
 export const CUE = Object.freeze({
@@ -33,30 +36,37 @@ export const FINALE_AT =
   TIME.PHASE_S * (TIME.AGENTS - 1) + CUE.foot.at + CUE.foot.dur + CUE.finaleHold
 
 /**
- * A multiplicação da frota, que substituiu a limpeza.
+ * A multiplicação da frota, entretecida na narrativa.
  *
- * Depois que os quatro terminam e a grade acende inteira, cada painel se divide
- * em quatro, duas vezes: 4 -> 16 -> 64. É o fecho da seção — a frota à qual os
- * quatro pertencem.
+ * Cada painel se divide assim que o SEU agente termina de escrever — não depois
+ * que todos terminam. Enquanto o próximo escreve, o anterior já virou quatro, e
+ * depois dezesseis. Ao fim da última fala o campo está completo: 4 x 16 = 64.
  *
- * O nível de 64 não é legível e não deveria ser: em 820x520 o painel fica com
- * 92x55px e 29px de corpo. A ilegibilidade é a mensagem — você lê quatro, e vê
- * que são sessenta e quatro.
+ * Os offsets são relativos ao início da fase do agente, então a divisão
+ * acompanha quem falou, não o relógio.
+ *
+ * O nível final não é legível e não deveria ser: o painel fica com 92x55px e
+ * 29px de corpo. A ilegibilidade é a mensagem — você lê quatro, e vê sessenta
+ * e quatro.
  */
 export const GROW = Object.freeze({
-  at: 25.6,     // começa a subdividir, depois do finale
-  step: 1.4,    // de um nível ao próximo
-  fade: 0.7,    // duração de cada troca
-  hold: 2.0,    // o campo de 64 parado
-  levels: Object.freeze([4, 8]), // colunas de cada nível novo; o primeiro é 2
+  split1: 5.2,  // da fase do agente: o painel dele vira quatro
+  split2: 8.0,  // e os quatro viram dezesseis
+  fade: 0.7,
+  hold: 1.5,    // o campo completo, parado
+
+  /** Quantas colunas o painel do agente ganha em cada nível: 2x2, depois 4x4.
+   *  Subdividir por 2 e por 4 dá exatamente as grades globais de 4x4 e 8x8. */
+  levels: Object.freeze([2, 4]),
 })
 
-/** Instante em que cada nível entra. */
-export const growAt = (n) => GROW.at + n * GROW.step
+/** Instante absoluto em que o painel do agente i chega ao nível n (1 ou 2). */
+export const splitAt = (i, n) =>
+  phaseStart(i) + (n === 1 ? GROW.split1 : GROW.split2)
 
-/** O campo de 64 começa a sair. */
+/** O campo completo começa a sair. */
 export const GROW_END =
-  growAt(GROW.levels.length - 1) + GROW.fade + GROW.hold
+  splitAt(TIME.AGENTS - 1, 2) + GROW.fade + GROW.hold
 
 /**
  * Ciclo de trabalho do cursor: aceso na primeira metade, apagado na segunda.
@@ -76,8 +86,6 @@ export const HOLD_END = '0.9900'
 /** Perseguição do spinner: início, pico e fim do pulso de cada ponto. */
 export const SPIN = Object.freeze({ lead: 0.01, peak: 0.09, trail: 0.17 })
 
-/** Início absoluto da fase do agente i. */
-export const phaseStart = (i) => i * TIME.PHASE_S
 
 /** Segundos absolutos -> keyTime normalizado. Nenhum render divide por TOTAL_S. */
 /** Casas decimais de um keyTime. Quatro separam eventos a ~2.8ms num loop de

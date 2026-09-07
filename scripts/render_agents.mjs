@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import {
   T, AGENT_HUE, TYPO, CELL_W, GEO, TIME, TOTAL_S, CUE, CURSOR_DUTY, SPIN,
-  FINALE_AT, GROW, growAt, GROW_END, KEYTIME_DECIMALS, phaseStart, k, ROSTER,
+  FINALE_AT, GROW, splitAt, GROW_END, KEYTIME_DECIMALS, phaseStart, k, ROSTER,
 } from './lib/constants/index.mjs'
 import { LIMITS } from './lib/constants/index.mjs'
 import { assertWidth, assertLineCount, assertBudget } from './lib/assert.mjs'
@@ -201,38 +201,43 @@ function spinner(i) {
 
 function pane(i, agent, data) {
   const o = GEO.paneOrigin(i)
+  const rect = { x: 0, y: 0, w: PANE.W, h: PANE.H }
 
   const box = tag('rect', {
     x: BOX.X, y: BOX.Y, width: BOX.W, height: BOX.H, rx: BOX.RX,
     fill: 'none', stroke: AGENT_HUE[agent.id], 'stroke-width': BOX.STROKE,
   })
-
   const content = rows(agent, data)
     .map((r, idx) => revealRow(i, r, idx, agent.id)).join('')
 
+  const cheio = paneFrame(PANE.W, PANE.H) +
+    paneChrome(PANE.W, agent.title, AGENT_HUE[agent.id]) +
+    box + content + spinner(i) + veil(i)
+
+  // Cada nível entra quando o SEU agente termina de falar, não quando todos
+  // terminam: a frota cresce durante a apresentação, não depois dela.
   return tag('g', { transform: `translate(${o.x} ${o.y})` },
     tag('title', {}, esc(`${agent.title} — ${agent.lines(data).join(' | ')}`)) +
-    paneFrame(PANE.W, PANE.H) +
-    paneChrome(PANE.W, agent.title, AGENT_HUE[agent.id]) +
-    box + content + spinner(i) + veil(i))
+    camada(cheio, splitAt(i, 1), 0, true) +
+    camada(subPaneis(rect, GROW.levels[0], agent), splitAt(i, 1), splitAt(i, 2), false) +
+    camada(subPaneis(rect, GROW.levels[1], agent), splitAt(i, 2), GROW_END, false))
 }
 
 
 // ------------------------------------------------- multiplicação da frota
 
 /**
- * Um nível da multiplicação: n x n painéis abstratos.
+ * Os sub-painéis de um agente: n x n dentro do retângulo dele.
  *
- * Não mostram conteúdo porque não cabe — em 4x4 sobram 26 colunas de texto, em
- * 8x8 sobram dez. O que resta é a silhueta do terminal, e a cor diz de qual dos
- * quatro agentes aquele painel descende: cada quadrante herda o pai.
+ * Não mostram conteúdo porque não cabe — em 196x121 sobram 26 colunas de texto,
+ * em 92x55 sobram dez. Resta a silhueta do terminal, e a cor é a do agente de
+ * quem descendem.
  */
-function subgrid(n) {
+function subPaneis(pai, n, agent) {
   const s = GEO.SUB
+  const hue = AGENT_HUE[agent.id]
   return Array.from({ length: n * n }, (_, i) => {
-    const p = GEO.gridPane(i, n)
-    const pai = ROSTER[GEO.parentAgent(i, n)]
-    const hue = AGENT_HUE[pai.id]
+    const p = GEO.subPane(pai, i, n)
     const ch = Math.round(p.h * s.chromeRatio)
     const rx = Math.min(GEO.PANE.RX, ch)
     const st = GEO.PANE.STROKE
@@ -248,25 +253,25 @@ function subgrid(n) {
         fill: [T.dotRed, T.dotYellow, T.dotGreen][d],
       })).join('')
 
-    // Nível intermediário ainda carrega o endereço do agente; o maior, só o cursor.
-    const corpo = n <= s.TEXT_UNTIL
-      ? text(p.x + s.pad, p.y + ch + s.pad + s.titleSize, hue, pai.title,
+    // O nível intermediário ainda carrega o endereço; o maior, só o cursor.
+    const corpo = n <= s.TEXT_UNTIL / 2
+      ? text(p.x + s.pad, p.y + ch + s.pad + s.titleSize, hue, agent.title,
           { 'font-size': s.titleSize }) +
-        s.barWidths.map((_, b) => tag('rect', {
+        s.barWidths.map((frac, b) => tag('rect', {
           x: p.x + s.pad, y: p.y + ch + s.pad * 2 + s.titleSize + b * s.barGap,
-          width: (p.w - s.pad * 2) * s.barWidths[b], height: s.barH,
+          width: (p.w - s.pad * 2) * frac, height: s.barH,
           rx: s.barH / 2, fill: T.dim, opacity: s.barOpacity,
         })).join('')
-      : cursorMini(p.x + s.pad, p.y + ch + s.pad, pai.id, hue)
+      : cursorMini(p.x + s.pad, p.y + ch + s.pad, agent.id, hue)
 
     return moldura + corpo
   }).join('')
 }
 
 /**
- * O cursor de um painel do nível maior.
+ * O cursor de um sub-painel do nível maior.
  *
- * Animado, sai como <use> do símbolo em <defs> — assim 64 cursores vivos custam
+ * Animado, sai como <use> do símbolo em <defs> — assim os 64 cursores custam
  * quatro <animate> no arquivo. No quadro estático não há <defs>, e um <use>
  * apontando para nada não desenha: aí o retângulo vai direto.
  */
@@ -277,8 +282,7 @@ function cursorMini(x, y, id, hue) {
     : tag('use', { href: `#cur-${id}`, 'xlink:href': `#cur-${id}`, x, y })
 }
 
-/** Os quatro cursores do nível maior, definidos uma vez e reusados 64 vezes.
- *  <use> replica a animação em cada cópia — 64 cursores vivos, quatro <animate>. */
+/** Os quatro cursores, definidos uma vez e reusados nos 64 sub-painéis. */
 function cursorDefs() {
   const s = GEO.SUB
   return tag('defs', {}, ROSTER.map((a) => tag('g', { id: `cur-${a.id}` },
@@ -289,18 +293,21 @@ function cursorDefs() {
       })))).join(''))
 }
 
-/** Opacidade de um nível: entra em `de`, sai em `ate`. */
-function nivel(conteudo, de, ate, base, kk) {
+/** Uma camada do painel, visível em [de, ate). `base` é o estado sem SMIL. */
+function camada(conteudo, de, ate, base) {
   if (STATIC) return base ? conteudo : ''
   const f = GROW.fade
+  const fim = ate + f >= TOTAL_S
   return tag('g', { opacity: base ? 1 : 0 },
     animate({
       attr: 'opacity',
-      values: base ? '1;1;0;0' : '0;0;1;1;0;0',
+      values: base ? '1;1;0;0' : (fim ? '0;0;1;1;0' : '0;0;1;1;0;0'),
       keyTimes: base
-        ? `0;${kk(de)};${kk(de + f)};1`
-        : `0;${kk(de)};${kk(de + f)};${kk(ate)};${kk(ate + f)};1`,
-      dur: TOTAL_S, where: 'nível',
+        ? `0;${k(de)};${k(de + f)};1`
+        : fim
+          ? `0;${k(de)};${k(de + f)};${k(ate)};1`
+          : `0;${k(de)};${k(de + f)};${k(ate)};${k(ate + f)};1`,
+      dur: TOTAL_S, where: 'camada',
     }) + conteudo)
 }
 
@@ -322,9 +329,7 @@ const main = () => {
     `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: GEO.CANVAS.W, height: GEO.CANVAS.H, fill: T.bg }),
     STATIC ? '' : cursorDefs(),
-    nivel(ROSTER.map((a, i) => pane(i, a, data)).join(''), GROW.at, 0, true, k),
-    nivel(subgrid(GROW.levels[0]), GROW.at, growAt(1), false, k),
-    nivel(subgrid(GROW.levels[1]), growAt(1), GROW_END, false, k),
+    ...ROSTER.map((a, i) => pane(i, a, data)),
     '</svg>',
   ].join('\n')
 

@@ -61,22 +61,21 @@ const BODY = Object.freeze({ Y: 94 })
 const FOOT = Object.freeze({ Y: 236 })
 
 /**
- * Retângulo do painel i numa grade n x n que preenche o canvas.
+ * Retângulo do sub-painel i de uma grade n x n DENTRO de um retângulo pai.
  *
- * A grade de 2 é a da seção; 4 e 8 são os níveis da multiplicação (§4.x). As
- * bordas externas coincidem nos três, então subdividir lê como cada painel se
- * partindo, não como a grade trocando de tamanho.
+ * Subdividir o painel de cada agente por 2 e depois por 4 dá exatamente as
+ * grades globais de 4x4 e 8x8 — as bordas coincidem. A diferença é semântica: a
+ * divisão pertence ao agente, então ela pode acontecer quando ELE termina, e
+ * não quando todos terminam.
  */
-const gridPane = (i, n) => {
-  const w = (CANVAS.W - GAP * (n - 1)) / n
-  const h = (CANVAS.H - GAP * (n - 1)) / n
-  return { x: (i % n) * (w + GAP), y: Math.floor(i / n) * (h + GAP), w, h }
-}
-
-/** De qual dos quatro agentes o painel i da grade n x n descende. */
-const parentAgent = (i, n) => {
-  const meia = n / 2
-  return Math.floor(Math.floor(i / n) / meia) * COLS + Math.floor((i % n) / meia)
+const subPane = (pai, i, n) => {
+  const w = (pai.w - GAP * (n - 1)) / n
+  const h = (pai.h - GAP * (n - 1)) / n
+  return {
+    x: pai.x + (i % n) * (w + GAP),
+    y: pai.y + Math.floor(i / n) * (h + GAP),
+    w, h,
+  }
 }
 
 /** Origem do painel i na grade COLS x ROWS. */
@@ -126,5 +125,5 @@ const SUB = Object.freeze({
 
 export const GEO = Object.freeze({
   GAP, COLS, ROWS, PAD, HAIRLINE, COORD_DECIMALS, CANVAS, PANE, DOT, SPIN_DOT, BOX, BODY, FOOT,
-  SUB, paneOrigin, gridPane, parentAgent, colX, lineY, boxTextY, boxTextX,
+  SUB, paneOrigin, subPane, colX, lineY, boxTextY, boxTextX,
 })

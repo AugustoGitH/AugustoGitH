@@ -935,9 +935,9 @@ Valores de `constants/timing.mjs` (§2.6).
 
 ```
 PHASE_S    6.5    por agente
-FINALE_AT 24.1    os quatro acendem juntos
-GROW.at   25.6    começa a subdividir; +1.4 para o nível seguinte
-GROW_END  29.7    o campo de 64 começa a sair
+split1    +5.2   da fase do agente: o painel dele vira quatro
+split2    +8.0   e os quatro viram dezesseis
+GROW_END  29.7    o campo completo começa a sair
 TOTAL_S   30.4
 ```
 
@@ -1039,29 +1039,44 @@ O número de entradas varia com a posição do agente: o agente 0 é
 
 #### d) A multiplicação da frota
 
-Depois que os quatro terminam e a grade acende inteira, cada painel se divide em
-quatro, duas vezes: **4 → 16 → 64**. É o fecho da seção, e substituiu a limpeza
-linha a linha.
+Cada painel se divide em quatro, duas vezes — **e a divisão é do agente, não do
+relógio**. O painel do `scout` vira quatro assim que ele termina de falar,
+enquanto o `analyst` ainda escreve. Ao fim da última fala o campo está completo:
+4 x 16 = 64.
 
-O nível de 64 **não é legível, e não deveria ser**. Em 820×520 o painel fica com
-92×55px e 29px de corpo — os três semáforos sozinhos ocupariam 52 dos 92 se
-mantivessem o tamanho original. A ilegibilidade é a mensagem: você lê quatro, e
-vê que são sessenta e quatro.
+```
+t= 9s   scout já em 16   analyst escrevendo   builder e liaison inteiros
+t=15s   scout e analyst em 16                 builder e liaison inteiros
+t=20s   scout e analyst em 16   builder em 4  liaison escrevendo
+t=28s   os quatro em 16 = 64
+```
+
+A primeira versão fazia a multiplicação **depois** que os quatro terminavam. Ela
+lia como um epílogo pendurado; assim ela é parte da narrativa — a frota cresce
+enquanto se apresenta.
+
+Os offsets são relativos à fase do agente (`splitAt(i, n)`), então a divisão
+acompanha quem falou.
 
 | nível | painel | mostra |
 | --- | --- | --- |
-| 4 | 404×254 | tudo — chrome, título, caixa, quatro linhas, rodapé |
-| 16 | 196×121 | chrome, `agent://…` e duas barras que insinuam saída |
-| 64 | 92×55 | chrome e um cursor |
+| 1 | 404×254 | tudo — chrome, título, caixa, quatro linhas, rodapé |
+| 2 | 196×121 | chrome, `agent://…` e duas barras que insinuam saída |
+| 3 | 92×55 | chrome e um cursor |
 
-**A cor diz a descendência.** Cada quadrante herda o agente pai: as 16 do canto
-superior esquerdo descendem do `scout`, e assim por diante. `parentAgent(i, n)`
-resolve isso pela posição, então subdividir lê como cada agente gerando uma
-equipe, não como a grade trocando de tamanho.
+O nível 3 **não é legível, e não deveria ser**: 29px de corpo, e os três
+semáforos ocupariam 52 dos 92px se mantivessem o tamanho. A ilegibilidade é a
+mensagem — você lê quatro e vê sessenta e quatro.
+
+**A cor é a do agente de quem o sub-painel descende.** Como a subdivisão parte
+do retângulo do próprio agente, isso sai de graça: não há mapa de descendência a
+manter. Subdividir por 2 e depois por 4 dá exatamente as grades globais de 4×4 e
+8×8, então as bordas coincidem e a divisão lê como partição, não como troca de
+grade.
 
 **Custo pago com `<use>`.** Os 64 cursores saem de quatro símbolos em `<defs>`,
 um por cor. `<use>` replica a animação em cada cópia: **64 cursores vivos por
-quatro `<animate>` no arquivo**. Sem isso o orçamento de 150 estouraria.
+quatro `<animate>`**. O total ficou em 132 de 150.
 
 > **Uma armadilha que isso trouxe.** `<use>` costuma vir com `xlink:href`, e o
 > primeiro render escreveu o atributo sem declarar `xmlns:xlink` no root. Dentro
