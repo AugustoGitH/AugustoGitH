@@ -69,32 +69,36 @@ export const RAIL = Object.freeze([
   Object.freeze({ id: 'category', icon: 'tag' }),
   Object.freeze({ id: 'premise', icon: 'folder' }),
   Object.freeze({ id: 'budget', icon: 'coin' }),
-  Object.freeze({ id: 'analysis', icon: 'scale' }),
-  Object.freeze({ id: 'aixpert', icon: 'helix' }),
 ])
 export const RAIL_TARGET = 4 // Orçamentos
+
+/** Botões da barra de título, por tela. Nomes reais do conjunto do produto. */
+export const ACTIONS = Object.freeze({
+  cards: Object.freeze(['add', 'settings', 'menu-hamburguer']),
+  table: Object.freeze(['tag', 'version', 'window-3', 'decimal', 'export', 'settings']),
+})
 
 /** Cards de orçamento. Estrutura fiel ao BudgetCard; conteúdo de amostra. */
 export const CARDS = Object.freeze([
   Object.freeze({
     name: 'Orçamento 2027 — Matriz', desc: 'Orçamento inicial',
     plan: 'PLANO ANUAL', period: '01/01/2027 - 31/12/2027',
-    state: 'elaboracao', color: 'green', definition: 62, filling: 41, versions: 3,
+    state: 'elaboracao', color: 'green', icon: 'plan-house', definition: 62, filling: 41, versions: 3,
   }),
   Object.freeze({
     name: 'Capex 2027', desc: 'Investimentos',
     plan: 'PLANO ANUAL', period: '01/01/2027 - 31/12/2027',
-    state: 'elaboracao', color: 'green', definition: 28, filling: 12, versions: 1,
+    state: 'elaboracao', color: 'green', icon: 'plan-house', definition: 28, filling: 12, versions: 1,
   }),
   Object.freeze({
     name: 'Trimestral Q1', desc: 'Revisão trimestral',
     plan: 'PLANO TRIMESTRAL', period: '01/01/2027 - 31/03/2027',
-    state: 'execucao', color: 'purple', definition: 100, filling: 87, versions: 4,
+    state: 'execucao', color: 'purple', icon: 'plan-buildings', definition: 100, filling: 87, versions: 4,
   }),
   Object.freeze({
     name: 'Fechamento 2026', desc: 'Encerrado',
     plan: 'PLANO ANUAL', period: '01/01/2026 - 31/12/2026',
-    state: 'execucao', color: 'purple', definition: 100, filling: 100, versions: 7,
+    state: 'execucao', color: 'purple', icon: 'plan-buildings', definition: 100, filling: 100, versions: 7,
   }),
 ])
 export const CARD_TARGET = 0
@@ -177,22 +181,21 @@ export const LAY = Object.freeze({
 
   header: Object.freeze({
     padX: 14, baseY: 21, searchW: 300, searchH: 18, searchRx: 9,
-    orgW: 92, orgH: 18, orgRx: 9, avatarR: 9, avatarGap: 10,
-    searchIconR: 3, orgPadX: 8,
+    // 116 e não 92: o chip carrega ícone de empresa + nome + seta, e o conteúdo
+    // pedia 108. Estreito demais, a seta subia por cima do nome.
+    orgW: 116, orgH: 18, orgRx: 9, avatarR: 9, avatarGap: 10,
+    searchIcon: 11, orgIcon: 10, orgArrow: 9, orgPadX: 8, orgIconGap: 6,
   }),
-  rail: Object.freeze({
-    top: 10, step: 26, size: 20, rx: 5, iconSize: 12, collapseY: 8,
-    footR: 8, footInset: 12, aiInner: 3.5,
-  }),
+  rail: Object.freeze({ top: 14, step: 30, size: 22, rx: 6, iconSize: 13 }),
   titlebar: Object.freeze({
-    padX: 14, baseY: 20, iconR: 6, btn: 16, btnGap: 5, btnRx: 4, labelGap: 8,
+    padX: 14, baseY: 20, icon: 13, btn: 17, btnGap: 5, btnRx: 4, btnIcon: 10, labelGap: 8,
   }),
   card: Object.freeze({
-    rx: 6, bar: 5, padX: 14, badgeR: 8, badgeY: 18,
+    rx: 6, bar: 5, padX: 14, badgeR: 8, badgeY: 18, badgeIcon: 10, badgeGap: 8,
     titleX: 30, titleY: 15, titleY2: 25, descY: 40,
     rowY: 58, rowStep: 15, pillH: 12, pillRx: 6, pillPadX: 10,
     progY: 112, progStep: 24, trackH: 3, trackY: 8, dotR: 3,
-    versionY: 172, topInset: 6, trackInset: 8, pillLift: 3,
+    versionY: 172, versionIcon: 10, versionGap: 5, topInset: 6, trackInset: 8, pillLift: 3,
   }),
   table: Object.freeze({
     leftW: 190, numX: 18, nameX: 34, chevronX: 8,

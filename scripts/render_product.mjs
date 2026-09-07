@@ -17,7 +17,7 @@ import { writeFileSync, mkdirSync } from 'node:fs'
 import {
   T, TYPO, GEO, KEYTIME_DECIMALS, keyTimeTick,
   PRODUCT, UI, RAIL, RAIL_TARGET, CARDS, CARD_TARGET, TABLE, APP, TOUR,
-  LAY, WEIGHT, ARROW, ICONS, ICON_SIDE,
+  LAY, WEIGHT, ARROW, ICONS, PLAN_ICONS, ACTIONS,
 } from './lib/constants/index.mjs'
 import { assertBudget } from './lib/assert.mjs'
 import { tag, text, animate, esc } from './lib/svg.mjs'
@@ -40,19 +40,19 @@ const bold = (size) => ({ 'font-size': size, 'font-weight': WEIGHT.bold })
 // ------------------------------------------------------------------ moldura
 
 /**
- * Um ícone do produto, escalado do viewBox original para o lado pedido.
+ * Um ícone do produto, centrado em (cx, cy) e escalado para `lado`.
  *
- * Vem de icons.mjs, extraído de src/svg/icons/outline pelo prep_icons.mjs.
- * Desenhar aproximações à mão dava glifos que não eram os do produto, e a seção
- * existe para ser fiel.
+ * As duas famílias têm viewBox diferente — 20x20 na interface, 256x256 nos
+ * planos — então a escala sai do `view` do próprio ícone, não de um lado fixo.
  */
-function glifo(nome, cx, cy, cor) {
-  const ic = ICONS[nome]
-  const s = LAY.rail.iconSize
-  const k = s / ICON_SIDE
+function icone(nome, cx, cy, lado, cor, familia = ICONS) {
+  const ic = familia[nome]
+  if (!ic) throw new Error(`ícone desconhecido: ${nome}`)
+  const caixa = Number(ic.view.split(' ')[2])
+  const k = lado / caixa
   return tag('g', {
-    transform: `translate(${(cx - s / 2).toFixed(2)} ${(cy - s / 2).toFixed(2)}) ` +
-               `scale(${k.toFixed(4)})`,
+    transform: `translate(${(cx - lado / 2).toFixed(2)} ${(cy - lado / 2).toFixed(2)}) ` +
+               `scale(${k.toFixed(5)})`,
     fill: cor,
   }, ic.paths.map((p) => tag('path', {
     d: p.d,
@@ -65,6 +65,7 @@ function header() {
   const h = LAY.header
   const y = APP.Y
   const cx = APP.X + APP.VIEW_W / 2
+  const orgX = APP.X + APP.VIEW_W - h.padX - h.avatarR * 2 - h.avatarGap - h.orgW
   return (
     tag('rect', { x: APP.X, y, width: APP.VIEW_W, height: APP.HEADER_H, fill: UI.header }) +
     // tspan em vez de três <text> com x calculado: o fluxo é do renderizador,
@@ -78,13 +79,14 @@ function header() {
       width: h.searchW, height: h.searchH, rx: h.searchRx, fill: UI.search }) +
     text(cx - h.searchW / 2 + h.padX, y + h.baseY - 1, UI.faint, PRODUCT.search,
       { 'font-size': APP.FONT.search }) +
-    tag('circle', { cx: cx + h.searchW / 2 - h.padX, cy: y + APP.HEADER_H / 2, r: h.searchIconR,
-      fill: 'none', stroke: UI.faint, 'stroke-width': LAY.stroke.thin }) +
-    tag('rect', { x: APP.X + APP.VIEW_W - h.padX - h.avatarR * 2 - h.avatarGap - h.orgW,
-      y: y + (APP.HEADER_H - h.orgH) / 2, width: h.orgW, height: h.orgH, rx: h.orgRx,
-      fill: UI.search }) +
-    text(APP.X + APP.VIEW_W - h.padX - h.avatarR * 2 - h.avatarGap - h.orgW + h.orgPadX,
-      y + h.baseY - 1, UI.surface, PRODUCT.org, { 'font-size': APP.FONT.search }) +
+    icone('search', cx + h.searchW / 2 - h.padX, y + APP.HEADER_H / 2, h.searchIcon, UI.faint) +
+    tag('rect', { x: orgX, y: y + (APP.HEADER_H - h.orgH) / 2, width: h.orgW,
+      height: h.orgH, rx: h.orgRx, fill: UI.search }) +
+    icone('building', orgX + h.orgPadX + h.orgIcon / 2, y + APP.HEADER_H / 2, h.orgIcon, UI.surface) +
+    text(orgX + h.orgPadX + h.orgIcon + h.orgIconGap, y + h.baseY - 1, UI.surface, PRODUCT.org,
+      { 'font-size': APP.FONT.search }) +
+    icone('arrow-down', orgX + h.orgW - h.orgPadX - h.orgArrow / 2, y + APP.HEADER_H / 2,
+      h.orgArrow, UI.surface) +
     tag('circle', { cx: APP.X + APP.VIEW_W - h.padX - h.avatarR, cy: y + APP.HEADER_H / 2,
       r: h.avatarR, fill: UI.search }) +
     text(APP.X + APP.VIEW_W - h.padX - h.avatarR, y + h.baseY - 1, UI.surface, PRODUCT.user,
@@ -95,6 +97,8 @@ function header() {
 /** Trilho de ícones. O item de Orçamentos acende depois do clique. */
 function rail(sel) {
   const r = LAY.rail
+  // Dois estados: inativo desenha o ícone em verde sobre o fundo do trilho;
+  // ativo pinta um chip verde e o ícone vira branco.
   const itens = RAIL.map((item, i) => {
     const y = railY(i)
     const cx = APP.X + APP.RAIL_W / 2
@@ -104,34 +108,30 @@ function rail(sel) {
       ? tag('rect', { x: cx - r.size / 2, y, width: r.size, height: r.size, rx: r.rx,
           fill: UI.teal, opacity: 1 }, STATIC ? '' : sel)
       : ''
-    return chip + glifo(item.icon, cx, cy, ativo ? UI.surface : UI.dim)
+    return chip + icone(item.icon, cx, cy, r.iconSize, ativo ? UI.surface : UI.teal)
   }).join('')
 
   return (
     tag('rect', { x: APP.X, y: BODY_Y, width: APP.RAIL_W, height: BODY_H, fill: UI.canvas }) +
     tag('line', { x1: RAIL_X, y1: BODY_Y, x2: RAIL_X, y2: APP.Y + APP.VIEW_H, stroke: UI.line }) +
-    tag('path', { d: `M${APP.X + APP.RAIL_W / 2 - 4} ${BODY_Y + r.collapseY}` +
-      `l4 4l-4 4M${APP.X + APP.RAIL_W / 2 + 5} ${BODY_Y + r.collapseY}v8`,
-      fill: 'none', stroke: UI.dim, 'stroke-width': LAY.stroke.rail }) +
-    itens +
-    tag('circle', { cx: APP.X + APP.RAIL_W / 2, cy: APP.Y + APP.VIEW_H - r.footInset,
-      r: r.footR, fill: UI.header })
+    itens
   )
 }
 
 /** Barra de título da página, com os botões de ação à direita. */
-function titlebar(rotulo, extra = '') {
+function titlebar(rotulo, acoes, extra = '') {
   const b = LAY.titlebar
   const y = BODY_Y
-  const botoes = [0, 1, 2].map((i) => tag('rect', {
-    x: APP.X + APP.VIEW_W - b.padX - (i + 1) * b.btn - i * b.btnGap,
-    y: y + (APP.TITLEBAR_H - b.btn) / 2, width: b.btn, height: b.btn, rx: b.btnRx,
-    fill: UI.teal,
-  })).join('')
+  const botoes = acoes.map((nome, i) => {
+    const bx = APP.X + APP.VIEW_W - b.padX - (acoes.length - i) * b.btn -
+      (acoes.length - 1 - i) * b.btnGap
+    const by = y + (APP.TITLEBAR_H - b.btn) / 2
+    return tag('rect', { x: bx, y: by, width: b.btn, height: b.btn, rx: b.btnRx, fill: UI.teal }) +
+      icone(nome, bx + b.btn / 2, by + b.btn / 2, b.btnIcon, UI.surface)
+  }).join('')
   return tag('rect', { x: RAIL_X, y, width: BODY_W, height: APP.TITLEBAR_H, fill: UI.canvas }) +
-    tag('circle', { cx: RAIL_X + b.padX + b.iconR, cy: y + APP.TITLEBAR_H / 2, r: b.iconR,
-      fill: 'none', stroke: UI.dim, 'stroke-width': LAY.stroke.thin }) +
-    text(RAIL_X + b.padX + b.iconR * 2 + b.labelGap, y + b.baseY, UI.ink, rotulo, bold(APP.FONT.page)) +
+    icone('coin', RAIL_X + b.padX + b.icon / 2, y + APP.TITLEBAR_H / 2, b.icon, UI.dim) +
+    text(RAIL_X + b.padX + b.icon + b.labelGap, y + b.baseY, UI.ink, rotulo, bold(APP.FONT.page)) +
     extra + botoes +
     tag('line', { x1: RAIL_X + b.padX, y1: y + APP.TITLEBAR_H,
       x2: APP.X + APP.VIEW_W - b.padX, y2: y + APP.TITLEBAR_H, stroke: UI.line })
@@ -185,7 +185,9 @@ function screenCards() {
         fill: UI.surface, stroke: i === CARD_TARGET ? UI.teal : UI.line }) +
       barra +
       tag('circle', { cx: x + k.padX + k.badgeR, cy: y + k.badgeY, r: k.badgeR, fill: plano }) +
-      text(x + k.titleX, y + k.titleY, UI.ink, c.name, bold(APP.FONT.cardTitle)) +
+      icone(c.icon, x + k.padX + k.badgeR, y + k.badgeY, k.badgeIcon, UI.surface, PLAN_ICONS) +
+      text(x + k.padX + k.badgeR * 2 + k.badgeGap, y + k.titleY, UI.ink, c.name,
+        bold(APP.FONT.cardTitle)) +
       text(x + k.padX, y + k.descY, UI.faint, c.desc, { 'font-size': APP.FONT.cardDesc }) +
       linha(0, 'PLANO', c.plan) +
       linha(1, 'PERÍODO', c.period) +
@@ -198,14 +200,13 @@ function screenCards() {
       text(x + cw - k.padX + k.bar - k.pillPadX / 2, y + k.rowY + 2 * k.rowStep, st.fg,
         st.label, { ...bold(APP.FONT.pill), 'text-anchor': 'end' }) +
       progresso +
-      tag('path', { d: `M${x + cw - k.padX - 14} ${y + k.versionY - 6}v6m0 0h6` +
-        `M${x + cw - k.padX - 8} ${y + k.versionY - 10}v4`,
-        fill: 'none', stroke: UI.dim, 'stroke-width': LAY.stroke.thin }) +
+      icone('version', x + cw - k.padX - k.versionGap - k.versionIcon,
+        y + k.versionY - k.versionIcon / 2, k.versionIcon, UI.dim) +
       text(x + cw - k.padX + k.bar, y + k.versionY, UI.dim, String(c.versions),
         { 'font-size': APP.FONT.value, 'text-anchor': 'end' })
   }).join('')
 
-  return titlebar(PRODUCT.page) + cards
+  return titlebar(PRODUCT.page, ACTIONS.cards) + cards
 }
 
 /** Tela da tabela: painel numerado à esquerda, cabeçalho de tempo à direita. */
@@ -215,7 +216,7 @@ function screenTable() {
   const st = UI.state[alvo.state]
 
   // Migalha: Orçamentos › nome › pill de estado
-  const crumbX = RAIL_X + LAY.titlebar.padX + LAY.titlebar.iconR * 2 + LAY.titlebar.labelGap +
+  const crumbX = RAIL_X + LAY.titlebar.padX + LAY.titlebar.icon + LAY.titlebar.labelGap +
     w(PRODUCT.page, APP.FONT.page) + b.crumbGap
   const migalha =
     text(crumbX, BODY_Y + LAY.titlebar.baseY, UI.dim, `› ${alvo.name}`,
@@ -291,7 +292,7 @@ function screenTable() {
       esquerda + celulas
   }).join('')
 
-  return titlebar(PRODUCT.page, migalha) +
+  return titlebar(PRODUCT.page, ACTIONS.table, migalha) +
     tag('rect', { x: ZONE_X, y: y0, width: ZONE_W, height: APP.VIEW_H - (y0 - APP.Y) - b.sheetPad,
       fill: UI.surface }) +
     faixa + ano + trimestres + cabecalhoMes + linhas

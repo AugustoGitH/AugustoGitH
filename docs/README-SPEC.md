@@ -2027,7 +2027,7 @@ O que é fiel, de capturas de 2026-09-07 e do código:
 | --- | --- |
 | cabeçalho com marca, busca, seletor de organização e avatar | captura |
 | trilho de **ícones** (não rótulos), com o item ativo em chip teal | captura + `Sidebar/constants.ts` |
-| os sete glifos | **os SVGs do produto**, extraídos por `prep_icons.mjs` |
+| **todos** os glifos — trilho, busca, empresa, seta, ações da barra, plano do card, versões | **os SVGs do produto**, extraídos por `prep_icons.mjs` |
 | card: barra de plano colorida, badge, PLANO/PERÍODO/ESTADO, duas barras de progresso, contagem de versões | captura + `BudgetCard` |
 | pills ELABORAÇÃO e EXECUÇÃO | captura + `tailwind.config.ts` |
 | tabela: faixa BUDGET, ano, trimestre, mês; linhas numeradas com expansão; marcador laranja na célula; símbolo de vazio | captura + `BudgetTable` |
@@ -2075,6 +2075,18 @@ previsto.
 
 **Regra que sai daqui:** posição derivada de largura de texto é frágil. Onde o
 fluxo resolve — `tspan`, `text-anchor` — prefira o fluxo.
+
+#### O trilho tem dois estados
+
+Inativo, o ícone é verde sobre o fundo do trilho. Ativo, um chip verde e o ícone
+branco. São os dois únicos estados, e o trilho mostra **cinco** itens — Analyses
+e AI Xpert saíram a pedido.
+
+#### O que estava na referência mas não é o produto
+
+A captura pegou o indicador flutuante do Next.js no canto inferior esquerdo. É
+ferramenta de desenvolvimento, não interface — foi removido e fica ignorado nas
+próximas referências.
 
 #### Os ícones vêm do produto, não da mão
 

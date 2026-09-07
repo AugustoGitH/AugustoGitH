@@ -16,7 +16,7 @@ export {
 export { CONTACT, PROBE, LINKS_PANE, LINKS_CANVAS, LINKS_TIME, TILE, TILES } from './links.mjs'
 export { BANNER } from './banner.mjs'
 export {
-  PRODUCT, UI, RAIL, RAIL_TARGET, CARDS, CARD_TARGET, TABLE, APP, TOUR,
+  PRODUCT, UI, RAIL, RAIL_TARGET, ACTIONS, CARDS, CARD_TARGET, TABLE, APP, TOUR,
   LAY, WEIGHT, ARROW,
 } from './product.mjs'
-export { ICONS, ICON_SIDE } from './icons.mjs'
+export { ICONS, PLAN_ICONS } from './icons.mjs'
