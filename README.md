@@ -5,6 +5,8 @@
        alt="Quatro agentes de terminal se revezando para apresentar Augusto Caetano Westphal: identidade, números do perfil, stack e contato." />
 </div>
 
+<br />
+
 <!-- ══════════════════ 02 · COMMITS ══════════════════ -->
 
 <div align="center">
@@ -12,12 +14,16 @@
        alt="$ git log --graph --since=1.year — skyline das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 3862 commits, 306 de 365 dias ativos, pico semanal de 201." />
 </div>
 
+<br />
+
 <!-- ══════════════════ 03 · STACKS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/stack-well.svg" width="820"
        alt="$ tree ./tech-stack --depth=1 — 32 tecnologias empilhadas como peças de Tetris. Front-end: React, Next.js, TypeScript, JavaScript, HTML5, CSS3, Sass, Styled Components, Bootstrap, Material UI, Apollo Client, jQuery. Back-end: Node.js, Express.js, NestJS, GraphQL. Bancos e ORM: PostgreSQL, MongoDB, Prisma, TypeORM, Sequelize, Firestore, Firebase Storage. Testes: Jest, React Testing Library, Mocha, Chai, Selenium, Robot Framework. Arquitetura: SOLID, Design Patterns, Clean Code." />
 </div>
+
+<br />
 
 <!-- ══════════════════ 04 · LINKS ══════════════════ -->
 

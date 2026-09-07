@@ -533,6 +533,8 @@ responsabilidade do SVG — o markdown não participa dessas decisões.
 
 <!-- ══════════ 02 · COMMITS ══════════ -->
 
+<br />
+
 <div align="center">
   <img src="./assets/commit-city.svg" width="820"
        alt="$ git log --graph --since=1.year — skyline das contribuições de
@@ -542,6 +544,8 @@ responsabilidade do SVG — o markdown não participa dessas decisões.
 
 <!-- ══════════ 03 · STACKS ══════════ -->
 
+<br />
+
 <div align="center">
   <img src="./assets/stack-well.svg" width="820"
        alt="$ tree ./tech-stack --depth=1 — 32 tecnologias empilhadas como peças
@@ -550,6 +554,8 @@ responsabilidade do SVG — o markdown não participa dessas decisões.
 </div>
 
 <!-- ══════════ 04 · LINKS ══════════ -->
+
+<br />
 
 <div align="center">
   <img src="./assets/contact-prompt.svg" width="820"
@@ -580,7 +586,8 @@ bloco, e nada mais.
 | 3 | Caminho sempre relativo: `./assets/…` | resolve na branch atual; não acopla a `main`; evita uma segunda ida ao proxy de imagem |
 | 4 | `width` explícito, igual à largura do canvas | sem ele o GitHub usa a largura intrínseca e o SVG estoura em tela estreita |
 | 5 | `alt` descreve o **conteúdo**, não o meio | "Quatro agentes…", nunca "SVG animado" |
-| 6 | Espaçamento é do SVG, não do markdown | `<br/>` empilhado é sintoma de padding faltando no canvas |
+| 6 | Espaçamento **dentro** de uma seção é do SVG | `<br/>` empilhado para arejar uma peça é sintoma de padding faltando no canvas |
+| 6b | Espaçamento **entre** seções é do README: um `<br />` por junta | o `<div>` não recebe margem no `markdown-body`, e um SVG não sabe o que vem depois dele. Sem isso as seções encostam — e como todas pintam o fundo em `canvas.default`, elas se fundem num bloco escuro contínuo |
 | 7 | **Título de seção vive dentro do SVG**, nunca como heading markdown | tipografia, tamanho, cor e posição passam a ser nossos; o markdown do GitHub só oferece um `h2` com borda inferior |
 | 8 | Nada fora de um bloco marcado | se não está num bloco, não pertence ao README |
 
@@ -1082,6 +1089,13 @@ imediato.
 com a Seção 1. Numa página de perfil em 1080p sobram ~720px de conteúdo depois
 do header fixo, das abas e do cabeçalho e padding da Box. Com a Seção 1 em 520px
 e 16px de espaçamento, restam **184px**.
+
+> **Revisado em 2026-09-06.** O `<br />` entre seções (§3.3, regra 6b) levou a
+> junta de 16 para ~40px, e o par passa a somar `520 + 40 + 176 = 736` contra os
+> ~720 estimados. Fica na borda: em 1080p as duas continuam visíveis com um
+> toque de rolagem. Aceito — seções encostadas se fundiam num bloco escuro só, e
+> separar valia os 16px. Se um dia precisar do encaixe exato de volta, a folga
+> está nos 97px de vazio de cada painel da Seção 1.
 
 Isso não é um teto incômodo: em 796px úteis, 53 prédios dão 13px de largura
 cada. Com 110px de altura máxima, o prédio mais alto fica em **1:8.5** — a
