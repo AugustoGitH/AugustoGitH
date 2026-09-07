@@ -194,7 +194,8 @@ const main = () => {
     `height="${STACK_CANVAS.H}" viewBox="0 0 ${STACK_CANVAS.W} ${STACK_CANVAS.H}" ` +
     `role="img" aria-label="${STACK_CANVAS.TITLE} — ${pecas.length} tecnologias ` +
     `empilhadas como peças de Tetris, agrupadas por categoria. ${nomes}.">`,
-    `<style>text{font-family:${TYPO.STACK};font-size:${TYPO.SIZE.body}px}</style>`,
+    // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
+    `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: STACK_CANVAS.W, height: STACK_CANVAS.H, fill: T.bg }),
     STATIC ? '' : clip,
     titulo + paredes + pilha + decl + med,

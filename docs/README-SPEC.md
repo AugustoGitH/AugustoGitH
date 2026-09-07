@@ -83,6 +83,25 @@ Posicione tudo numa grade de células fixas, derivada do tamanho da fonte
 (§2.4). Evite emoji: renderização inconsistente entre plataformas. Use glifos
 monoespaçados (`✳ ▸ ⏵ ░ █ ●`).
 
+### 0.4.1 `font-size` nunca vai na folha de estilo do SVG
+
+Cada SVG carrega um `<style>` com a família monoespaçada. Ele **não pode**
+declarar `font-size`.
+
+**Por quê:** atributo de apresentação em SVG tem especificidade zero. Qualquer
+regra CSS ganha dele, inclusive um seletor de tipo. Enquanto a folha declarou
+`text{font-size:11px}`, todo `font-size="15"` e `font-size="9"` foi
+silenciosamente ignorado — os títulos das Seções 2 e 3 saíram a 11px desde que
+foram criados, e o endereço das peças de contato renderizou a 11px numa placa
+dimensionada para 9px, transbordando e sendo recortado.
+
+Nada avisa: o SVG é válido, o atributo está lá, e o navegador simplesmente
+prefere a regra. Só se vê olhando o resultado.
+
+O tamanho vem de `text()` em `lib/svg.mjs`, sempre como atributo, com
+`TYPO.SIZE.body` como padrão. Se `font-size` voltar para o `<style>`, o
+parâmetro para de funcionar de novo.
+
 ### 0.5 Todo número exibido é lido, nunca estimado
 
 Nenhuma seção pode exibir um dado que não venha de `data/*.json` gerado por um

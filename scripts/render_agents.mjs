@@ -230,7 +230,8 @@ const main = () => {
     `viewBox="0 0 ${GEO.CANVAS.W} ${GEO.CANVAS.H}" role="img" ` +
     `aria-label="Quatro agentes de terminal se apresentando em revezamento: ` +
     `identidade, números do perfil, stack e contato.">`,
-    `<style>text{font-family:${TYPO.STACK};font-size:${TYPO.SIZE.body}px}</style>`,
+    // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
+    `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: GEO.CANVAS.W, height: GEO.CANVAS.H, fill: T.bg }),
     ...ROSTER.map((a, i) => pane(i, a, data)),
     '</svg>',

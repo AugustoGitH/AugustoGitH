@@ -1,6 +1,7 @@
 /** Helpers puros de SVG. Sem estado, sem I/O, sem constante literal. */
 import { assertKeyframes } from './assert.mjs'
 import { GEO } from './constants/geometry.mjs'
+import { TYPO } from './constants/typography.mjs'
 
 export const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -32,5 +33,20 @@ export function animate({ attr, values, keyTimes, dur, where, repeat = true }) {
   })
 }
 
+/**
+ * Um <text>, com o tamanho SEMPRE como atributo.
+ *
+ * Atributo de apresentação em SVG tem especificidade zero: qualquer regra CSS
+ * ganha dele, inclusive um seletor de tipo. Enquanto a folha de estilo do
+ * arquivo declarava `text{font-size:11px}`, todo `font-size="15"` e
+ * `font-size="9"` era silenciosamente ignorado — títulos de seção saíam a 11px
+ * e endereços transbordavam a placa.
+ *
+ * Por isso a folha carrega só a família, e o tamanho vem daqui. Se algum dia
+ * `font-size` voltar para o <style>, este parâmetro para de funcionar de novo.
+ */
 export const text = (x, y, fill, content, extra = {}) =>
-  tag('text', { x, y, fill, 'xml:space': 'preserve', ...extra }, esc(content))
+  tag('text', {
+    x, y, fill, 'xml:space': 'preserve',
+    'font-size': TYPO.SIZE.body, ...extra,
+  }, esc(content))

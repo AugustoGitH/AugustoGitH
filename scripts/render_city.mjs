@@ -135,7 +135,8 @@ const main = () => {
     `aria-label="Skyline das contribuições de ${contrib.from} a ${contrib.to}: ` +
     `${weeks.length} semanas, ${contrib.total} commits, ${contrib.activeDays} de ` +
     `${contrib.days} dias ativos, pico semanal de ${totais[iPico]}.">`,
-    `<style>text{font-family:${TYPO.STACK};font-size:${TYPO.SIZE.body}px}</style>`,
+    // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
+    `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: CITY.W, height: CITY.H, fill: T.bg }),
     conteudo,
     '</svg>',

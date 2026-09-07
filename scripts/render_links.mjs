@@ -31,7 +31,8 @@ const STATIC = process.env.STATIC === '1'
 const svgOpen = (w, h, label) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" ` +
   `viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}">\n` +
-  `<style>text{font-family:${TYPO.STACK};font-size:${TYPO.SIZE.body}px}</style>`
+  // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
+    `<style>text{font-family:${TYPO.STACK}}</style>`
 
 /** O cursor de bloco do sistema, piscando no seu próprio ritmo. */
 const cursor = (x, y, hue, dur) => tag('rect', {

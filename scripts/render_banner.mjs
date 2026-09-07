@@ -54,6 +54,7 @@ const main = () => {
 
   const legenda =
     text(BANNER.PAD, BANNER.CAPTION_Y, T.accent, BANNER.TITLE, {
+      'font-size': TYPO.SIZE.section,
       'font-weight': TYPO.SECTION_WEIGHT, 'letter-spacing': TYPO.SECTION_TRACKING,
     }) +
     text(BANNER.W - BANNER.PAD, BANNER.CAPTION_Y, T.muted, BANNER.STATUS,
@@ -67,7 +68,8 @@ const main = () => {
     `segurando um asterisco luminoso, deitado de lado com o mesmo asterisco, e ` +
     `agachado entre dois símbolos luminosos apoiados no banco. Estado do blog: ` +
     `${BANNER.STATUS}.">`,
-    `<style>text{font-family:${TYPO.STACK};font-size:${TYPO.SIZE.body}px}</style>`,
+    // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
+    `<style>text{font-family:${TYPO.STACK}}</style>`,
     tag('rect', { x: 0, y: 0, width: BANNER.W, height: BANNER.H, fill: T.bg }),
     quadros, legenda,
     '</svg>',
