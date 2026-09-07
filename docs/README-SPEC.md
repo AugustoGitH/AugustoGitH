@@ -1782,8 +1782,25 @@ vivos. A defasagem vem de durações diferentes, não de `begin` atrasado — qu
 **A fileira fecha exatamente na largura do terminal.** O espaço em branco entre
 `<img>` inline é decidido pelo navegador e não serve de medianiz — então cada
 peça ocupa **1/4 da largura cheia (205px)** e traz a medianiz desenhada dentro
-de si: metade dela nas bordas internas, nada nas externas. A primeira placa
-começa em 0, a última termina em 820.
+de si: metade dela em **cada** borda interna, nada nas externas.
+
+```
+peça 0   placa   0..201     recua só à direita
+peça 1   placa 209..406     recua dos dois lados
+peça 2   placa 414..611     recua dos dois lados
+peça 3   placa 619..820     recua só à esquerda
+```
+
+Os dois recuos são independentes. Subtrair a medianiz apenas nas pontas deixava
+as peças do meio com a largura cheia, e a placa transbordava a arte de 205px: o
+traço direito era recortado fora e as duas do meio apareciam sem borda de um
+lado.
+
+**Endereço trunca em vez de transbordar.** O endereço completo vive no `href` e
+no `alt`; na placa ele só precisa identificar. A peça mais estreita é a régua, e
+o corte usa `...` em ASCII — o caractere de reticências pode faltar na fonte do
+sistema (§0.4). Com medianiz de 8px cabem 33 colunas e o endereço mais longo tem
+32, então hoje nada trunca: é guarda, não recurso em uso.
 
 Consequência no markdown: **nenhum espaço entre as tags `<a>`**. Um único
 caractere em branco viraria ~4px de medianiz fantasma e a fileira deixaria de

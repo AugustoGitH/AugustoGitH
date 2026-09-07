@@ -68,7 +68,9 @@ export const TILE = Object.freeze({
    * primeira peça começa em 0, a última termina em 820.
    */
   W: GEO.CANVAS.W / 4,   // 205
-  GUTTER: 12,
+  // 8 e não 12: as peças do meio recuam dos dois lados, e a folga do endereço
+  // mais longo (32 colunas) saía de 1.6px para 5.4px com a medianiz menor.
+  GUTTER: 8,
   H: 46,
   RX: 6,
   PAD: 6,
@@ -77,6 +79,7 @@ export const TILE = Object.freeze({
   ADDR_Y: 36,
   ADDR_SIZE: 9,          // o endereço mais longo tem 32 colunas e precisa caber
   CURSOR_GAP: 1,         // colunas entre o rótulo e o cursor
+  ELLIPSIS: '...',       // ASCII: o reticências tipográfico pode faltar na fonte do sistema
 })
 
 export const TILES = Object.freeze([

@@ -86,15 +86,28 @@ function terminal() {
 
 /** Uma peça de contato: rótulo, endereço e um cursor no ritmo próprio dela. */
 function peca(t, addr, i, total) {
-  // Medianiz desenhada dentro da peça: metade dela nas bordas internas, nada
-  // nas externas. A fileira fecha exatamente na largura do terminal acima.
+  /**
+   * Medianiz desenhada dentro da peça: metade dela em CADA borda interna, nada
+   * nas externas. A fileira fecha exatamente na largura do terminal acima.
+   *
+   * Os recuos são independentes — as do meio recuam dos dois lados. Subtrair a
+   * medianiz só nas pontas dava w = TILE.W para as do meio, e a placa
+   * transbordava a arte: o traço direito era recortado fora.
+   */
   const g = TILE.GUTTER / 2
-  const x = i === 0 ? 0 : g
-  const w = TILE.W - (i === 0 ? g : 0) - (i === total - 1 ? g : 0)
+  const esq = i === 0 ? 0 : g
+  const dir = i === total - 1 ? 0 : g
+  const x = esq
+  const w = TILE.W - esq - dir
 
+  // O endereço completo vive no href e no alt; aqui ele só precisa identificar.
+  // Truncar é preferível a transbordar — e a peça mais estreita é a régua.
   const addrCell = TILE.ADDR_SIZE * TYPO.ADVANCE_RATIO
-  const util = Math.floor((w - TILE.PAD * 2) / addrCell)
-  assertWidth(addr, `peça/${t.id}`, util)
+  const util = Math.floor((w - TILE.PAD * 2 - CELL_W) / addrCell)
+  const rotulo = addr.length <= util
+    ? addr
+    : addr.slice(0, Math.max(1, util - TILE.ELLIPSIS.length)) + TILE.ELLIPSIS
+  assertWidth(rotulo, `peça/${t.id}`, util)
 
   const s = TILE.STROKE
   return [
@@ -105,7 +118,7 @@ function peca(t, addr, i, total) {
     text(x + TILE.PAD + CELL_W, TILE.LABEL_Y, t.hue, t.id),
     cursor(x + TILE.PAD + CELL_W * (t.id.length + 1 + TILE.CURSOR_GAP), TILE.LABEL_Y,
       t.hue, t.blink),
-    text(x + TILE.PAD + CELL_W, TILE.ADDR_Y, T.dim, addr, { 'font-size': TILE.ADDR_SIZE }),
+    text(x + TILE.PAD + CELL_W, TILE.ADDR_Y, T.dim, rotulo, { 'font-size': TILE.ADDR_SIZE }),
     '</svg>',
   ].join('\n')
 }
