@@ -27,19 +27,19 @@
  "langs": [
   {
    "name": "TypeScript",
-   "pct": 38.5
+   "pct": 39.5
   },
   {
    "name": "JavaScript",
-   "pct": 35.9
+   "pct": 34.2
   },
   {
    "name": "CSS",
-   "pct": 17.9
+   "pct": 18.4
   },
   {
    "name": "HTML",
-   "pct": 5.1
+   "pct": 5.3
   },
   {
    "name": "Sass",
@@ -47,9 +47,9 @@
   }
  ],
  "contrib": {
-  "total": 3825,
+  "total": 3866,
   "activeDays": 306,
-  "days": 366,
+  "days": 365,
   "drawn": 3825,
   "maxDay": 54,
   "maxWeek": 201,
@@ -683,8 +683,7 @@
    {
     "firstDay": "2026-09-06",
     "days": [
-     19,
-     0
+     19
     ]
    }
   ]

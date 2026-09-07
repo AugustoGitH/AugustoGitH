@@ -120,9 +120,21 @@ const main = async () => {
   ])
 
   const repos = allRepos.filter((r) => !r.fork)
+  const ehPerfil = (r) => r.name.toLowerCase() === USER.toLowerCase()
 
+  // O repositório de perfil fica FORA da contagem de linguagens.
+  //
+  // Ele passou a contar como JavaScript no dia em que estes scripts entraram
+  // nele, e deslocou todos os percentuais — o README passou a medir o próprio
+  // código-fonte. A distribuição responde "o que ele constrói", e o andaime do
+  // README não é um projeto.
+  //
+  // Continua dentro de `repos.total`: é um repositório público de verdade, e
+  // esse número precisa bater com o que o GitHub mostra no perfil.
   const counts = {}
-  for (const r of repos) if (r.language) counts[r.language] = (counts[r.language] ?? 0) + 1
+  for (const r of repos) {
+    if (r.language && !ehPerfil(r)) counts[r.language] = (counts[r.language] ?? 0) + 1
+  }
   const totalLang = Object.values(counts).reduce((a, b) => a + b, 0)
   const langs = Object.entries(counts)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -132,7 +144,7 @@ const main = async () => {
     .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at) || a.name.localeCompare(b.name))
     // Fora: o próprio repo de perfil, e repos sem linguagem detectada — uma
     // linha "NOME  -" não diz o que o dev construiu, só ocupa espaço.
-    .filter((r) => r.name.toLowerCase() !== USER.toLowerCase() && r.language)
+    .filter((r) => !ehPerfil(r) && r.language)
     .slice(0, 3)
     .map((r) => ({ name: r.name, language: r.language }))
 
