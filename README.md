@@ -1,3 +1,12 @@
+<!-- ══════════════════ 00 · BANNER ══════════════════ -->
+
+<div align="center">
+  <img src="./assets/banner.svg" width="820"
+       alt="$ blog --status — três retratos em preto e branco de Augusto Caetano Westphal, da mesma sessão: agachado sobre um banco de concreto segurando um asterisco luminoso, deitado de lado com o mesmo asterisco, e agachado entre dois símbolos luminosos apoiados no banco. Estado do blog: writing, soon." />
+</div>
+
+<br />
+
 <!-- ══════════════════ 01 · APRESENTAÇÃO ══════════════════ -->
 
 <div align="center">

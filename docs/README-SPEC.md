@@ -4,7 +4,7 @@
 > **como o SVG é montado**. Nada aqui é implementado por terceiros: todo
 > elemento animado é gerado por código deste repositório e commitado como arquivo.
 
-- **Escopo deste documento:** as quatro seções do README.
+- **Escopo deste documento:** as cinco seções do README.
 - **Última atualização:** 2026-09-06
 
 > **Fonte de verdade deste documento.** Tudo aqui é derivado de (a) este
@@ -27,6 +27,7 @@
 | 5 | [Seção 2 — A cidade de commits](#5-seção-2--a-cidade-de-commits) | skyline do calendário de contribuições |
 | 6 | [Seção 3 — O poço de stacks](#6-seção-3--o-poço-de-stacks) | partida de Tetris com as tecnologias |
 | 7 | [Seção 4 — O prompt devolvido](#7-seção-4--o-prompt-devolvido) | fecho: os endereços e o cursor esperando |
+| 8 | [Seção 0 — O banner](#8-seção-0--o-banner) | abertura: folha de contatos e o blog |
 
 ---
 
@@ -523,6 +524,14 @@ responsabilidade do SVG — o markdown não participa dessas decisões.
 ### 3.2 Esqueleto
 
 ```markdown
+<!-- ══════════ 00 · BANNER ══════════ -->
+
+<div align="center">
+  <img src="./assets/banner.svg" width="820" alt="..." />
+</div>
+
+<br />
+
 <!-- ══════════ 01 · APRESENTAÇÃO ══════════ -->
 
 <div align="center">
@@ -605,6 +614,7 @@ longo. Numa peça maior a conclusão seria outra.
 
 | # | Seção | Estado hoje | Ao ser especificada |
 | :-: | --- | --- | --- |
+| 00 | Banner | — (nova) | `banner.svg` (§8) |
 | 01 | Apresentação | `readme-typing-svg` externo + `banner_00_rounded.png` (699 KB) | **substituído** por `agents-grid.svg` |
 | 02 | Commits | snake via `Platane/snk@v3` | **substituído** por `commit-city.svg` (§5) |
 | 03 | Stacks | ~35 badges `shields.io` | **substituído** por `stack-well.svg` (§6) |
@@ -1756,3 +1766,101 @@ justifica: ele faz algo que o SVG não pode fazer.
 | Animação | revela uma vez e congela; o cursor pisca para sempre |
 | Cor | rosa do `liaison` — o agente de contato fecha a página |
 | Markdown | uma linha de links, a única exceção do §3.3 |
+
+
+---
+
+## 8. Seção 0 — O banner
+
+### 8.1 Intenção
+
+Uma folha de contatos: três quadros da mesma sessão fotográfica abrindo a
+página e servindo de porta para o blog de tecnologia.
+
+### 8.2 Dois registros, de propósito
+
+O preto-e-branco editorial contra o terminal cyberpunk **não é inconsistência**.
+A página passa a ter dois registros:
+
+- **a pessoa** — fotográfico, mesma linguagem da foto de perfil do GitHub
+  (verificada em 2026-09-06: mesmo preto-e-branco, mesma parede de reboco, mesma
+  geração)
+- **o sistema** — os quatro terminais e gráficos abaixo
+
+O banner pertence ao primeiro. Por isso o brilho das fotos **não** é tingido no
+acento do sistema: tingir tentaria costurar dois registros que devem ler como
+dois.
+
+### 8.3 A única seção raster
+
+Toda outra seção é vetor gerado. Esta carrega três JPEG embutidos como data URI.
+
+**Por que embutir, e não referenciar três arquivos:** a seção continua sendo UM
+arquivo, como todas as outras (§0.8), e o texto fica em SVG de verdade — com a
+tipografia do sistema — em vez de queimado no raster.
+
+As fotos entram **inteiras**. São quadradas na origem (1024×1024) e o conteúdo
+dos três quadros é para ser preservado, então há reamostragem, não recorte.
+
+| | |
+| --- | ---: |
+| origem | 1024×1024, ~1.3 MB cada |
+| quadro | 390×390 JPEG q85, ~21 KB cada |
+| exibido | 260×260 (1.5× para tela densa) |
+| SVG final | 91 KB, dentro do teto de 120 KB |
+
+### 8.4 O corte roda à mão — o caso que §1.1 previu
+
+`scripts/prep_banner.py` reamostra e comprime. **Python, local, nunca no CI** —
+exatamente a exceção que §1.1 abriu ao dizer que processamento de imagem é o
+único terreno sem equivalente maduro em npm.
+
+Os caminhos das fotos originais ficam no script como registro da origem; outras
+entram por argumento.
+
+`render_banner.mjs`, esse sim, é Node e determinístico: só lê os `.jpg` prontos
+e embute. O CI o roda como qualquer outro render.
+
+### 8.5 Geometria
+
+```
+PAD       12
+GUTTER     8
+SIDE     260      (usável 796 - 2 medianizes) / 3
+CANVAS   820 × 308
+```
+
+O número do quadro fica **sobre** a foto, no canto inferior esquerdo — é a marca
+da borda do filme, e economiza uma linha de legenda.
+
+### 8.6 O blog ainda não existe, e o pipeline barraria o link
+
+`fetch_profile.mjs` aborta quando um endereço não responde (§7.4). Se a URL do
+blog entrasse no `PROBE` antes de estar no ar, **o primeiro cron quebraria** —
+seria repetir o bug do `augustowestphal.site` com o mecanismo que criamos para
+impedi-lo.
+
+Então: o banner declara o estado (`writing · soon`) e **não** leva link. Quando
+o blog subir, são duas linhas — a URL no `PROBE` e um `<a>` na linha de links do
+bloco 04.
+
+### 8.7 Consequência: a janela de leitura conjunta acabou
+
+§5.2 dimensionou a Seção 2 para caber na tela junto com a Seção 1. Com o banner
+de 308px acima, isso deixa de ser possível — e deixa de fazer sentido: uma
+página com abertura editorial é lida rolando.
+
+A altura da Seção 2 continua onde está: 96px de prédio dariam agulhas de 1:14, e
+a proporção de 1:6.9 que a restrição produziu segue sendo a certa pelo motivo
+dela mesma, não pelo orçamento que a originou.
+
+### 8.8 Decisões da Seção 0
+
+| Decisão | Resultado |
+| --- | --- |
+| Registro visual | fotográfico, sem tingir — contraste deliberado com o sistema |
+| Recorte | nenhum; as três fotos inteiras |
+| Formato | JPEG q85 embutido como data URI num SVG |
+| Corte e compressão | Python, local e à mão (§1.1) |
+| Link do blog | ausente até estar no ar; o banner declara o estado |
+| Animação | os quadros surgem escalonados em 1.2s e congelam |
