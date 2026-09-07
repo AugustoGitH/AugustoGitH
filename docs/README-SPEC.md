@@ -4,7 +4,7 @@
 > **como o SVG é montado**. Nada aqui é implementado por terceiros: todo
 > elemento animado é gerado por código deste repositório e commitado como arquivo.
 
-- **Escopo deste documento:** as seis seções do README.
+- **Escopo deste documento:** as seções do README.
 - **Última atualização:** 2026-09-06
 
 > **Fonte de verdade deste documento.** Tudo aqui é derivado de (a) este
@@ -28,7 +28,7 @@
 | 6 | [Seção 3 — O poço de stacks](#6-seção-3--o-poço-de-stacks) | partida de Tetris com as tecnologias |
 | 7 | [Seção 4 — O prompt devolvido](#7-seção-4--o-prompt-devolvido) | fecho: os endereços e o cursor esperando |
 | 8 | [Seção 0 — O banner](#8-seção-0--o-banner) | abertura: folha de contatos e o blog |
-| 9 | [Seção 1 — O preview do produto](#9-seção-1--o-preview-do-produto) | sessão de uso gravada do BudgetXpert |
+| 9 | [Seção 1 — O preview do produto](#9-seção-1--o-preview-do-produto) | **fora do README**; mantida como referência |
 
 ---
 
@@ -636,7 +636,7 @@ longo. Numa peça maior a conclusão seria outra.
 | # | Seção | Estado hoje | Ao ser especificada |
 | :-: | --- | --- | --- |
 | 00 | Banner | — (nova) | `banner.svg` (§8) |
-| 01 | Produto | — (nova) | `product-preview.svg` (§9) |
+| 01 | Produto | removida do README; a spec e os scripts ficam (§9) |  |
 | 01 | Apresentação | `readme-typing-svg` externo + `banner_00_rounded.png` (699 KB) | **substituído** por `agents-grid.svg` |
 | 02 | Commits | snake via `Platane/snk@v3` | **substituído** por `commit-city.svg` (§5) |
 | 03 | Stacks | ~35 badges `shields.io` | **substituído** por `stack-well.svg` (§6) |
@@ -2015,7 +2015,13 @@ dela mesma, não pelo orçamento que a originou.
 
 ---
 
-## 9. Seção 1 — O preview do produto
+## 9. Seção 1 — O preview do produto · fora do README
+
+> **Removida do README em 2026-09-07.** O bloco saiu, o asset foi apagado e o
+> render saiu do CI. Os scripts, as constantes e os ícones extraídos ficam no
+> repositório: a seção custou muito para ser descartada, e reativá-la é repor o
+> bloco e a linha do workflow. O capítulo abaixo segue valendo como registro do
+> que foi decidido e por quê.
 
 ### 9.1 Intenção
 

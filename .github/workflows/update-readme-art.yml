@@ -46,7 +46,6 @@ jobs:
       - name: Desenhar as seções
         run: |
           node scripts/render_banner.mjs
-          node scripts/render_product.mjs
           node scripts/render_agents.mjs
           node scripts/render_city.mjs
           node scripts/render_stack.mjs

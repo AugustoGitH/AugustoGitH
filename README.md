@@ -8,17 +8,7 @@
 <br />
 <br />
 
-<!-- ══════════════════ 01 · PRODUTO ══════════════════ -->
-
-<div align="center">
-  <img src="./assets/product-preview.svg" width="820"
-       alt="$ open ~/work/budgetxpert --preview — sessão de uso gravada do BudgetXpert, Results Management Software: o ponteiro abre Budgets, os cards aparecem e um deles revela a tabela de orçamento com categorias e premissas por período. Navegação: Home, Plans, Categories, Premises, Budgets, Analyses, AI Xpert. preview, sample data." />
-</div>
-
-<br />
-<br />
-
-<!-- ══════════════════ 02 · APRESENTAÇÃO · desativada ══════════════════
+<!-- ══════════════════ 01 · APRESENTAÇÃO · desativada ══════════════════
 
 <div align="center">
   <img src="./assets/agents-grid.svg" width="820"
@@ -30,7 +20,7 @@
 
 ══════════════════════════════════════════════════════════════════ -->
 
-<!-- ══════════════════ 03 · COMMITS ══════════════════ -->
+<!-- ══════════════════ 02 · COMMITS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/commit-city.svg" width="820"
@@ -40,7 +30,7 @@
 <br />
 <br />
 
-<!-- ══════════════════ 04 · STACKS ══════════════════ -->
+<!-- ══════════════════ 03 · STACKS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/stack-well.svg" width="820"
@@ -50,7 +40,7 @@
 <br />
 <br />
 
-<!-- ══════════════════ 05 · LINKS ══════════════════ -->
+<!-- ══════════════════ 04 · LINKS ══════════════════ -->
 
 <div align="center">
   <img src="./assets/contact-prompt.svg" width="820"
