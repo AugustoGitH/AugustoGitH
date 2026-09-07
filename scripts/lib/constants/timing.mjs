@@ -11,7 +11,7 @@ export const TIME = Object.freeze({
 /** Início absoluto da fase do agente i. */
 export const phaseStart = (i) => i * TIME.PHASE_S
 
-export const TOTAL_S = 30.4 // = GROW_END + GROW.fade
+export const TOTAL_S = 31 // = GROW_END + GROW.fade, arredondado
 
 /** Cues em segundos, relativos ao início da fase do agente. */
 export const CUE = Object.freeze({
@@ -36,37 +36,32 @@ export const FINALE_AT =
   TIME.PHASE_S * (TIME.AGENTS - 1) + CUE.foot.at + CUE.foot.dur + CUE.finaleHold
 
 /**
- * A multiplicação da frota, entretecida na narrativa.
+ * A montagem da frota, depois que os quatro terminam.
  *
- * Cada painel se divide assim que o SEU agente termina de escrever — não depois
- * que todos terminam. Enquanto o próximo escreve, o anterior já virou quatro, e
- * depois dezesseis. Ao fim da última fala o campo está completo: 4 x 16 = 64.
- *
- * Os offsets são relativos ao início da fase do agente, então a divisão
- * acompanha quem falou, não o relógio.
+ * A grade não salta de 4 para 64: ela se monta **de um em um**, um painel por
+ * vez, em ordem de leitura. É aritmético — mais um, mais um — e é isso que faz
+ * parecer uma frota subindo, e não um corte de plano.
  *
  * O nível final não é legível e não deveria ser: o painel fica com 92x55px e
  * 29px de corpo. A ilegibilidade é a mensagem — você lê quatro, e vê sessenta
  * e quatro.
  */
 export const GROW = Object.freeze({
-  split1: 5.2,  // da fase do agente: o painel dele vira quatro
-  split2: 8.0,  // e os quatro viram dezesseis
-  fade: 0.7,
+  at: 25.4,     // depois do finale, quando os quatro já acenderam juntos
+  step: 0.05,   // de um painel ao próximo
+  fade: 0.45,   // cada painel surge nisto
   hold: 1.5,    // o campo completo, parado
-
-  /** Quantas colunas o painel do agente ganha em cada nível: 2x2, depois 4x4.
-   *  Subdividir por 2 e por 4 dá exatamente as grades globais de 4x4 e 8x8. */
-  levels: Object.freeze([2, 4]),
+  cols: 8,
 })
 
-/** Instante absoluto em que o painel do agente i chega ao nível n (1 ou 2). */
-export const splitAt = (i, n) =>
-  phaseStart(i) + (n === 1 ? GROW.split1 : GROW.split2)
+/** Instante em que o painel k da grade entra. */
+export const paneAt = (k) => GROW.at + k * GROW.step
+
+/** O último painel termina de entrar. */
+export const FILL_END = paneAt(GROW.cols ** 2 - 1) + GROW.fade
 
 /** O campo completo começa a sair. */
-export const GROW_END =
-  splitAt(TIME.AGENTS - 1, 2) + GROW.fade + GROW.hold
+export const GROW_END = FILL_END + GROW.hold
 
 /**
  * Ciclo de trabalho do cursor: aceso na primeira metade, apagado na segunda.
