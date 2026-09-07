@@ -186,6 +186,7 @@ scripts/
       roster.mjs               # os 4 agentes: identidade e roteiro
       limits.mjs               # orçamentos e limites validados na geração
     svg.mjs                    # helpers puros: escape, tag, animate, clip
+    pane.mjs                   # moldura e barra de título de um terminal
     color.mjs                  # interpolação de rampa
     assert.mjs                 # validações que abortam a geração
   audit_constants.mjs          # verifica a regra §0.9
@@ -980,6 +981,20 @@ do mesmo elemento entram em conflito.
 </g>
 ```
 
+#### Moldura e barra de título — `lib/pane.mjs`
+
+O chrome era desenhado de `0` a `W`, **cobrindo o traço lateral do corpo**. O
+corpo ficava com borda visível nas laterais e o header não, e o olho lê isso
+como "o header é mais estreito que o corpo".
+
+O chrome recua pela largura do traço (`PANE.STROKE`), então a moldura emoldura o
+painel inteiro — header incluso — e as duas partes têm exatamente a mesma
+largura pintada. O raio do chrome também encolhe pelo traço: raios iguais em
+curvas concêntricas desalinhariam meio pixel.
+
+O código estava duplicado entre a Seção 1 e a Seção 4, com o mesmo erro nas
+duas. Agora vive em `lib/pane.mjs` e as duas seções não podem mais divergir.
+
 #### c) Véu do painel inativo
 
 Atributo de markup `opacity="0"` (fallback: todos os painéis nítidos); a
@@ -1764,10 +1779,15 @@ pareceriam um só elemento cintilando; fora de fase, parecem quatro processos
 vivos. A defasagem vem de durações diferentes, não de `begin` atrasado — que
 §0.3 proíbe.
 
-**Largura:** 194px cada, saída do endereço mais longo (32 colunas a 9px) com
-folga para variação de avanço entre as fontes monoespaçadas do sistema. A
-fileira ocupa de 776 a 794px dos 796 úteis, conforme o espaço em branco que o
-navegador põe entre `<img>` inline.
+**A fileira fecha exatamente na largura do terminal.** O espaço em branco entre
+`<img>` inline é decidido pelo navegador e não serve de medianiz — então cada
+peça ocupa **1/4 da largura cheia (205px)** e traz a medianiz desenhada dentro
+de si: metade dela nas bordas internas, nada nas externas. A primeira placa
+começa em 0, a última termina em 820.
+
+Consequência no markdown: **nenhum espaço entre as tags `<a>`**. Um único
+caractere em branco viraria ~4px de medianiz fantasma e a fileira deixaria de
+alinhar com o terminal acima.
 
 A linha de links em markdown puro **saiu**: as peças fazem o mesmo trabalho
 desenhadas.

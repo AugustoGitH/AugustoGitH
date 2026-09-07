@@ -24,6 +24,7 @@ import {
 } from './lib/constants/index.mjs'
 import { assertWidth, assertBudget } from './lib/assert.mjs'
 import { tag, text, animate } from './lib/svg.mjs'
+import { paneFrame, paneChrome } from './lib/pane.mjs'
 
 const IN = 'data/profile.json'
 const STATIC = process.env.STATIC === '1'
@@ -68,16 +69,8 @@ function terminal() {
   return [
     svgOpen(P.W, H, `${P.TITLE} — $ connect --list, e o prompt devolvido ao leitor.`),
     tag('rect', { x: 0, y: 0, width: P.W, height: H, fill: T.bg }),
-    tag('rect', { x: GEO.HAIRLINE, y: GEO.HAIRLINE,
-      width: P.W - GEO.HAIRLINE * 2, height: H - GEO.HAIRLINE * 2, rx: P.RX,
-      fill: T.pane, stroke: T.border }),
-    tag('path', {
-      d: `M0 ${P.RX}a${P.RX} ${P.RX} 0 0 1 ${P.RX} -${P.RX}h${P.W - P.RX * 2}` +
-         `a${P.RX} ${P.RX} 0 0 1 ${P.RX} ${P.RX}v${P.CHROME_H - P.RX}H0Z`,
-      fill: T.chrome,
-    }) + dots +
-    text(GEO.colX(GEO.DOT.CX[2] / CELL_W + 1), GEO.DOT.CY + TYPO.BASELINE_NUDGE,
-      P.HUE, P.TITLE),
+    paneFrame(P.W, H),
+    paneChrome(P.W, P.TITLE, P.HUE),
     revela(text(P.PAD, P.CMD_Y, T.ink, '$ connect --list'), P.CMD_Y, LINKS_TIME.CMD_AT),
     revela(text(P.PAD, promptY, P.HUE, P.PROMPT), promptY, promptAt),
     tag('g', { opacity: 1 },
@@ -92,21 +85,27 @@ function terminal() {
 }
 
 /** Uma peça de contato: rótulo, endereço e um cursor no ritmo próprio dela. */
-function peca(t, addr) {
+function peca(t, addr, i, total) {
+  // Medianiz desenhada dentro da peça: metade dela nas bordas internas, nada
+  // nas externas. A fileira fecha exatamente na largura do terminal acima.
+  const g = TILE.GUTTER / 2
+  const x = i === 0 ? 0 : g
+  const w = TILE.W - (i === 0 ? g : 0) - (i === total - 1 ? g : 0)
+
   const addrCell = TILE.ADDR_SIZE * TYPO.ADVANCE_RATIO
-  const util = Math.floor((TILE.W - TILE.PAD * 2) / addrCell)
+  const util = Math.floor((w - TILE.PAD * 2) / addrCell)
   assertWidth(addr, `peça/${t.id}`, util)
 
+  const s = TILE.STROKE
   return [
     svgOpen(TILE.W, TILE.H, `${t.id} — ${addr}`),
     tag('rect', { x: 0, y: 0, width: TILE.W, height: TILE.H, fill: T.bg }),
-    tag('rect', { x: TILE.STROKE, y: TILE.STROKE,
-      width: TILE.W - TILE.STROKE * 2, height: TILE.H - TILE.STROKE * 2,
-      rx: TILE.RX, fill: T.pane, stroke: t.hue, 'stroke-width': TILE.STROKE }),
-    text(TILE.PAD + CELL_W, TILE.LABEL_Y, t.hue, t.id),
-    cursor(TILE.PAD + CELL_W * (t.id.length + 1 + TILE.CURSOR_GAP), TILE.LABEL_Y,
+    tag('rect', { x: x + s / 2, y: s / 2, width: w - s, height: TILE.H - s,
+      rx: TILE.RX, fill: T.pane, stroke: t.hue, 'stroke-width': s }),
+    text(x + TILE.PAD + CELL_W, TILE.LABEL_Y, t.hue, t.id),
+    cursor(x + TILE.PAD + CELL_W * (t.id.length + 1 + TILE.CURSOR_GAP), TILE.LABEL_Y,
       t.hue, t.blink),
-    text(TILE.PAD + CELL_W, TILE.ADDR_Y, T.dim, addr, { 'font-size': TILE.ADDR_SIZE }),
+    text(x + TILE.PAD + CELL_W, TILE.ADDR_Y, T.dim, addr, { 'font-size': TILE.ADDR_SIZE }),
     '</svg>',
   ].join('\n')
 }
@@ -127,11 +126,11 @@ const main = () => {
   const t = grava('assets/contact-prompt.svg', terminal())
   console.log(`-> terminal ${P.W}x${LINKS_CANVAS.H} | ${t.bytes} bytes, ${t.animates} animações`)
 
-  for (const tile of TILES) {
+  TILES.forEach((tile, i) => {
     const addr = endereco(tile)
-    const b = grava(`assets/link-${tile.id}.svg`, peca(tile, addr))
+    const b = grava(`assets/link-${tile.id}.svg`, peca(tile, addr, i, TILES.length))
     console.log(`-> ${tile.id.padEnd(9)} ${TILE.W}x${TILE.H} | ${String(b.bytes).padStart(4)} bytes | ${addr}`)
-  }
+  })
   console.log(`-> ${bytes} bytes no total${STATIC ? ' (estático)' : ''}`)
 }
 

@@ -20,6 +20,7 @@ import {
 import { LIMITS } from './lib/constants/index.mjs'
 import { assertWidth, assertLineCount, assertBudget } from './lib/assert.mjs'
 import { tag, text, animate, esc } from './lib/svg.mjs'
+import { paneFrame, paneChrome } from './lib/pane.mjs'
 
 const IN = 'data/profile.json'
 const OUT = 'assets/agents-grid.svg'
@@ -204,19 +205,6 @@ function spinner(i) {
 
 function pane(i, agent, data) {
   const o = GEO.paneOrigin(i)
-  const dots = DOT.CX.map((cx, n) => tag('circle', {
-    cx, cy: DOT.CY, r: DOT.R, fill: [T.dotRed, T.dotYellow, T.dotGreen][n],
-  })).join('')
-
-  const chrome =
-    tag('path', {
-      d: `M0 ${PANE.RX}a${PANE.RX} ${PANE.RX} 0 0 1 ${PANE.RX} -${PANE.RX}` +
-         `h${PANE.W - PANE.RX * 2}a${PANE.RX} ${PANE.RX} 0 0 1 ${PANE.RX} ${PANE.RX}` +
-         `v${PANE.CHROME_H - PANE.RX}H0Z`,
-      fill: T.chrome,
-    }) + dots +
-    text(GEO.colX(DOT.CX[2] / CELL_W + 1), DOT.CY + TYPO.BASELINE_NUDGE,
-         AGENT_HUE[agent.id], agent.title)
 
   const box = tag('rect', {
     x: BOX.X, y: BOX.Y, width: BOX.W, height: BOX.H, rx: BOX.RX,
@@ -228,11 +216,9 @@ function pane(i, agent, data) {
 
   return tag('g', { transform: `translate(${o.x} ${o.y})` },
     tag('title', {}, esc(`${agent.title} — ${agent.lines(data).join(' | ')}`)) +
-    tag('rect', {
-      x: GEO.HAIRLINE, y: GEO.HAIRLINE,
-      width: PANE.W - GEO.HAIRLINE * 2, height: PANE.H - GEO.HAIRLINE * 2, rx: PANE.RX,
-      fill: T.pane, stroke: T.border,
-    }) + chrome + box + content + spinner(i) + veil(i))
+    paneFrame(PANE.W, PANE.H) +
+    paneChrome(PANE.W, agent.title, AGENT_HUE[agent.id]) +
+    box + content + spinner(i) + veil(i))
 }
 
 const main = () => {

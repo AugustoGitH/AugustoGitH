@@ -58,10 +58,17 @@ export const LINKS_CANVAS = Object.freeze({
  * cintilando; fora de fase, parecem quatro processos vivos.
  */
 export const TILE = Object.freeze({
-  // 4 x 194 + o espaço em branco entre <img> inline cabe nos 796 úteis. A
-  // largura sai do endereço mais longo (32 colunas) com folga para variação de
-  // avanço entre as fontes monoespaçadas do sistema.
-  W: 194,
+  /**
+   * A fileira tem que alinhar EXATAMENTE com o terminal acima, sem sobra nas
+   * pontas. O espaço em branco entre <img> inline é decidido pelo navegador e
+   * não serve de medianiz — então cada peça ocupa 1/4 da largura cheia e traz a
+   * medianiz desenhada dentro de si, e o README não leva espaço entre as tags.
+   *
+   * A placa recua GUTTER/2 nas bordas internas e encosta nas externas: a
+   * primeira peça começa em 0, a última termina em 820.
+   */
+  W: GEO.CANVAS.W / 4,   // 205
+  GUTTER: 12,
   H: 46,
   RX: 6,
   PAD: 6,

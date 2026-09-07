@@ -36,6 +36,7 @@ const PANE = Object.freeze({
   W: PANE_W,
   H: PANE_H,
   RX: 8,
+  STROKE: 1,   // traço da moldura; o chrome recua por ele (ver lib/pane.mjs)
   CHROME_H: 26,
   PAD,
   INNER_W: PANE_W - PAD * 2, // 390
