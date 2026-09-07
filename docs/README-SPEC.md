@@ -596,7 +596,7 @@ bloco, e nada mais.
 | 4 | `width` explícito, igual à largura do canvas | sem ele o GitHub usa a largura intrínseca e o SVG estoura em tela estreita |
 | 5 | `alt` descreve o **conteúdo**, não o meio | "Quatro agentes…", nunca "SVG animado" |
 | 6 | Espaçamento **dentro** de uma seção é do SVG | `<br/>` empilhado para arejar uma peça é sintoma de padding faltando no canvas |
-| 6b | Espaçamento **entre** seções é do README: um `<br />` por junta | o `<div>` não recebe margem no `markdown-body`, e um SVG não sabe o que vem depois dele. Sem isso as seções encostam — e como todas pintam o fundo em `canvas.default`, elas se fundem num bloco escuro contínuo |
+| 6b | Espaçamento **entre** seções é do README: **dois** `<br />` por junta | o `<div>` não recebe margem no `markdown-body`, e um SVG não sabe o que vem depois dele. Sem isso as seções encostam — e como todas pintam o fundo em `canvas.default`, elas se fundem num bloco escuro contínuo |
 | 7 | **Título de seção vive dentro do SVG**, nunca como heading markdown | tipografia, tamanho, cor e posição passam a ser nossos; o markdown do GitHub só oferece um `h2` com borda inferior |
 | 8 | Nada fora de um bloco marcado | se não está num bloco, não pertence ao README |
 
@@ -1100,12 +1100,13 @@ com a Seção 1. Numa página de perfil em 1080p sobram ~720px de conteúdo depo
 do header fixo, das abas e do cabeçalho e padding da Box. Com a Seção 1 em 520px
 e 16px de espaçamento, restam **184px**.
 
-> **Revisado em 2026-09-06.** O `<br />` entre seções (§3.3, regra 6b) levou a
-> junta de 16 para ~40px, e o par passa a somar `520 + 40 + 176 = 736` contra os
-> ~720 estimados. Fica na borda: em 1080p as duas continuam visíveis com um
-> toque de rolagem. Aceito — seções encostadas se fundiam num bloco escuro só, e
-> separar valia os 16px. Se um dia precisar do encaixe exato de volta, a folga
-> está nos 97px de vazio de cada painel da Seção 1.
+> **Revisado em 2026-09-06.** A junta entre seções (§3.3, regra 6b) foi de 16
+> para ~64px com dois `<br />`, e o banner de 308px entrou acima de tudo (§8.7).
+> A janela de leitura conjunta deixou de existir, e deixou de fazer sentido: uma
+> página com abertura editorial é lida rolando. A altura de 176px da Seção 2
+> continua onde está — 96px de prédio dariam agulhas de 1:14, e a proporção de
+> 1:6.9 que a restrição produziu segue certa pelo motivo dela mesma, não pelo
+> orçamento que a originou.
 
 Isso não é um teto incômodo: em 796px úteis, 53 prédios dão 13px de largura
 cada. Com 110px de altura máxima, o prédio mais alto fica em **1:8.5** — a
