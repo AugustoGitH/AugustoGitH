@@ -8,33 +8,32 @@ import { GEO } from './geometry.mjs'
  * o que deveria reconhecer.
  */
 export const SHORT = Object.freeze({
-  'Styled Components': 'Styled',
   'React Testing Library': 'Testing Lib',
-  'Design Patterns': 'Patterns',
-  'Firebase Storage': 'FB Storage',
-  'Apollo Client': 'Apollo',
   'Robot Framework': 'Robot',
+  'Firebase Storage': 'FB Storage',
 })
 
 /**
- * Taxonomia declarada. Não vem de API — é dele, transcrita do cartão anterior
- * (README-LEGADO.md §1.1 e §3). Mesma exceção nomeada de ROLE em §0.5.
+ * Taxonomia declarada. Não vem de API — é dele, e é a única fonte da seção.
+ * Mesma exceção nomeada de ROLE em §0.5.
+ *
+ * A ordem aqui é a de LEITURA (o painel lateral); a ordem de QUEDA é o rodízio
+ * montado em render_stack.mjs, para as cores não caírem em faixas.
  */
 export const CATEGORIES = Object.freeze([
+  Object.freeze({ id: 'lang', label: 'LANGUAGES', hue: T.ok,
+    items: Object.freeze(['JavaScript', 'TypeScript']) }),
   Object.freeze({ id: 'front', label: 'FRONT-END', hue: AGENT_HUE.scout,
-    items: Object.freeze(['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML5',
-      'CSS3', 'Sass', 'Styled Components', 'Bootstrap', 'Material UI',
-      'Apollo Client', 'jQuery']) }),
+    items: Object.freeze(['HTML', 'CSS', 'SASS', 'Next.js', 'React.js', 'jQuery',
+      'Bootstrap', 'Tailwind', 'MUI', 'Apollo']) }),
   Object.freeze({ id: 'back', label: 'BACK-END', hue: AGENT_HUE.analyst,
-    items: Object.freeze(['Node.js', 'Express.js', 'NestJS', 'GraphQL']) }),
+    items: Object.freeze(['Node.js', 'Express.js', 'Nest.js', 'Firestore',
+      'Firebase Storage', 'GraphQL', 'Prisma', 'Sequelize', 'TypeORM']) }),
   Object.freeze({ id: 'data', label: 'DATABASES', hue: AGENT_HUE.builder,
-    items: Object.freeze(['PostgreSQL', 'MongoDB', 'Prisma', 'TypeORM',
-      'Sequelize', 'Firestore', 'Firebase Storage']) }),
+    items: Object.freeze(['MySQL', 'PostgreSQL', 'MongoDB']) }),
   Object.freeze({ id: 'test', label: 'TESTING', hue: AGENT_HUE.liaison,
-    items: Object.freeze(['Jest', 'React Testing Library', 'Mocha', 'Chai',
-      'Selenium', 'Robot Framework']) }),
-  Object.freeze({ id: 'arch', label: 'ARCHITECTURE', hue: T.ok,
-    items: Object.freeze(['SOLID', 'Design Patterns', 'Clean Code']) }),
+    items: Object.freeze(['Mocha', 'Chai', 'Stubs', 'Spies', 'Jest', 'Vitest',
+      'React Testing Library', 'Robot Framework', 'Selenium']) }),
 ])
 
 /**
@@ -62,11 +61,10 @@ const PAD = GEO.PAD
 const TOP = 32
 const WELL_Y = 42
 const COLS = 12         // perto do poço clássico de 10 — proporção retrato
-const ROWS = 18         // 14 usadas pela pilha + 4 de folga para a queda entrar
+const ROWS = 18         // 15 usadas pela pilha + folga para a queda entrar
 const GAP = 24
 
-/** Lado da célula, em px. Inteiro de propósito: coordenada fracionária
- *  destrói a borda dura que faz a leitura de pixel art. */
+/** Lado da célula, em px. */
 export const CELL = 22
 
 const WELL_W = COLS * CELL
@@ -116,11 +114,11 @@ export const STACK_CANVAS = Object.freeze({
   TITLE: '$ tree ./tech-stack --depth=1',
 })
 
-/** Ritmo da partida, em segundos. */
 /** Peso do rótulo sobre o bloco. Monoespaçado tem avanço fixo, então negrito
  *  não altera a largura — sobra contraste de graça sobre a cor da categoria. */
 export const PIECE_LABEL_WEIGHT = 600
 
+/** Ritmo da partida, em segundos. */
 export const GAME = Object.freeze({
   LEAD: 0.2,            // antes da primeira peça — evita keyTime duplicado em 0
   FALL_STEP: 0.18,      // entre uma peça e a próxima

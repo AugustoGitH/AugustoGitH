@@ -45,12 +45,27 @@ function formaPara(label, ordem) {
   return BY_RUN[run][ordem % BY_RUN[run].length]
 }
 
-/** As 32 tecnologias, na ordem das categorias, já com forma atribuída. */
-const pecas = CATEGORIES.flatMap((c) => c.items).map((nome, i) => {
-  const label = SHORT[nome] ?? nome
-  const cat = CATEGORIES.find((c) => c.items.includes(nome))
-  return { nome, label, hue: cat.hue, grupo: cat.id, shape: formaPara(label, i) }
-})
+/**
+ * As tecnologias, na ordem em que caem.
+ *
+ * A ordem NÃO é a das categorias: caindo agrupado, cada cor formava uma faixa
+ * horizontal e a pilha lia como um gráfico de barras empilhadas. Aqui as
+ * categorias se intercalam em rodízio — uma de cada, e repete — então as cores
+ * se misturam pelo poço.
+ *
+ * Rodízio, e não sorteio: §1.3 exige determinismo.
+ */
+const pecas = (() => {
+  const filas = CATEGORIES.map((c) => c.items.map((nome) => ({ nome, cat: c })))
+  const ordem = []
+  for (let i = 0; ordem.length < filas.reduce((n, f) => n + f.length, 0); i++) {
+    for (const fila of filas) if (fila[i]) ordem.push(fila[i])
+  }
+  return ordem.map(({ nome, cat }, i) => {
+    const label = SHORT[nome] ?? nome
+    return { nome, label, hue: cat.hue, grupo: cat.id, shape: formaPara(label, i) }
+  })
+})()
 
 
 /** Uma peça: quatro blocos e o nome sobre a maior sequência horizontal. */

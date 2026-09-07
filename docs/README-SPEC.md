@@ -1485,7 +1485,7 @@ Nome curto vira O/S/Z, médio vira T/J/L, longo vira I. Dentro de cada faixa há
 rodízio pela ordem, para as sete aparecerem sem nada ser sorteado — §1.3 exige
 determinismo.
 
-Distribuição resultante: `T`6 `L`5 `J`4 `Z`4 `S`3 `O`2 `I`8. As sete presentes.
+As sete formas aparecem; a distribuição sai do rodízio e muda quando a lista muda.
 
 #### Nomes: inteiros por padrão, resumidos por exceção
 
@@ -1493,18 +1493,15 @@ O nome vai inteiro. Encurta só quem não cabe nem na sequência de 4, e para a
 palavra distintiva — **nunca para inicial**. Sigla obriga o leitor a decodificar
 o que deveria reconhecer.
 
-Dos 32, **6 foram resumidos**:
+Das 33, **3 foram resumidas**:
 
 | Original | No bloco |
 | --- | --- |
-| Styled Components | `Styled` |
 | React Testing Library | `Testing Lib` |
-| Design Patterns | `Patterns` |
-| Firebase Storage | `FB Storage` |
-| Apollo Client | `Apollo` |
 | Robot Framework | `Robot` |
+| Firebase Storage | `FB Storage` |
 
-Os outros 26 aparecem por extenso — `TypeScript`, `JavaScript`, `Material UI` e
+As outras 30 aparecem por extenso.
 `PostgreSQL` inclusos, todos como peça `I`.
 
 O `alt` da imagem lista os **nomes originais**: quem ouve recebe a informação
@@ -1575,13 +1572,24 @@ oferece 63px, não 66, e `assertLabelFits` aborta a geração se o rótulo não
 couber. Sem essa conferência o texto encosta nas bordas ou vaza, e nada avisa:
 o SVG segue válido.
 
+#### A ordem de queda intercala as categorias
+
+Caindo na ordem das categorias, cada cor formava uma faixa horizontal e a pilha
+lia como um gráfico de barras empilhadas — o oposto de um poço de Tetris.
+
+A ordem de queda é um **rodízio**: uma peça de cada categoria, e repete. Rodízio,
+e não sorteio, porque §1.3 exige determinismo.
+
+A ordem das categorias em `stack.mjs` continua sendo a de **leitura** — é ela que
+o painel lateral mostra. Só a queda embaralha.
+
 #### Queda com gravidade, não encaixe ótimo
 
 Cada peça é solta do topo em cada coluna e para no primeiro obstáculo; fica na
 coluna que der o repouso mais baixo, desempate pela esquerda.
 
 ```
-32 peças · 14 fileiras · 40 buracos
+33 peças · 15 fileiras · 48 buracos
 ```
 
 Descer do topo — em vez de procurar o melhor encaixe — é o que impede a peça de
@@ -1697,7 +1705,7 @@ scripts/render_stack.mjs          profile.json + stack.mjs -> assets/stack-well.
 | --- | ---: | --- |
 | Tamanho do SVG | < 60 KB | `wc -c assets/stack-well.svg` |
 | `<animate>` + `<animateTransform>` | 64 | `grep -c` |
-| Peças desenhadas | = 32 (128 blocos) | contagem contra `stack.mjs` |
+| Peças desenhadas | = 33 | contagem contra `stack.mjs` |
 | `values` × `keyTimes` da queda | contagens iguais | `assert.mjs` — **aborta** |
 | Nenhuma peça fora do poço | — | `assert.mjs` — **aborta** |
 | Determinismo | byte-idêntico | rodar 2× e comparar hash |
