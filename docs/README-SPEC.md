@@ -2014,55 +2014,73 @@ o terceiro registro do README, depois do fotográfico (banner) e do terminal.
 Repintar o BudgetXpert de terracota deturparia o produto. A coisa parece com ela
 mesma — mesma lógica que manteve as fotos do banner em preto e branco (§8.2).
 
-### 9.4 Fiel na estrutura, amostra no conteúdo
+### 9.4 Fiel às telas reais, amostra no conteúdo
 
-Os repositórios são **privados e da organização** `budgetXpert`, e o conteúdo
-pertence aos clientes. Nada de dado real entra aqui.
+A primeira versão foi reconstruída só a partir do código e **errou o essencial**:
+inventou uma sidebar com rótulos onde o produto tem um trilho de ícones, e uma
+tabela plana onde ele tem cabeçalho hierárquico de tempo. Capturas da aplicação
+corrigiram o desenho.
 
-O que é fiel, lido do código em 2026-09-07:
+O que é fiel, de capturas de 2026-09-07 e do código:
 
 | Elemento | Origem |
 | --- | --- |
-| navegação (Home, Plans, Categories, Premises, Budgets, Analyses, AI Xpert) | `src/components/navigations/Sidebar/constants.ts` |
-| paleta `main` `second` `third` `fourth` | `tailwind.config.ts` |
-| estados de budget (`running`, `indraft`, `closed`) e suas cores | `tailwind.config.ts` |
-| campos do card (nome, estado, nº de versões) | `budget/_impl/NonSelected/_impl/BudgetCard` |
-| tabela: Categories e Premises aninhados por `level`, colunas de período, até 4 versões comparadas | `features/budget/BudgetTable` |
-| o fluxo `NonSelected → Selected` | estrutura de pastas da tela de budget |
+| cabeçalho com marca, busca, seletor de organização e avatar | captura |
+| trilho de **ícones** (não rótulos), com o item ativo em chip teal | captura + `Sidebar/constants.ts` |
+| card: barra de plano colorida, badge, PLANO/PERÍODO/ESTADO, duas barras de progresso, contagem de versões | captura + `BudgetCard` |
+| pills ELABORAÇÃO e EXECUÇÃO | captura + `tailwind.config.ts` |
+| tabela: faixa BUDGET, ano, trimestre, mês; linhas numeradas com expansão; marcador laranja na célula; símbolo de vazio | captura + `BudgetTable` |
+| paleta | **amostragem de pixel** das capturas |
 
-Os **números são inventados**, e a moldura diz isso: `preview · sample data`,
-à direita do título.
+As cores saíram do pixel, não do palpite: `#062D3E` no cabeçalho, `#1D4253` na
+busca, `#9FC131` e `#7C3AED` nas barras de plano, `#FF6900` no ponto de
+progresso, `#F26522` no marcador de célula.
+
+**Nada de dado real entra.** Nomes, datas e números são amostra; os repositórios
+são privados e da organização, e o conteúdo é dos clientes. A moldura declara:
+`preview · sample data`.
 
 Como a Seção 5, esta seção **apresenta, não mede** — e isso fica declarado, não
 disfarçado (§0.5).
 
 ### 9.5 Geometria
 
-Canvas **820 × 314**, o mesmo do banner (§8.5) — as duas aberturas têm o mesmo
-peso na página.
+Canvas **820 × 330**, 16px a mais que o banner — o preço de um card completo
+legível. O app ocupa 796 × 276.
 
 ```
-TITLE_Y    27       mesma linha de base das demais seções
-app        796 × 260 em (12, 42)
-header     34
-sidebar    132       7 itens de 26px = 182, cabe em 214
-conteúdo   664 × 226
-tabela     rótulo 170 + 6 colunas de 78
+TITLE_Y           27    mesma linha de base das demais seções
+header            34
+trilho            44    ícones, sem rótulo
+barra de título   32
+card             186    quatro por linha
+tabela                 faixa 16 + ano 14 + trimestre 14 + mês 16, linhas de 19
 ```
 
-Os corpos de texto são menores que os 11px do sistema (`brand` 12, `nav` 10,
-`head` 11, `label` 9.5, `cell` 9, `badge` 8.5): o SVG imita uma tela inteira
-reduzida a 796×260, e o texto precisa da proporção que teria no app.
+Os corpos vão de 6.5 a 11px: o SVG imita uma tela de ~1280px reduzida a 796, e o
+texto precisa da proporção que teria no app.
+
+#### Ver o resultado, não só os números
+
+Este render é o primeiro que **não dá para conferir por medida**. Uma
+reimplementação em Pillow reproduziria os meus próprios erros.
+
+A verificação passou a ser rasterizar o SVG de verdade, com `cairosvg`, num
+ambiente isolado fora do repositório. Foi assim que apareceu a marca
+`Budget✕pert` sobreposta: os três pedaços eram três `<text>` com `x` calculado
+pelo avanço monoespaçado, e qualquer fonte diferente os empilhava. Viraram
+`<tspan>` — o fluxo é do renderizador, e o desenho deixa de depender do avanço
+previsto.
+
+**Regra que sai daqui:** posição derivada de largura de texto é frágil. Onde o
+fluxo resolve — `tspan`, `text-anchor` — prefira o fluxo.
 
 #### Os offsets de UI moram agrupados por zona
 
-Desenhar uma interface produz dezenas de números pequenos — respiro de 16 aqui,
-linha de base de 22 ali. A primeira versão deste render tinha **72 valores de
-desenho soltos**, e a auditoria de §0.9 os pegou.
-
-Nomear um por um viraria uma lista ilegível. Ficaram agrupados por zona em
-`LAY`: `header`, `nav`, `screen`, `home`, `card`, `table`. Mexer no cabeçalho é
-mexer em `LAY.header`, e nada mais.
+Desenhar uma interface produz dezenas de números pequenos. As duas versões deste
+render tiveram **72 e 23** valores soltos, e a auditoria de §0.9 pegou os dois
+lotes. Ficaram agrupados em `LAY`: `stroke`, `header`, `rail`, `titlebar`,
+`card`, `table`.
 
 ### 9.6 O roteiro do ponteiro
 
@@ -2102,7 +2120,7 @@ produto está desenhando.
 | --- | --- |
 | Posição | 01, depois do banner e antes da apresentação (§9.2) |
 | Registro | claro, a paleta do produto — repintar deturparia (§9.3) |
-| Dado | estrutura fiel, números de amostra, rotulado na moldura |
+| Dado | telas reais como referência, cores amostradas do pixel, números de amostra |
 | Interação | replay com ponteiro visível; a plataforma não executa JS |
-| Altura | 314, igual ao banner |
+| Altura | 330 — 16px a mais que o banner, o preço de um card completo legível |
 | Reuso | `product.mjs` é o molde para o próximo projeto |
