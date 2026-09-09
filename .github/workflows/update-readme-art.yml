@@ -1,6 +1,6 @@
 name: Update README art
 
-# Redesenha as quatro seções do README a partir dos dados do perfil.
+# Redesenha as seções do README a partir dos dados do perfil.
 # Nada aqui depende de serviço de terceiro: os scripts são deste repositório e
 # os SVGs são commitados de volta.
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Desenhar as seções
         run: |
-          node scripts/render_banner.mjs
+          node scripts/render_about.mjs
           node scripts/render_agents.mjs
           node scripts/render_city.mjs
           node scripts/render_stack.mjs

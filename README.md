@@ -1,8 +1,10 @@
-<!-- ══════════════════ 00 · BANNER ══════════════════ -->
+<!-- ══════════════════ 00 · BLOG ══════════════════ -->
+<!-- assets/about-blog.svg: node scripts/render_about.mjs
+     a montagem em caracteres vem de data/ascii-frames.json (prep_ascii.py) -->
 
 <div align="center">
-  <img src="./assets/banner.svg" width="820"
-       alt="My Blog — três retratos em preto e branco de Augusto Caetano Westphal, da mesma sessão: agachado sobre um banco de concreto segurando um asterisco luminoso; agachado no banco entre dois símbolos luminosos apoiados nele; deitado de lado sobre o banco, com o mesmo asterisco. $ blog --status: writing, soon." />
+  <a href="https://augustowestphal.netlify.app"><img src="./assets/about-blog.svg" width="820"
+       alt="agent://blog — três retratos de Augusto Caetano Westphal em montagem de caracteres, da mesma sessão: agachado sobre um banco de concreto segurando um asterisco luminoso; agachado no banco entre dois símbolos luminosos apoiados nele; deitado de lado sobre o banco, com o mesmo asterisco. writing · soon. Escrevo sobre tudo que envolve a área de tecnologia: problemas e soluções técnicas, código, boas práticas, opiniões e mais." /></a>
 </div>
 
 <br />

@@ -15,6 +15,7 @@ export {
 } from './stack.mjs'
 export { CONTACT, PROBE, LINKS_PANE, LINKS_CANVAS, LINKS_TIME, TILE, TILES } from './links.mjs'
 export { BANNER } from './banner.mjs'
+export { ASCII, ABOUT_PANE, aboutLayout, ABOUT_TIME, ABOUT_HREF } from './about.mjs'
 export {
   PRODUCT, UI, RAIL, RAIL_TARGET, ACTIONS, CARDS, CARD_TARGET, TABLE, APP, TOUR,
   LAY, WEIGHT, ARROW,

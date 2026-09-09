@@ -22,6 +22,25 @@ export function assertLineCount(lines, where) {
 }
 
 /**
+ * A montagem de caracteres tem que ser retangular, e do tamanho anunciado.
+ *
+ * Cada linha é um <text> com `textLength` fixo: uma linha mais curta que as
+ * outras seria ESTICADA até a mesma largura em vez de sair torta, e o quadro
+ * inteiro escorregaria sem nada avisar. A conferência é aqui porque o JSON vem
+ * de fora do Node (prep_ascii.py, §1.1) e pode ser regerado com outro
+ * parâmetro sem que o render saiba.
+ */
+export function assertAsciiGrid(rows, cols, where) {
+  if (!rows?.length) fail(`${where}: quadro vazio`)
+  rows.forEach((linha, n) => {
+    if (linha.length !== cols) {
+      fail(`${where}: linha ${n} com ${linha.length} colunas, esperado ${cols}`)
+    }
+  })
+  return rows
+}
+
+/**
  * values e keyTimes precisam ter a mesma contagem.
  *
  * Divergência faz o navegador descartar a animação inteira em silêncio — sem
