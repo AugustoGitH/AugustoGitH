@@ -40,7 +40,23 @@
 <br />
 <br />
 
-<!-- ══════════════════ 04 · LINKS ══════════════════ -->
+<!-- ══════════════════ 04 · PROJETOS ══════════════════ -->
+
+<div align="center">
+
+| Projeto | Descrição | Stack | Período |
+| :--- | :--- | :--- | :--- |
+| [**BudgetXpert**](https://budgetxpert.com/br) | Plataforma SaaS de gestão financeira e controle orçamentário — novas funcionalidades e melhorias de produtividade e experiência do usuário. | Next.js · React · TypeScript · GraphQL · Storybook | set/2024 – atual |
+| [**Saludii Nutrition**](https://saludii.com/para-nutricionistas#nutritionSection) | Plataforma que conecta nutricionistas, pacientes e empresas — atuação em frontend e backend da aplicação. | Redwood.js · GraphQL · Prisma · PostgreSQL | abr/2024 – abr/2025 |
+| **Zap Flow** | CRM SaaS integrado ao WhatsApp Business, com chat, automações e mensagens em massa. | Next.js · NestJS · PostgreSQL · REST API | mai/2023 – dez/2023 |
+| [**Tech Legion**](https://github.com/techlegionbr/site-techlegion--frontend) | Site institucional construído sozinho, do zero: autenticação, autorização, controle de permissões e um blog completo, com escrita e visualização de conteúdo. | React · Next.js · REST API | mar/2023 – mar/2024 |
+
+</div>
+
+<br />
+<br />
+
+<!-- ══════════════════ 05 · LINKS ══════════════════ -->
 
 <!-- sem espaço entre as tags: o branco entre <img> inline viraria medianiz
      do navegador e a fileira não fecharia nos 820 do terminal abaixo -->
