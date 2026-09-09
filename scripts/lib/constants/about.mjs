@@ -130,6 +130,7 @@ export const ABOUT_TIME = Object.freeze({
   DUR: 0.35,            // varredura de cada linha de texto
   TRAIL_PAD: 0.15,      // depois da última linha, antes do cursor assentar
   CURSOR_BLINK: 1.06,   // igual às demais seções
+  CURSOR_FADE: 0.05,    // fade instantâneo; existe só pra manter keyTimes distintos
 })
 
 /**

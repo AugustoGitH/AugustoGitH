@@ -32,14 +32,6 @@ const svgOpen = (w, h, label) =>
   // Só a família: o tamanho vem por atributo (ver text() em lib/svg.mjs).
     `<style>text{font-family:${TYPO.STACK}}</style>`
 
-/** O cursor de bloco do sistema, piscando no seu próprio ritmo. */
-const cursor = (x, y, hue, dur) => tag('rect', {
-  x, y: y - TYPO.SIZE.body + 1, width: CELL_W, height: TYPO.SIZE.body + 1, fill: hue,
-}, STATIC ? '' : tag('animate', {
-  attributeName: 'opacity', ...CURSOR_DUTY,
-  dur: `${dur}s`, begin: '0s', repeatCount: 'indefinite',
-}))
-
 /** Une os três quadros numa linha só por fileira, com a calha entre eles. */
 function montagem(dados) {
   const sep = ' '.repeat(ASCII.GUTTER)
@@ -62,12 +54,15 @@ function cartao(dados) {
   const boxUtil = Math.floor((P.W - P.PAD * 2 - P.BOX_PAD * 2) / CELL_W) - 1
   P.LINES.forEach((linha, i) => assertWidth(linha, `sobre/linha-${i}`, boxUtil))
 
-  // As linhas de TEXTO que digitam, na ordem: o segundo comando e a caixa.
-  // O primeiro comando abre a cena e não espera nada — vai fora desta lista.
+  // As linhas de TEXTO que digitam, na ordem: os dois comandos e a caixa.
+  // Cada uma carrega o próprio cursor (revela() abaixo) — igual à Seção 1.
   const rows = [{
-    text: P.CMD2, x: P.PAD, y: L.cmd2Y, fill: T.ink,
-    at: ATIME.CMD_AT + ATIME.DUR + ATIME.ART_GAP + ATIME.ART_DUR + ATIME.CMD2_GAP,
+    text: P.CMD, x: P.PAD, y: P.CMD_Y, fill: T.ink, at: ATIME.CMD_AT,
   }]
+  rows.push({
+    text: P.CMD2, x: P.PAD, y: L.cmd2Y, fill: T.ink,
+    at: rows[0].at + ATIME.DUR + ATIME.ART_GAP + ATIME.ART_DUR + ATIME.CMD2_GAP,
+  })
   P.LINES.forEach((linha, i) => {
     const prev = rows[rows.length - 1]
     const gap = i === 0 ? ATIME.BOX_GAP : ATIME.STEP
@@ -100,6 +95,49 @@ function cartao(dados) {
   }
 
   /**
+   * O cursor que acompanha CADA linha enquanto ela digita — igual ao
+   * revealRow da Seção 1. Some depois de escrever; na última linha ele fica,
+   * porque não há próxima linha pra herdar o holofote (spec §0.3: o estado
+   * final assentado, sem SMIL a base já mostra o cursor no lugar certo).
+   */
+  const cursorDe = (row, idx) => {
+    if (STATIC) return ''
+    const isLast = idx === rows.length - 1
+    const x0 = row.x
+    const x1 = row.x + row.text.length * CELL_W
+    const wS = row.at
+    const wE = row.at + ATIME.DUR
+    const f = ATIME.CURSOR_FADE
+
+    const slide = animate({
+      attr: 'x', values: `${x0};${x0};${x1.toFixed(2)};${x1.toFixed(2)}`,
+      keyTimes: `0;${kk(wS)};${kk(wE)};1`,
+      dur: total, where: `sobre/cursor-${idx}/slide`, repeat: false,
+    })
+    const blink = tag('animate', {
+      attributeName: 'opacity', ...CURSOR_DUTY,
+      dur: `${ATIME.CURSOR_BLINK}s`, begin: '0s', repeatCount: 'indefinite',
+    })
+    const fase = isLast
+      ? animate({
+        attr: 'opacity', values: '0;0;1;1',
+        keyTimes: `0;${kk(wS)};${kk(wS + f)};1`,
+        dur: total, where: `sobre/cursor-${idx}`, repeat: false,
+      })
+      : animate({
+        attr: 'opacity', values: '0;0;1;1;0;0',
+        keyTimes: `0;${kk(wS)};${kk(wS + f)};${kk(wE)};${kk(wE + f)};1`,
+        dur: total, where: `sobre/cursor-${idx}`, repeat: false,
+      })
+
+    return tag('g', { opacity: 0 }, fase +
+      tag('rect', {
+        x: x1, y: row.y - TYPO.SIZE.body + 1, width: CELL_W, height: TYPO.SIZE.body + 1,
+        fill: row.fill,
+      }, slide + blink))
+  }
+
+  /**
    * A arte, uma <text> por fileira.
    *
    * textLength fixa a largura em ASCII.W: a grade deixa de depender do avanço
@@ -123,13 +161,6 @@ function cartao(dados) {
     dur: total, where: 'sobre/varredura', repeat: false,
   }))) + tag('g', { 'clip-path': 'url(#scan)' }, arte)
 
-  const cursorFinal = tag('g', { opacity: 1 },
-    (STATIC ? '' : animate({
-      attr: 'opacity', values: '0;0;1;1',
-      keyTimes: `0;${kk(last.at)};${kk(last.at + ATIME.DUR)};1`,
-      dur: total, where: 'sobre/cursor', repeat: false,
-    })) + cursor(last.x + CELL_W * last.text.length, last.y, last.fill, ATIME.CURSOR_BLINK))
-
   const alt = `${P.TITLE} — três retratos de Augusto Caetano Westphal em montagem ` +
     `de caracteres, da mesma sessão: ${ASCII.ORDER.map((f) => f.alt).join('; ')}. ` +
     `${P.STATUS}. Sobre o blog: tecnologia, código, boas práticas e opiniões.`
@@ -141,14 +172,12 @@ function cartao(dados) {
     paneChrome(P.W, P.TITLE, P.HUE),
     // À direita da barra de título; ancorado no fim, não numa largura estimada.
     text(P.W - P.PAD, P.STATUS_Y, T.muted, P.STATUS, { 'text-anchor': 'end' }),
-    text(P.PAD, P.CMD_Y, T.ink, P.CMD),
     varredura,
     tag('rect', {
       x: P.PAD, y: L.boxY, width: P.W - P.PAD * 2, height: L.boxH,
       rx: P.BOX_RX, fill: T.chrome,
     }),
-    rows.map(digita).join('\n'),
-    cursorFinal,
+    rows.map((row, idx) => digita(row, idx) + cursorDe(row, idx)).join('\n'),
     '</svg>',
   ].join('\n')
 }
