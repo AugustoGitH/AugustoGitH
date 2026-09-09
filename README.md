@@ -42,11 +42,14 @@
 
 <!-- ══════════════════ 04 · LINKS ══════════════════ -->
 
+<!-- sem espaço entre as tags: o branco entre <img> inline viraria medianiz
+     do navegador e a fileira não fecharia nos 820 do terminal abaixo -->
+<p align="center"><a href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="205" alt="portfolio — augustowestphal.netlify.app" /></a><a href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="205" alt="linkedin — linkedin.com/in/augusto-westphal" /></a><a href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="205" alt="github — github.com/AugustoGitH" /></a><a href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="205" alt="email — augustoc.westphal.ltda@gmail.com" /></a></p>
+
+<br />
+<br />
+
 <div align="center">
   <img src="./assets/contact-prompt.svg" width="820"
        alt="agent://liaison — $ connect --list, e o prompt devolvido ao leitor." />
 </div>
-
-<!-- sem espaço entre as tags: o branco entre <img> inline viraria medianiz
-     do navegador e a fileira não fecharia nos 820 do terminal acima -->
-<p align="center"><a href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="205" alt="portfolio — augustowestphal.netlify.app" /></a><a href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="205" alt="linkedin — linkedin.com/in/augusto-westphal" /></a><a href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="205" alt="github — github.com/AugustoGitH" /></a><a href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="205" alt="email — augustoc.westphal.ltda@gmail.com" /></a></p>
