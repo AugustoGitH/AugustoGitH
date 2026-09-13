@@ -24,7 +24,7 @@
 
 <div align="center">
   <img src="./assets/commit-city.svg" width="820"
-       alt="$ git log --graph --since=1.year — skyline das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 306 de 365 dias ativos, pico semanal de 201." />
+       alt="$ git log --graph --since=1.year — skyline neon das contribuições de setembro de 2025 a setembro de 2026: 53 semanas, 306 de 365 dias ativos, pico semanal de 201." />
 </div>
 
 <br />
@@ -34,7 +34,7 @@
 
 <div align="center">
   <img src="./assets/stack-well.svg" width="820"
-       alt="$ tree ./tech-stack --depth=1 — 32 tecnologias empilhadas como peças de Tetris. Front-end: React, Next.js, TypeScript, JavaScript, HTML5, CSS3, Sass, Styled Components, Bootstrap, Material UI, Apollo Client, jQuery. Back-end: Node.js, Express.js, NestJS, GraphQL. Bancos e ORM: PostgreSQL, MongoDB, Prisma, TypeORM, Sequelize, Firestore, Firebase Storage. Testes: Jest, React Testing Library, Mocha, Chai, Selenium, Robot Framework. Arquitetura: SOLID, Design Patterns, Clean Code." />
+       alt="$ tree ./tech-stack --depth=1 — 33 tecnologias empilhadas como peças neon de Tetris. Linguagens: JavaScript e TypeScript. Front-end: HTML, CSS, Sass, Next.js, React.js, jQuery, Bootstrap, Tailwind, MUI e Apollo. Back-end: Node.js, Express.js, Nest.js, Firestore, Firebase Storage, GraphQL, Prisma, Sequelize e TypeORM. Bancos: MySQL, PostgreSQL e MongoDB. Testes: Mocha, Chai, Stubs, Spies, Jest, Vitest, React Testing Library, Robot Framework e Selenium." />
 </div>
 
 <br />
@@ -46,10 +46,10 @@
 
 | Projeto | Descrição | Stack | Período |
 | :--- | :--- | :--- | :--- |
-| [**BudgetXpert**](https://budgetxpert.com/br) | Plataforma SaaS de gestão financeira e controle orçamentário — novas funcionalidades e melhorias de produtividade e experiência do usuário. | Next.js · React · TypeScript · GraphQL · Storybook | set/2024 – atual |
-| [**Saludii Nutrition**](https://saludii.com/para-nutricionistas#nutritionSection) | Plataforma que conecta nutricionistas, pacientes e empresas — atuação em frontend e backend da aplicação. | Redwood.js · GraphQL · Prisma · PostgreSQL | abr/2024 – abr/2025 |
-| **Zap Flow** | CRM SaaS integrado ao WhatsApp Business, com chat, automações e mensagens em massa. | Next.js · NestJS · PostgreSQL · REST API | mai/2023 – dez/2023 |
-| [**Tech Legion**](https://github.com/techlegionbr/site-techlegion--frontend) | Site institucional construído sozinho, do zero: autenticação, autorização, controle de permissões e um blog completo, com escrita e visualização de conteúdo. | React · Next.js · REST API | mar/2023 – mar/2024 |
+| [**BudgetXpert**](https://budgetxpert.com/br) | Evoluí 2 frentes do SaaS financeiro — produtividade e experiência do usuário — entregando continuamente novas funcionalidades e melhorias nos fluxos de gestão orçamentária. | Next.js · React · TypeScript · GraphQL · Storybook | set/2024 – atual |
+| [**Saludii Nutrition**](https://saludii.com/para-nutricionistas#nutritionSection) | Ampliei a cobertura da plataforma para 3 públicos — nutricionistas, pacientes e empresas — desenvolvendo funcionalidades de ponta a ponta no frontend e backend. | Redwood.js · GraphQL · Prisma · PostgreSQL | abr/2024 – abr/2025 |
+| **Zap Flow** | Centralizei 3 operações do WhatsApp Business — chat, automações e mensagens em massa — construindo um CRM SaaS com frontend, API e persistência de dados. | Next.js · NestJS · PostgreSQL · REST API | mai/2023 – dez/2023 |
+| [**Tech Legion**](https://github.com/techlegionbr/site-techlegion--frontend) | Entreguei sozinho um site institucional completo, cobrindo 3 pilares — acesso, permissões e conteúdo — ao construir do zero autenticação, autorização e um blog. | React · Next.js · REST API | mar/2023 – mar/2024 |
 
 </div>
 
@@ -61,5 +61,3 @@
 <!-- sem espaço entre as tags: o branco entre <img> inline viraria medianiz
      do navegador e a fileira não fecharia nos 820 do terminal abaixo -->
 <p align="center"><a href="https://augustowestphal.netlify.app"><img src="./assets/link-portfolio.svg" width="205" alt="portfolio — augustowestphal.netlify.app" /></a><a href="https://www.linkedin.com/in/augusto-westphal/"><img src="./assets/link-linkedin.svg" width="205" alt="linkedin — linkedin.com/in/augusto-westphal" /></a><a href="https://github.com/AugustoGitH"><img src="./assets/link-github.svg" width="205" alt="github — github.com/AugustoGitH" /></a><a href="mailto:augustoc.westphal.ltda@gmail.com"><img src="./assets/link-email.svg" width="205" alt="email — augustoc.westphal.ltda@gmail.com" /></a></p>
-
-

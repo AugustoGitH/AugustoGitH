@@ -19,7 +19,7 @@ import {
 } from './lib/constants/index.mjs'
 import { assertFits, assertCityHeights, assertBudget } from './lib/assert.mjs'
 import { tag, text, animate } from './lib/svg.mjs'
-import { rampColor } from './lib/color.mjs'
+import { lighten, rampColor } from './lib/color.mjs'
 
 const IN = 'data/profile.json'
 const OUT = 'assets/commit-city.svg'
@@ -42,11 +42,17 @@ function predio(w, i, cw, bw, scale, maxDay) {
     if (c === 0) continue // dia sem commit não desenha; some na costura
     const h = c * scale
     y -= h // a POSIÇÃO vem da altura exata — o topo do prédio nunca desloca
+    const cor = rampColor(CITY_RAMP, Math.sqrt(c / maxDay))
     blocos.push(tag('rect', {
       x, y, width: bw,
       // MIN_BAND transborda no vão acima, nunca na altura do prédio.
       height: Math.max(CITY.MIN_BAND, h - CITY.BAND_GAP),
-      fill: rampColor(CITY_RAMP, Math.sqrt(c / maxDay)),
+      rx: CITY.BLOCK_RADIUS,
+      fill: cor,
+      stroke: lighten(cor, CITY.BLOCK_STROKE_LIGHTEN),
+      'stroke-width': CITY.BLOCK_STROKE_W,
+      'stroke-opacity': CITY.BLOCK_STROKE_OPACITY,
+      'paint-order': 'stroke fill',
     }))
   }
 

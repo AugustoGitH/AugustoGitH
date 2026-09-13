@@ -58,23 +58,18 @@ export const AGENT_HUE = Object.freeze({
 })
 
 /**
- * Rampa de intensidade da cidade: terracota na base, verde do GitHub no topo.
+ * Rampa de intensidade da cidade: os mesmos sinais neon dos quatro agentes.
  *
- * Paradas explícitas com interpolação linear entre adjacentes — nenhum tom
- * intermediário nasce sem alguém ter olhado para as pontas.
- *
- * O piso é #a75e3f e não um terracota mais escuro por uma razão dura: em
- * #4a2a1e um dia de 1 commit ficava em 1.98:1 contra o fundo, e um dia ativo
- * que parece ausente é o desenho mentindo sobre o dado. Piso atual: 4.34:1.
- *
- * O verde não some — fica reservado ao topo. Escasso, ele marca evento em vez
- * de virar cor de fundo.
+ * A sequência fria -> quente dá magnitude sem voltar ao terracota dominante:
+ * ciano nos dias menores, violeta e rosa no miolo, verde no pico. Todas as
+ * pontas permanecem legíveis sobre o fundo; neon aqui é saturação e contraste,
+ * não blur (§0.7).
  */
 export const CITY_RAMP = Object.freeze([
-  Object.freeze([0.00, '#a75e3f']),
-  Object.freeze([0.34, '#c66c48']),
-  Object.freeze([0.52, '#d97757']),
-  Object.freeze([0.66, '#e2a355']),
-  Object.freeze([0.82, '#93cf5f']),
+  Object.freeze([0.00, '#56d4dd']),
+  Object.freeze([0.30, '#79c0ff']),
+  Object.freeze([0.52, '#d2a8ff']),
+  Object.freeze([0.74, '#f778ba']),
+  Object.freeze([0.88, '#8fe36b']),
   Object.freeze([1.00, '#39d353']),
 ])

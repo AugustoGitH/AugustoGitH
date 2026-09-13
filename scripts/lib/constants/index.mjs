@@ -10,7 +10,7 @@ export { LIMITS } from './limits.mjs'
 export { ROSTER, ROLE, LINKS, MONTHS } from './roster.mjs'
 export { CITY, cityUsableW, colW, buildingW, pxPerCommit, textW } from './city.mjs'
 export {
-  CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, STACK_CANVAS, GAME,
+  CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, PIECE, STACK_CANVAS, GAME,
   PIECE_LABEL_WEIGHT,
 } from './stack.mjs'
 export { CONTACT, PROBE, LINKS_PANE, LINKS_CANVAS, LINKS_TIME, TILE, TILES } from './links.mjs'

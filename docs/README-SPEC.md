@@ -5,7 +5,7 @@
 > elemento animado é gerado por código deste repositório e commitado como arquivo.
 
 - **Escopo deste documento:** as seções do README.
-- **Última atualização:** 2026-09-06
+- **Última atualização:** 2026-09-13
 
 > **Fonte de verdade deste documento.** Tudo aqui é derivado de (a) este
 > repositório, (b) a API pública do GitHub para os dados do perfil e (c)
@@ -368,17 +368,17 @@ Contraste sobre `#0d1117`, verificado em 2026-09-06: âmbar 6.06:1 · ciano
 
 ```js
 export const CITY_RAMP = Object.freeze([
-  [0.00, '#a75e3f'], [0.34, '#c66c48'], [0.52, '#d97757'],
-  [0.66, '#e2a355'], [0.82, '#93cf5f'], [1.00, '#39d353'],
+  [0.00, '#56d4dd'], [0.30, '#79c0ff'], [0.52, '#d2a8ff'],
+  [0.74, '#f778ba'], [0.88, '#8fe36b'], [1.00, '#39d353'],
 ])
 ```
 
 Paradas explícitas com interpolação linear entre adjacentes — nenhum tom
 intermediário nasce sem alguém ter olhado para as pontas.
 
-O piso é `#a75e3f`, e não um terracota mais escuro, por uma razão dura: em
-`#4a2a1e` um dia de 1 commit ficava em **1.98:1** contra o fundo. Um dia ativo
-que parece ausente é o desenho mentindo sobre o dado. Piso atual: **4.34:1**.
+É a mesma família de sinais dos agentes: ciano nos dias menores, violeta e rosa
+no miolo, verde no pico. Assim o gráfico fecha com as seções anteriores sem
+usar `filter`: o neon vem de saturação, contraste e contorno seco (§0.7).
 
 ### 2.4 `typography.mjs` — fonte e métrica de célula
 
@@ -1322,39 +1322,23 @@ total) contra 1, e a varredura já conta a mesma história — a do tempo passan
 
 ### 5.9 Cores
 
-A cidade é **terracota**, com o verde do GitHub reservado ao topo da
-intensidade. A rampa está em §2.3.
+A cidade percorre a **paleta neon dos agentes**, com o verde do GitHub reservado
+ao topo da intensidade. A rampa está em §2.3.
 
 ```
 t = sqrt(commitsDoDia / maiorDia)
 ```
 
-Raiz quadrada, não linear: a distribuição é enviesada — 216 dos 306 dias ativos
-ficam abaixo de 14 commits, e um mapeamento linear jogaria 70% deles no quarto
-mais escuro da rampa.
+Raiz quadrada, não linear: a distribuição é enviesada, e um mapeamento linear
+jogaria a maior parte dos dias no início da rampa.
 
 > **Altura linear, cor em raiz — e isso não é incoerência.** Altura é o canal
 > preciso, onde comprimir seria mentir sobre a curva de crescimento (§5.5). Cor
 > é o canal de textura, onde a rampa só precisa distribuir bem os tons.
 
-Distribuição resultante, verificada em 2026-09-06:
-
-| Família | Dias | Fatia |
-| --- | ---: | ---: |
-| terracota | 253 | 82.7% |
-| âmbar (transição) | 32 | 10.5% |
-| verde | 21 | 6.9% |
-
-**O verde se concentra, e é isso que lhe dá força.** Dos 21 dias verdes, **13
-estão em agosto de 2026**:
-
-```
-out/25: 2   fev/26: 1   jun/26: 3   jul/26: 2   ago/26: 13
-```
-
-A cidade é terracota e o centro acende verde. A curva de crescimento fica
-contada duas vezes — pela altura e pela cor — e o verde deixa de ser cor de
-fundo para virar evento.
+Cada faixa recebe ainda um contorno mais claro do próprio matiz e cantos
+levemente arredondados. Isso aproxima os dias de blocos de jogo e dá presença
+neon sem blur, mantendo altura e posição como os canais exatos do dado.
 
 Descartado: os 5 níveis discretos do heatmap do GitHub. Os limiares dele caem em
 ~5/11/16 commits, então **80 dias (26% dos ativos), de 16 a 54 commits, pintariam
@@ -1429,7 +1413,7 @@ divergirem, a geração para.
 | Rótulos de mês | três: início, meio, fim |
 | Total exibido | `totalContributions` (3862), com a divergência documentada (§5.7.1) |
 | Animação | uma varredura, `fill="freeze"` — é gráfico, não narrativa |
-| Paleta | terracota com o verde reservado ao topo da intensidade (§5.9) |
+| Paleta | sinais neon dos agentes, com verde reservado ao topo da intensidade (§5.9) |
 | Decoração | nenhuma. Lua, nuvens, carros e antenas não codificam dado (§0.5) |
 
 
@@ -1507,19 +1491,22 @@ As outras 30 aparecem por extenso.
 O `alt` da imagem lista os **nomes originais**: quem ouve recebe a informação
 completa.
 
-### 6.4 Vetor chapado: peça sólida, canto arredondado, calha
+### 6.4 Tetraminó neon: silhueta única, células visíveis, calha
 
-Cada peça é **uma forma só**. Não há divisão entre as células que a compõem — o
-`L` é um `L` inteiro, não três quadrados encostados. Preenchimento chapado, sem
-friso, sem relevo, sem contorno.
+Cada peça conserva **uma silhueta só**, mas revela discretamente as quatro
+células que a compõem. O contorno claro e o brilho curto no topo de cada célula
+dão leitura de arcade; o nome continua acima dessa malha e a forma permanece
+inteira.
 
 | Recurso | Efeito |
 | --- | --- |
 | um `<path>` por peça | some a costura interna entre células |
 | cantos convexos arredondados, côncavos vivos | é o que sai de uma união de retângulos arredondados, e o que a referência mostra |
 | calha de recuo em cada lado | separa peças vizinhas com um vão de fundo, não com uma linha |
+| malha interna translúcida | identifica as quatro células sem fragmentar o tetraminó |
+| friso mais claro do próprio matiz | cria neon seco, sem `filter` |
 
-**A calha é de desenho, não de empacotamento.** A queda com gravidade e os 40
+**A calha é de desenho, não de empacotamento.** A queda com gravidade e os 48
 buracos continuam idênticos: a peça ocupa as mesmas células, só é desenhada
 menor. `GUTTER = 1.5` em célula de 22px dá 3px entre peças vizinhas — cerca de
 14% da célula, na faixa da referência.
@@ -1541,17 +1528,9 @@ para divergir quando uma forma mudar.
 
 #### O que isso substituiu
 
-A versão anterior era pixel art: `shape-rendering="crispEdges"`, coordenada
-inteira, friso claro de 1px por célula e uma camada escura inflada por peça para
-separá-la das vizinhas. Eram **256 retângulos** e o `L` lia como três quadrados
-encostados.
-
-`crispEdges` saiu junto — ele serrilharia os cantos arredondados, e com ele cai
-a exigência de coordenada inteira que existia só para servi-lo.
-
-```
-52.376 bytes  →  32.251 bytes
-```
+A versão chapada apagava demais a referência ao Tetris: a silhueta funcionava,
+mas podia ler apenas como etiquetas coloridas irregulares. A nova malha recupera
+a unidade celular sem voltar ao pixel art duro nem ao contorno escuro inflado.
 
 #### Geometria
 
@@ -1616,11 +1595,11 @@ Seção 1 e o verde da Seção 2:
 
 | Categoria | Peças | Cor |
 | --- | ---: | --- |
-| Front-End | 12 | `#d97757` âmbar |
-| Back-End | 4 | `#56d4dd` ciano |
-| Databases & ORM | 7 | `#d2a8ff` violeta |
-| Testing | 6 | `#f778ba` rosa |
-| Architecture | 3 | `#39d353` verde |
+| Languages | 2 | `#39d353` verde |
+| Front-End | 10 | `#d97757` âmbar |
+| Back-End | 9 | `#56d4dd` ciano |
+| Databases | 3 | `#d2a8ff` violeta |
+| Testing | 9 | `#f778ba` rosa |
 
 O README inteiro fecha em **cinco matizes**, e a Seção 3 é onde eles aparecem
 juntos — o que faz dela o fecho visual do sistema, não uma peça avulsa.
@@ -1635,21 +1614,25 @@ O poço ocupa 264px; sobram ~508px. O painel usa esse espaço para colocar o que
 o código público mede **ao lado** do que o perfil declara:
 
 ```
-FRONT-END      12  ████        PUBLIC CODE
-BACK-END        4  █           TypeScript   39.5%
-DATABASES       7  ██          JavaScript   34.2%
-TESTING         6  ██          CSS          18.4%
-ARCHITECTURE    3  █           HTML          5.3%
+LANGUAGES        2  █          PUBLIC CODE
+FRONT-END       10  ████       TypeScript   39.5%
+BACK-END         9  ████       JavaScript   34.2%
+DATABASES        3  █          CSS          18.4%
+TESTING          9  ████       HTML          5.3%
                                Sass          2.6%
 ```
 
-Isto resolve a tensão registrada em `README-LEGADO.md` §6.4 — 32 tecnologias
+As barras ficam só em `DECLARED`, onde comparam contagens entre categorias.
+Em `PUBLIC CODE`, linguagem e percentual bastam: repetir cada número como uma
+segunda barra acrescentava ruído sem acrescentar informação.
+
+Isto resolve a tensão registrada em `README-LEGADO.md` §6.4 — 33 tecnologias
 declaradas contra 5 linguagens medidas — **sem juízo de valor**.
 
 > **Alternativa descartada:** marcar as 5 medidas com preenchimento sólido e as
-> 27 restantes com contorno. Codificava mais, mas convidava a leitura de "27
+> 28 restantes com contorno. Codificava mais, mas convidava a leitura de "28
 > não verificadas" — que é falsa. O trabalho real está em repositório privado
-> (3862 commits, 306 dias ativos, §5.7). Ausência nos repos públicos não é
+> (3963 commits, 306 dias ativos, §5.7). Ausência nos repos públicos não é
 > ausência de uso, e um desenho não deve sugerir o contrário.
 
 Os dois blocos lado a lado, sem hierarquia: o poço diz o que ele declara, o
@@ -1658,20 +1641,20 @@ painel diz o que o código público mede. O leitor tira a própria conclusão.
 ### 6.7 Animação: queda em passos
 
 ```
-0.2 – 6.2s   as 32 peças caem, escalonadas em 0.18s
-6.2 – 7.7s   pilha completa, parada — o único momento em que a stack existe inteira
-7.7 – 8.9s   desintegra de baixo para cima, fileira a fileira
-8.9 – 10.0s  poço vazio
+0.2 – 6.4s    as 33 peças caem, escalonadas em 0.18s
+6.4 – 7.9s    pilha completa, parada — o único momento em que a stack existe inteira
+7.9 – 9.1s    desintegra de baixo para cima, fileira a fileira
+9.1 – 10.24s  poço vazio
              recomeça
 ```
 
 **A queda é discreta, uma fileira por vez** — `calcMode="discrete"` segura cada
 posição até o próximo keyTime em vez de interpolar. É a diferença entre uma
-peça que desliza e uma peça que cai num jogo em grade, e faz parte da leitura de
-pixel art tanto quanto o `crispEdges`.
+peça que desliza e uma peça que cai num jogo em grade, reforçando a leitura de
+Tetris mesmo com cantos arredondados.
 
 Cada peça é um `<g>` com quatro blocos e o texto: **um `animateTransform` para a
-queda e um `animate` de opacidade para a desintegração** — 64 no total, folgado
+queda e um `animate` de opacidade para a desintegração** — 66 no total, folgado
 sob o teto de 150.
 
 O `animateTransform` é montado à mão e por isso passava ao largo da validação de
@@ -1715,14 +1698,14 @@ scripts/render_stack.mjs          profile.json + stack.mjs -> assets/stack-well.
 | Decisão | Resultado |
 | --- | --- |
 | Formato | replay, não jogo — a plataforma não executa JS |
-| Nomes | inteiros; 6 resumidos por não caberem; nenhuma sigla |
+| Nomes | inteiros; 3 resumidos por não caberem; nenhuma sigla |
 | Poço | 12 colunas × 18 fileiras, célula de 22px, calha de 1.5px |
-| Empacotamento | queda com gravidade, determinística — 40 buracos por consequência, não por enfeite |
+| Empacotamento | queda com gravidade, determinística — 48 buracos por consequência, não por enfeite |
 | Formas | os sete tetrominós; a forma é escolhida pelo tamanho do nome |
 | Cores | as 5 já existentes; o README fecha em 5 matizes |
 | Medido × declarado | lado a lado no painel, sem marcar as peças |
 | Animação | queda em passos discretos → pilha → desintegração → loop |
-| Estilo | vetor chapado: peça sólida, canto convexo arredondado, calha entre peças |
+| Estilo | silhueta sólida com friso neon, malha celular sutil e calha entre peças |
 
 
 ---

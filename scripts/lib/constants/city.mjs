@@ -47,6 +47,13 @@ export const CITY = Object.freeze({
    *  transborda no vão acima, jamais na altura do prédio. */
   MIN_BAND: 1.0,
 
+  /** Contorno claro e seco: faz cada dia ler como bloco de jogo sem o custo e
+   *  a névoa de um filtro de glow. Altura e posição seguem vindas do dado. */
+  BLOCK_RADIUS: 1.2,
+  BLOCK_STROKE_LIGHTEN: 0.28,
+  BLOCK_STROKE_OPACITY: 0.72,
+  BLOCK_STROKE_W: 0.7,
+
   PARTIAL_OPACITY: 0.45,                // semana corrente, ainda incompleta
   PARTIAL_CAP_GAP: 3,                   // vão entre o telhado em obra e o tracejado
   AVG_OPACITY: 0.5,                     // a linha da média é referência, não dado

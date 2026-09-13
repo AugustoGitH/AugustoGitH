@@ -104,7 +104,18 @@ export const PANEL = Object.freeze({
   COUNT_X: 140,
   BAR_X: 152,
   HEAD_Y: 50,
-  BAR_DIM: 0.7,         // barra do bloco medido: sem cor de categoria, rebaixada
+})
+
+/** Acabamento dos tetraminós. A silhueta continua única; a malha interna faz
+ *  as quatro células voltarem a ler como Tetris sem desmontar a forma. */
+export const PIECE = Object.freeze({
+  EDGE_LIGHTEN: 0.32,
+  EDGE_W: 0.9,
+  GRID_INSET: 3.2,
+  GRID_RADIUS: 1.4,
+  GRID_OPACITY: 0.22,
+  SHINE_H: 2.2,
+  SHINE_OPACITY: 0.18,
 })
 
 export const STACK_CANVAS = Object.freeze({

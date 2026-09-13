@@ -17,13 +17,14 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import {
   T, TYPO, CELL_W, GEO, KEYTIME_DECIMALS,
-  CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, STACK_CANVAS, GAME,
+  CELL, SHORT, CATEGORIES, SHAPES, BY_RUN, WELL, PANEL, PIECE, STACK_CANVAS, GAME,
   PIECE_LABEL_WEIGHT,
 } from './lib/constants/index.mjs'
 import { assertBudget, assertKeyframes, assertLabelFits } from './lib/assert.mjs'
 import { dropPieces, stackStats } from './lib/pack.mjs'
 import { caminhoDaPeca } from './lib/outline.mjs'
 import { tag, text, animate } from './lib/svg.mjs'
+import { lighten } from './lib/color.mjs'
 
 const IN = 'data/profile.json'
 const OUT = 'assets/stack-well.svg'
@@ -74,14 +75,30 @@ function peca(p, i, tempos, kk) {
   const px = (c) => WELL.X + (p.col + c) * CELL
   const py = (r) => WELL.Y + (p.row + r) * CELL
 
-  // Um caminho só: sem costura entre as células, sem friso, sem contorno. O
-  // que separa a peça das vizinhas é a calha (WELL.GUTTER), não uma linha.
+  // A silhueta é um caminho só; a malha interna revela as quatro células sem
+  // quebrar a leitura do tetraminó. O friso claro cria neon seco, sem filtro.
+  const celulas = forma.cells.map(([c, r]) => {
+    const x = px(c) + WELL.GUTTER + PIECE.GRID_INSET
+    const y = py(r) + WELL.GUTTER + PIECE.GRID_INSET
+    const lado = CELL - (WELL.GUTTER + PIECE.GRID_INSET) * 2
+    return tag('rect', {
+      x, y, width: lado, height: lado, rx: PIECE.GRID_RADIUS,
+      fill: 'none', stroke: T.ink, 'stroke-width': PIECE.EDGE_W,
+      opacity: PIECE.GRID_OPACITY,
+    }) + tag('rect', {
+      x, y, width: lado, height: PIECE.SHINE_H, rx: PIECE.GRID_RADIUS,
+      fill: T.ink, opacity: PIECE.SHINE_OPACITY,
+    })
+  }).join('')
+
   const corpo =
     tag('path', {
       d: caminhoDaPeca(forma.cells.map((c) => [...c]), CELL, px(0), py(0),
         WELL.GUTTER, WELL.RADIUS),
-      fill: p.hue,
+      fill: p.hue, stroke: lighten(p.hue, PIECE.EDGE_LIGHTEN),
+      'stroke-width': PIECE.EDGE_W, 'paint-order': 'stroke fill',
     }) +
+    celulas +
     assertLabelFits(p.label, forma.run) +
     text(px(forma.runCol + forma.run / 2), py(forma.runRow) + CELL / 2 + TYPO.BASELINE_NUDGE,
       T.bg, p.label, { 'text-anchor': 'middle', 'font-weight': PIECE_LABEL_WEIGHT })
@@ -117,17 +134,18 @@ function peca(p, i, tempos, kk) {
     }) + corpo)
 }
 
-/** Linha do painel: swatch, rótulo, número e barra. */
-function linha(y, cor, rotulo, valor, frac) {
+/** Linha do painel. A barra é útil no declarado; no código público o próprio
+ *  percentual já é a medida e não precisa ser desenhado uma segunda vez. */
+function linha(y, cor, rotulo, valor, frac = null) {
   return (cor ? tag('rect', {
     x: PANEL.X, y: y - PANEL.SWATCH + 1,
     width: PANEL.SWATCH, height: PANEL.SWATCH, rx: 1, fill: cor,
   }) : '') +
-  text(PANEL.X + PANEL.LABEL_X, y, T.dim, rotulo) +
+  text(PANEL.X + (cor ? PANEL.LABEL_X : 0), y, T.dim, rotulo) +
   text(PANEL.X + PANEL.COUNT_X, y, T.ink, valor, { 'text-anchor': 'end' }) +
-  tag('rect', { x: PANEL.X + PANEL.BAR_X, y: y - PANEL.BAR_H,
+  (frac === null ? '' : tag('rect', { x: PANEL.X + PANEL.BAR_X, y: y - PANEL.BAR_H,
     width: Math.max(1, PANEL.BAR_W * frac), height: PANEL.BAR_H,
-    rx: 1, fill: cor ?? T.dim, opacity: cor ? 1 : PANEL.BAR_DIM })
+    rx: 1, fill: cor }))
 }
 
 const main = () => {
@@ -174,11 +192,10 @@ const main = () => {
 
   const y2 = PANEL.HEAD_Y + PANEL.HEAD_GAP + CATEGORIES.length * PANEL.ROW_H
             - PANEL.ROW_H + PANEL.BLOCK_GAP
-  const maxPct = Math.max(...langs.map((l) => l.pct))
   const med = text(PANEL.X, y2, T.muted, 'PUBLIC CODE') +
     langs.map((l, n) => linha(
       y2 + PANEL.HEAD_GAP + n * PANEL.ROW_H,
-      null, l.name, `${l.pct}%`, l.pct / maxPct)).join('')
+      null, l.name, `${l.pct}%`)).join('')
 
   const titulo = text(GEO.PAD, STACK_CANVAS.TITLE_Y, T.accent, STACK_CANVAS.TITLE, {
     'font-size': TYPO.SIZE.section,
