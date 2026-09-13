@@ -4,7 +4,7 @@
   "name": "Augusto Caetano Westphal",
   "company": "BudgetXpert",
   "blog": "augustowestphal.netlify.app",
-  "followers": 38,
+  "followers": 39,
   "since": "feb 2022"
  },
  "repos": {
@@ -48,26 +48,14 @@
  ],
  "contrib": {
   "total": 3963,
-  "activeDays": 311,
-  "days": 371,
-  "drawn": 3963,
+  "activeDays": 306,
+  "days": 365,
+  "drawn": 3926,
   "maxDay": 58,
   "maxWeek": 201,
-  "from": "2025-09-07",
-  "to": "2026-09-06",
+  "from": "2025-09-14",
+  "to": "2026-09-13",
   "weeks": [
-   {
-    "firstDay": "2025-09-07",
-    "days": [
-     0,
-     12,
-     9,
-     8,
-     3,
-     5,
-     0
-    ]
-   },
    {
     "firstDay": "2025-09-14",
     "days": [
@@ -689,6 +677,12 @@
      31,
      11,
      22,
+     0
+    ]
+   },
+   {
+    "firstDay": "2026-09-13",
+    "days": [
      0
     ]
    }
