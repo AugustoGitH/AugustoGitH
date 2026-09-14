@@ -47,9 +47,9 @@
   }
  ],
  "contrib": {
-  "total": 3964,
+  "total": 3927,
   "activeDays": 307,
-  "days": 365,
+  "days": 366,
   "drawn": 3927,
   "maxDay": 58,
   "maxWeek": 201,
@@ -683,7 +683,8 @@
    {
     "firstDay": "2026-09-13",
     "days": [
-     1
+     1,
+     0
     ]
    }
   ]
