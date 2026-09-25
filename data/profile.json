@@ -49,7 +49,7 @@
  "contrib": {
   "total": 4191,
   "activeDays": 309,
-  "days": 369,
+  "days": 370,
   "drawn": 4191,
   "maxDay": 68,
   "maxWeek": 225,
@@ -687,6 +687,7 @@
      14,
      27,
      5,
+     0,
      0
     ]
    }
