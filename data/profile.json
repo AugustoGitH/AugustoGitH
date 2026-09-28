@@ -4,7 +4,7 @@
   "name": "Augusto Caetano Westphal",
   "company": "BudgetXpert",
   "blog": "augustowestphal.netlify.app",
-  "followers": 38,
+  "followers": 37,
   "since": "feb 2022"
  },
  "repos": {
@@ -47,9 +47,9 @@
   }
  ],
  "contrib": {
-  "total": 4226,
+  "total": 4179,
   "activeDays": 305,
-  "days": 365,
+  "days": 366,
   "drawn": 4179,
   "maxDay": 70,
   "maxWeek": 239,
@@ -683,6 +683,7 @@
    {
     "firstDay": "2026-09-27",
     "days": [
+     0,
      0
     ]
    }
